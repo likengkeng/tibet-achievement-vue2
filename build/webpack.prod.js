@@ -4,8 +4,10 @@ const common = require('./webpack.base.js');
 // 压缩CSS插件
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 var plugins = [
+  new CleanWebpackPlugin(), //删除打包的目录
   new MiniCssExtractPlugin({
     // Options similar to the same options in webpackOptions.output
     // both options are optional
@@ -21,7 +23,7 @@ const cssLoader = [
 ];
 
 module.exports = merge(common, {
-  devtool: 'source-map',
+  devtool: 'cheap-module-source-map',
   optimization: {
     // 分离chunks
     splitChunks: {

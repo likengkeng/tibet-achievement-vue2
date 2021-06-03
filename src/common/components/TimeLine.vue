@@ -1,16 +1,24 @@
 <template>
   <div style="position: relative;">
-    <span class="prev-event"></span>
+    <span class="prev-event move-event" @click="showPrev"></span>
     <ul class="timeline">
       <li class='timeItem' v-for="(item, index) in currentList" :key="index">
         <div class="relative">
           <span class='date'>
             <label>{{ item.date }}</label>
           </span>
-          <input class='radio' name='time-radio' type='radio'>
+          <input
+            class='radio'
+            name='time-radio'
+            type='radio'
+            :checked="select.id === item.id"
+            @change="changeSelectedEvent(item)">
           <label></label>
           <span class="line"></span>
-          <div class='content'>
+          <div
+            class='content'
+            :class="{ selected: select.id === item.id }"
+            @click="changeSelectedEvent(item)">
             <img src="/static/imgs/news1.jpg" class="event-img">
             <div>
               <p><h4>{{ item.content.title }}</h4></p>
@@ -20,6 +28,7 @@
         </div>
       </li>
     </ul>
+    <span class="next-event move-event" @click="showNext"></span>
   </div>
 </template>
 
@@ -41,17 +50,44 @@ interface TimeItem {
       type: Array,
       default: () => [],
     },
+    select: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  watch: {
+    list() {
+      this.getCurrentList();
+    },
   },
 })
 export default class TimeLine extends Vue {
   size: number = 5;
   index: number = 0;
   declare list: TimeItem[];
+  currentList: TimeItem[] = [];
 
-  get currentList() {
-    if (!(this.list || []).length) return [];
+  getCurrentList() {
     const end = this.index + this.size >= this.list.length ? this.list.length : this.index + this.size;
-    return this.list.slice(this.index, end);
+    this.currentList = this.list.slice(this.index, end);
+  }
+
+  changeSelectedEvent(data) {
+    this.$emit('update:select', data);
+  }
+
+  showPrev() {
+    if (this.index > 0) {
+      this.index -= 1;
+      this.getCurrentList();
+    }
+  }
+
+  showNext() {
+    if (this.index < this.list.length - this.size) {
+      this.index += 1;
+      this.getCurrentList();
+    }
   }
 }
 </script>
@@ -120,25 +156,39 @@ $line_width: 260px;
       position: absolute;
       width: 200px;
       height: 300px;
-      border: 1px solid #eee;
       left: -86px;
       top: 30px;
+      cursor: pointer;
       .event-img {
         width: 100%;
         height: 140px;
       }
     }
+    .content:hover {
+      border: 8px solid #FFBC66;
+    }
+    .content.selected {
+      border: 8px solid #FFBC66;
+    }
   }
 }
 
-.prev-event {
-  background-image: url('/static/imgs/prevArrow1x.png');
+.move-event {
   display: inline-block;
   width: 40px;
   height: 40px;
   background-repeat:no-repeat;
   position: absolute;
   top: 58px;
+  cursor: pointer;
+}
+
+.prev-event {
+  background-image: url('/static/imgs/prevArrow1x.png');
   left: 120px;
+}
+.next-event {
+  background-image: url('/static/imgs/nextArrow1x.png');
+  right: 400px;
 }
 </style>

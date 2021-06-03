@@ -45,6 +45,13 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.(mp3|ogv|mp4|ogg|wav|webm)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit:10
+        }
+      },
     ],
   },
   plugins: [

@@ -1,7 +1,7 @@
 <template>
   <div class="big-event">
     大事件
-    <time-line :list="bigEventList"></time-line>
+    <time-line :list="bigEventList" :select.sync="selectEvent"></time-line>
   </div>
 </template>
 
@@ -10,6 +10,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import TimeLine from '@/common/components/TimeLine.vue';
 import $http from '@/pc/api/event';
+import { BigEventItem } from 'CustomerTypes';
 import { eventList } from '../mock';
 
 @Component({
@@ -18,7 +19,8 @@ import { eventList } from '../mock';
   },
 })
 export default class BigEvent extends Vue {
-  bigEventList: Array<{[key: string]: any}> = [];
+  bigEventList: BigEventItem[] = [];
+  selectEvent: BigEventItem = {} as BigEventItem;
 
   mounted() {
     $http.getBigEventList()
@@ -29,6 +31,9 @@ export default class BigEvent extends Vue {
 
       });
     this.bigEventList = eventList;
+    if (this.bigEventList.length) {
+      this.selectEvent = this.bigEventList[0];
+    }
   }
 }
 </script>

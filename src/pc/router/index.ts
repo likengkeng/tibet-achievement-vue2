@@ -2,9 +2,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 Vue.use(Router);
-
-const HelloWorld = () => import('@/pc/components/HelloWorld.vue');
-const Home = () => import('@/pc/views/Home.vue');
+const HelloWorld = () => import(/* webpackChunkName: "HelloWord" */ '@/pc/components/HelloWorld.vue');
+const Home = () => import(/* webpackChunkName: "Home" */ '@/pc/views/Home.vue');
 
 export default new Router({
   mode: 'hash',

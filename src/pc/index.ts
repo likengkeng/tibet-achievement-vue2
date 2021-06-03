@@ -16,5 +16,5 @@ new Vue({
   router,
   //@ts-ignore
   store,
-  render: (h) => h(App)
+  render: (h:any) => h(App)
 })
