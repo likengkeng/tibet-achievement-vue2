@@ -10,6 +10,7 @@ module.exports = merge(common, {
     overlay: true,
     hot: true,
     stats: 'errors-only',
+    disableHostCheck: true,
     compress: true, // 为每个静态文件开启 gzip compression
     port: 8000,
     historyApiFallback: {

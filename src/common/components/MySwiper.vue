@@ -14,13 +14,13 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css';
 
 @Component({
   components: {
-    Swiper,
-    SwiperSlide,
+    swiper,
+    swiperSlide,
   },
   props: {
     list: {
@@ -46,7 +46,7 @@ export default class MySwiper extends Vue {
     // Some Swiper option/callback...
   };
   get swiper() {
-    return this.$refs.mySwiper.$swiper;
+    return this.$refs.mySwiper.swiper;
   }
   mounted() {
     this.swiper.slideTo(3, 1000, false);
