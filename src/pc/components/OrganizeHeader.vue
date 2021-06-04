@@ -1,7 +1,8 @@
 <template>
   <div class="header">
-    <ul class="text-center">
+    <ul>
       <li
+        class="text-center"
         v-for="(menu, index) in menuList"
         :key="index"
         :class="{active: isActive(menu)}"
@@ -42,11 +43,15 @@ export default class MenuHeader extends Vue {
 <style scoped lang="scss">
 .header {
   height: 68px;
-  background: #940708;
+  background: #EFD0D0;
   ul {
     height: 100%;
+    padding-left: 200px;
     li.active {
       background: #7A0001;
+      a {
+        color: #FFFFFF;
+      }
     }
     li {
       display: inline-block;
@@ -55,7 +60,7 @@ export default class MenuHeader extends Vue {
       width: 168px;
       cursor: pointer;
       a {
-        color: #FFE5E5;
+        color: #B01516;
         font-size: 16px;
         text-decoration-line: none;
       }

@@ -14,12 +14,7 @@
           :is="contenItem.content">
         </component>
       </div>
-      <div class="left-menu" v-sticky="{
-        top: '68px',
-        width: '362px',
-        right: '0px',
-        zIndex: '9998',
-      }">
+      <div class="left-menu" v-sticky="anchorNavStickyOpts">
         <anchor-navigator
           :menuList="menuList"
           :current="currentMenu"
@@ -92,6 +87,12 @@ export default class Home extends Vue {
       content: SevenGroup,
     },
   ];
+  anchorNavStickyOpts = {
+    top: '68px',
+    width: '362px',
+    right: '0px',
+    zIndex: '9998',
+  };
   currentMenu: MenuItem = {} as MenuItem;
 
   mounted() {
@@ -112,7 +113,6 @@ export default class Home extends Vue {
 <style scoped>
 .content {
   min-height: 3500px;
-  background: #ffeebb;
   flex: 1;
 }
 .left-menu {
