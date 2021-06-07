@@ -92,13 +92,12 @@ export default class TimeLine extends Vue {
 }
 </script>
 <style scoped lang="scss">
-$line_width: 260px;
+$line_width: 210px;
 .timeline {
   list-style: none;
-  margin: 80px 0 0;
-  padding: 0;
+  padding-top: 80px;
   display: inline-block;
-  border-spacing: $line_width 0;
+  border-spacing: 200px 0;
   li {
     display: table-cell;
     .relative {
@@ -107,18 +106,17 @@ $line_width: 260px;
     .date {
       text-align: center;
       top: -70px;
-      left: -35px;
+      left: -140px;
       right: 0;
       font-size: 0.95em;
       line-height: 20px;
       position: absolute;
-      width: 100px;
+      width: 200px;
     }
     .radio {
       margin: 0 auto;
       top: -17px;
-      left: 0;
-      right: 0;
+      left: -50px;
       width: 30px;
       height: 30px;
       border: 5px solid #D8D8D8;
@@ -134,8 +132,8 @@ $line_width: 260px;
       height: 8px;
       background: #D8D8D8;
       position: absolute;
-      top: -8px;
-      left: -100px;
+      top: -6px;
+      left: -130px;
     }
     .radio + label::before{
       border: 5px solid #D8D8D8;
@@ -148,15 +146,16 @@ $line_width: 260px;
       position: absolute;
       top: -17px;
       z-index: 100;
+      left: -50px;
     }
     .radio:checked + label::before{
       background: #681313;
     }
     .content {
       position: absolute;
-      width: 200px;
+      width: 180px;
       height: 300px;
-      left: -86px;
+      left: -140px;
       top: 30px;
       cursor: pointer;
       .event-img {
@@ -179,16 +178,16 @@ $line_width: 260px;
   height: 40px;
   background-repeat:no-repeat;
   position: absolute;
-  top: 58px;
+  top: 98px;
   cursor: pointer;
 }
 
 .prev-event {
   background-image: url('/static/imgs/prevArrow1x.png');
-  left: 120px;
+  left: 0px;
 }
 .next-event {
   background-image: url('/static/imgs/nextArrow1x.png');
-  right: 400px;
+  right: 0px;
 }
 </style>

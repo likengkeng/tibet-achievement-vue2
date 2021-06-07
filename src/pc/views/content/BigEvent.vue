@@ -1,6 +1,5 @@
 <template>
   <div class="big-event">
-    大事件
     <time-line :list="bigEventList" :select.sync="selectEvent"></time-line>
   </div>
 </template>

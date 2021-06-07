@@ -5,8 +5,8 @@
       :menuList="menuList"
       :current="currentMenu"
       @selectMenu="updateCurrentMenu"></menu-header>
-    <div class="flex">
-      <div class="content">
+    <div class="relative">
+      <div class="content float-l">
         <component
           v-for="(contenItem, index) in contentList"
           :key="index"
@@ -14,7 +14,7 @@
           :is="contenItem.content">
         </component>
       </div>
-      <div class="left-menu" v-sticky="anchorNavStickyOpts">
+      <div class="left-menu float-l">
         <anchor-navigator
           :menuList="menuList"
           :current="currentMenu"
@@ -110,14 +110,17 @@ export default class Home extends Vue {
 }
 </script>
 
-<style scoped>
-.content {
-  min-height: 3500px;
-  flex: 1;
-}
-.left-menu {
-  flex: 0 0 362px;
-  min-height: 3500px;
-  background: burlywood;
+<style scoped lang="scss">
+.tibet-achievement {
+  overflow: hidden;
+  .content {
+    min-height: 3500px;
+    padding-left: 360px;
+    width: calc(100% - 720px);
+  }
+  .left-menu {
+    min-height: 3500px;
+    width: 360px;
+  }
 }
 </style>

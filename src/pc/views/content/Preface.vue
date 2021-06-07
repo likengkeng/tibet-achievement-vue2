@@ -31,6 +31,7 @@ export default class Preface extends Vue {
     muted: true,
     language: 'en',
     height: '600',
+    width: '100%',
     playbackRates: [0.7, 1.0, 1.5, 2.0],
     sources: [{
       type: 'video/mp4',
@@ -78,7 +79,6 @@ export default class Preface extends Vue {
 </script>
 <style scoped lang="scss">
 .preface {
-  background: #eeeaaa;
   height: 657px;
 }
 </style>

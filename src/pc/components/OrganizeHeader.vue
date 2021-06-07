@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div class="header text-center">
     <ul>
       <li
         class="text-center"
@@ -46,7 +46,6 @@ export default class MenuHeader extends Vue {
   background: #EFD0D0;
   ul {
     height: 100%;
-    padding-left: 200px;
     li.active {
       background: #7A0001;
       a {

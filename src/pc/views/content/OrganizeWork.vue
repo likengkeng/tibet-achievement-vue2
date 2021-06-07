@@ -5,9 +5,15 @@
       :current="currentMenu"
       @selectMenu="updateCurrentMenu"></organize-header>
     <div class="work-content">
-      <work-swiper :list="workList" width="100%" height="400px">
+      <work-swiper :list="workList" width="50%" height="400px">
         <template v-slot:content="slotProps">
-          <div class="content-item1">{{ slotProps.slide.title }}</div>
+          <div class="content-item1">
+            <div></div>
+            <div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
         </template>
       </work-swiper>
     </div>
@@ -88,6 +94,17 @@ export default class OrganizeWork extends Vue {
   .work-content {
     width: 60%;
     height: 100%;
+    .swiper-slide {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-weight: bold;
+      .content-item1 {
+        width: 100%;
+        height: 100%;
+      }
+    }
   }
 }
 </style>

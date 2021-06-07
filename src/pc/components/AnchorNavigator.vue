@@ -1,7 +1,6 @@
 <template>
   <div class="anchor-nav">
     <ul class="text-center">
-      <li class="navigator">导航</li>
       <li
         v-for="(menu, index) in menuList"
         :key="index"
