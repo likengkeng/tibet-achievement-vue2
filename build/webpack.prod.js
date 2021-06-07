@@ -5,14 +5,17 @@ const common = require('./webpack.base.js');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const project = process.env.PROJECT || 'pc';
 
 var plugins = [
-  new CleanWebpackPlugin(), //删除打包的目录
+  new CleanWebpackPlugin({
+    cleanOnceBeforeBuildPatterns: [`dist/${project}`]
+  }), //删除打包的目录
   new MiniCssExtractPlugin({
     // Options similar to the same options in webpackOptions.output
     // both options are optional
-    filename: 'css/[name].[contenthash].css',
-    chunkFilename: 'css/[name].[contenthash].css',
+    filename: `${project}/css/[name].[contenthash].css`,
+    chunkFilename: `${project}/css/[name].[contenthash].css`,
   }),
 ];
 
@@ -63,7 +66,7 @@ module.exports = merge(common, {
   mode: 'production',
   output: {
     filename: 'js/[name].[contenthash].js',
-    path: path.resolve(__dirname, '../dist'),
+    path: path.resolve(__dirname, `../dist/${project}`),
     publicPath: './',
   },
 })
