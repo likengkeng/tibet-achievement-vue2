@@ -64,7 +64,7 @@ module.exports = {
     // 处理静态文件夹 static 复制到打包的 static 文件夹
     new CopyWebpackPlugin([
       {
-        from: path.resolve(__dirname, '../static'),
+        from: path.resolve(__dirname, `../src/${PROJECT}/static`),
         to: 'static',
       },
     ]),

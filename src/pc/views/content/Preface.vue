@@ -18,7 +18,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import 'video.js/dist/video-js.css';
-import '/static/styles/video-custom.css';
+import '@/pc/static/styles/video-custom.css';
 import { videoPlayer } from 'vue-video-player';
 @Component({
   components: {

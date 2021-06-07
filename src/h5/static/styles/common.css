@@ -1,0 +1,41 @@
+ul {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  height: auto;
+}
+
+li {
+  list-style: none;
+}
+
+.cover-logo-h5 {
+  height: 211px;
+  background: url('../imgs/cover-logo-1x.png');
+  background-size: cover;
+}
+
+.flex {
+  display: flex;
+  margin: 0 auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.relative {
+  position: relative;
+}
+
+.float-l {
+  float: left;
+}
+
+.float-r {
+  float: right;
+}
