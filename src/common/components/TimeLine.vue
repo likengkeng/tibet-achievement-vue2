@@ -19,7 +19,7 @@
             class='content'
             :class="{ selected: select.id === item.id }"
             @click="changeSelectedEvent(item)">
-            <img src="/static/imgs/news1.jpg" class="event-img">
+            <img src="../imgs/news1.jpg" class="event-img">
             <div>
               <p><h4>{{ item.content.title }}</h4></p>
               <span>{{ item.content.desc }}</span>
@@ -183,11 +183,11 @@ $line_width: 210px;
 }
 
 .prev-event {
-  background-image: url('/static/imgs/prevArrow1x.png');
+  background-image: url('../imgs/prevArrow1x.png');
   left: 0px;
 }
 .next-event {
-  background-image: url('/static/imgs/nextArrow1x.png');
+  background-image: url('../imgs/nextArrow1x.png');
   right: 0px;
 }
 </style>

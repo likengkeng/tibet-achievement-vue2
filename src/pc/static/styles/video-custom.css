@@ -1,0 +1,15 @@
+.video-js .vjs-big-play-button {
+  left:0!important;
+  right:0!important;
+  top:0!important;
+  bottom:0!important;
+  margin: auto!important;
+}
+.video-js .vjs-play-control:before {
+  top:20% !important;
+  content: '\f101';
+  font-size: 48px;
+}
+.video-js {
+  width: 100%!important;
+}
