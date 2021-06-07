@@ -9,6 +9,7 @@
       <preface></preface>
       <leader-care></leader-care>
       <big-event></big-event>
+      <organize-work></organize-work>
     </div>
   </div>
 </template>
@@ -20,6 +21,7 @@ import MenuHeader from '@/h5/components/MenuHeader.vue';
 import Preface from './content/Preface.vue';
 import LeaderCare from './content/LeaderCare.vue';
 import BigEvent from './content/BigEvent.vue';
+import OrganizeWork from './content/OrganizeWork.vue';
 import { MenuItem } from 'CommonTypes';
 
 @Component({
@@ -28,6 +30,7 @@ import { MenuItem } from 'CommonTypes';
     Preface,
     LeaderCare,
     BigEvent,
+    OrganizeWork,
   },
 })
 export default class Home extends Vue {
