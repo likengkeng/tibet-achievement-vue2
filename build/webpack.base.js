@@ -7,6 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { resolve } = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const PROJECT = process.env.PROJECT || 'pc';
 
 const forkTscheckerPlugin = new ForkTsCheckerWebpackPlugin({
   // typescript: {
@@ -18,7 +19,7 @@ const forkTscheckerPlugin = new ForkTsCheckerWebpackPlugin({
 });
 
 module.exports = {
-  entry: ['./src/pc/index.ts'],
+  entry: [`./src/${PROJECT}/index.ts`],
   target: 'web',
   module: {
     rules: [
@@ -69,7 +70,7 @@ module.exports = {
     ]),
     new webpack.DefinePlugin({
       'process.env': {
-        ROUTER_BASE: '',
+        PROJECT: JSON.stringify(PROJECT),
       },
     }),
     // 创建一个新进程，专门来运行Typescript类型检查。这么做的原因是为了利用多核资源来提升编译的速度

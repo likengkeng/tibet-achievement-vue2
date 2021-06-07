@@ -2,23 +2,26 @@ const { merge } = require('webpack-merge');
 const common = require('./webpack.base.js');
 const path = require('path');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const project = process.env.PROJECT || 'pc';
+const isPC = project === 'pc';
+const port = isPC ? '8000' : '8888';
 
 module.exports = merge(common, {
   devtool: 'inline-source-map',
   devServer: {
+    port,
     contentBase: '../dist',
     overlay: true,
     hot: true,
     stats: 'errors-only',
     disableHostCheck: true,
     compress: true, // 为每个静态文件开启 gzip compression
-    port: 8000,
     historyApiFallback: {
       rewrites: [{ from: /./, to: '/index.html' }],
     },
   },
   output: {
-    filename: 'js/[name].[hash].js',
+    filename: `${project}/js/[name].[hash].js`,
     path: path.resolve(__dirname, '../dist'),
   },
   module: {

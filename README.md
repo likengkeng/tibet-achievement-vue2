@@ -2,7 +2,17 @@
 
 ## 如何运行
 ```
-yarn run dev
+yarn run dev (for pc)
+
+yarn run dev:h5  (for H5)
+
+```
+
+## 线上build
+```
+yarn run build (for pc)
+
+yarn run build:h5  (for H5)
 
 ```
 
