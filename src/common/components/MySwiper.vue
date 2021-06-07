@@ -3,7 +3,8 @@
     ref="mySwiper"
     :options="swiperOptions"
     class="swiper"
-    :style="{width: width, height: height}">
+    :style="{width: width, height: height}"
+    @slideChange="slideChanged">
     <swiper-slide v-for="(slide, index) in list" :key="index">
       <slot name="content" :slide="slide"><img :src="slide.src"></slot>
     </swiper-slide>
@@ -43,6 +44,10 @@ export default class MySwiper extends Vue {
       el: '.swiper-pagination',
       clickable: true,
     },
+    // navigation: {
+    //   nextEl: '.swiper-button-next',
+    //   prevEl: '.swiper-button-prev',
+    // }
     // Some Swiper option/callback...
   };
   get swiper() {
@@ -50,6 +55,16 @@ export default class MySwiper extends Vue {
   }
   mounted() {
     this.swiper.slideTo(3, 1000, false);
+  }
+  updateOption(options) {
+    this.swiperOptions = {
+      ...this.swiperOptions,
+      ...options,
+    };
+    this.swiper.pagination.update();
+  }
+  slideChanged() {
+    this.$emit('slideChanged', this.swiper.activeIndex);
   }
 }
 </script>

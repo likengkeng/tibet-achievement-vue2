@@ -7,6 +7,8 @@
       @selectMenu="updateCurrentMenu"></menu-header>
     <div class="home-content">
       <preface></preface>
+      <leader-care></leader-care>
+      <big-event></big-event>
     </div>
   </div>
 </template>
@@ -16,12 +18,16 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import MenuHeader from '@/h5/components/MenuHeader.vue';
 import Preface from './content/Preface.vue';
+import LeaderCare from './content/LeaderCare.vue';
+import BigEvent from './content/BigEvent.vue';
 import { MenuItem } from 'CommonTypes';
 
 @Component({
   components: {
     MenuHeader,
     Preface,
+    LeaderCare,
+    BigEvent,
   },
 })
 export default class Home extends Vue {

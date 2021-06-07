@@ -1,7 +1,7 @@
 <template>
   <div class="preface">
     <div class="preface-logo"></div>
-    <image-swiper :list="imgList" width="100%" height="375px"></image-swiper>
+    <image-swiper :p2="true" :list="imgList" width="100%" height="375px" key="preface"></image-swiper>
     <div class="text-content">
       {{ currentDesc }}
     </div>
