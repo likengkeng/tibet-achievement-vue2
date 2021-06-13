@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { AxiosInstance } from 'axios';
-
+const apiUrl = 'http://182.61.5.103:9999/cms/'
 
 function createAPI({ url, headers } : any) {
   const instance = axios.create({
@@ -36,7 +36,7 @@ function createAPI({ url, headers } : any) {
 
 export const apiCreator: (headers?: any) => AxiosInstance = (headers) => {
   return createAPI({
-    url: '/api',
+    url: apiUrl,
     headers: { ...headers},
   });
 };

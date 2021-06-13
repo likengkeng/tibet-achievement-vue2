@@ -158,6 +158,7 @@ $line_width: 210px;
       left: -140px;
       top: 30px;
       cursor: pointer;
+      border: 8px solid #fff;
       .event-img {
         width: 100%;
         height: 140px;

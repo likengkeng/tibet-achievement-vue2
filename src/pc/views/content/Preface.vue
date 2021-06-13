@@ -1,16 +1,33 @@
 <template>
   <div class="preface">
-    <video-player
-      class="video-player-box"
-      ref="videoPlayer"
-      :options="playerOptions"
-      :playsinline="true"
-      customEventName="customstatechangedeventname"
-      @play="onPlayerPlay($event)"
-      @pause="onPlayerPause($event)"
-      @statechanged="playerStateChanged($event)"
-      @ready="playerReadied">
-  </video-player>
+    <MyContentHeader :content='content' @click='detail'></MyContentHeader>
+    <div class='list_box'>
+        <img @click='leftBtn' :src="left_icon" alt="" class='icon left'>
+        <img @click='rightBtn' :src="right_icon" alt="" class='icon right'>
+
+      <div v-for='item in list' :key='item' class='list' :style='{transform: `translateX(-${pageSize*100}%)`}'>
+        <video-player
+          v-if='isVideo'
+          class="video-player-box"
+          ref="videoPlayer"
+          :options="playerOptions"
+          :playsinline="true"
+          customEventName="customstatechangedeventname"
+          @play="onPlayerPlay($event)"
+          @pause="onPlayerPause($event)"
+          @statechanged="playerStateChanged($event)"
+          @ready="playerReadied">
+        </video-player>
+        <img v-else :src="el.path" alt="" class='list_img'>
+        <div class='content'>
+          <div>以习近平为团长的中央代表团抵达日喀则地区，受到各族群众热烈欢迎！</div>
+          <div class='carousel_btn_box'>
+            <div class='carousel_btn' @click='selectChange(index)' :class='{select: index == pageSize}' v-for='(item, index) in list' :key='item.articleId'></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
   </div>
 </template>
 
@@ -20,9 +37,15 @@ import Component from 'vue-class-component';
 import 'video.js/dist/video-js.css';
 import '@/pc/static/styles/video-custom.css';
 import { videoPlayer } from 'vue-video-player';
+import content from '@/pc/static/imgs/title_1.png'
+import MyContentHeader from '@/pc/components/MyContentHeader.vue';
+import right_icon from '@/pc/static/imgs/right_icon.png'
+import left_icon from '@/pc/static/imgs/left_icon.png'
+import $http from '@/pc/api/event';
+
 @Component({
   components: {
-    videoPlayer,
+    videoPlayer,MyContentHeader
   }
 })
 export default class Preface extends Vue {
@@ -30,7 +53,7 @@ export default class Preface extends Vue {
     // videojs options
     muted: true,
     language: 'en',
-    height: '600',
+    height: '568',
     width: '100%',
     playbackRates: [0.7, 1.0, 1.5, 2.0],
     sources: [{
@@ -39,18 +62,56 @@ export default class Preface extends Vue {
     }],
     // poster: '/static/imgs/author.jpg',
   }
-
+  left_icon = left_icon
+  right_icon = right_icon
   playerOptions = {};
-
+  
+  content = content
+  list = []
+  pageSize = 0
+  selectChange(index){
+    this.pageSize = index
+  }
+  leftBtn(){
+    console.log(this.pageSize)
+    if (this.pageSize == 0) {
+      return
+    }
+    this.pageSize -= 1
+  }
+  rightBtn(){
+    console.log(this.pageSize)
+    if (this.pageSize == this.list.length-1) {
+      return
+    }
+    this.pageSize += 1
+  }
   get player() {
     return this.$refs.videoPlayer.player;
   }
-
+  detail(){
+    this.$router.push({name: 'list', query: {value: 'preface'}})
+  }
   getData() {
     this.playerOptions = { ...this.playerOptionsDefault };
   }
-
+  getList(){
+    $http.prefaceList({prefaceType: 1})
+    .then(res => {
+      // console.log(res)
+      // res.data.data.map(el => {
+      //   el.isVideo = false
+      //   const type = el.path?.substring(el.path.length-3)
+      //   if (type == 'mp4') {
+      //     el.isVideo = true
+      //   }
+      //   return el
+      // })
+      // this.list = res.data.data
+    })
+  }
   mounted() {
+    this.getList()
     this.$nextTick(() => {
       this.getData();
     })
@@ -79,6 +140,72 @@ export default class Preface extends Vue {
 </script>
 <style scoped lang="scss">
 .preface {
-  height: 657px;
+  width: 1200px;
+  margin: auto;
+  .list_box{
+    width: 1200px;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+    .icon{
+        width: 46px;
+        height: 36px;
+        display: block;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+      }
+      .right{
+        right: 0px;
+      }
+      .left{
+        left: 0px;
+      }
+    .list{
+      width: 1200px;
+      flex-shrink: 0;
+      position: relative;
+      transition: .5s;
+      .list_img{
+        height: 568px;
+        display: block;
+      }
+      .content{
+        position: absolute;
+        z-index: 9;
+        bottom: 0px;
+        width: 100%;
+        padding: 13px 24px;
+        box-sizing: border-box;
+        background: rgba(0, 0, 0, 0.5);
+        font-size: 18px;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .carousel_btn_box{
+          display: flex;
+          .carousel_btn{
+            display: flex;
+            margin-left: 10px;
+            border-radius: 10px;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.6);
+          }
+          .select{
+            width: 20px;
+            background: #fff;
+          }
+        }
+        
+      }
+    }
+  }
+  
+}
+::v-deep .vjs-has-started .vjs-control-bar{
+  display: none;
 }
 </style>

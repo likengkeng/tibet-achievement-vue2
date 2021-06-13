@@ -43,11 +43,12 @@ export default class MenuHeader extends Vue {
 <style scoped lang="scss">
 .header {
   height: 68px;
-  background: #EFD0D0;
+  background: rgba(239, 208, 208, .65);
   ul {
     height: 100%;
+    display: flex;
     li.active {
-      background: #7A0001;
+      background: #B01516;
       a {
         color: #FFFFFF;
       }
@@ -57,6 +58,9 @@ export default class MenuHeader extends Vue {
       height: 100%;
       line-height: 68px;
       width: 168px;
+      flex-grow: 1;
+      font-size: 16px;
+      font-weight: bold;
       cursor: pointer;
       a {
         color: #B01516;

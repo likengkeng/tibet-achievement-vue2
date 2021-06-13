@@ -6,21 +6,23 @@
       :current="currentMenu"
       @selectMenu="updateCurrentMenu"></menu-header>
     <div class="relative">
-      <div class="content float-l">
+      <div class="content">
         <component
           v-for="(contenItem, index) in contentList"
           :key="index"
           :class="contenItem.value + '_jump_page'"
+          class='mb_25'
           :is="contenItem.content">
         </component>
-      </div>
-      <div class="left-menu float-l">
-        <anchor-navigator
-          :menuList="menuList"
-          :current="currentMenu"
-          @selectMenu="updateCurrentMenu"></anchor-navigator>
+        <div class="left-menu">
+          <anchor-navigator
+            :menuList="menuList"
+            :current="currentMenu"
+            @selectMenu="updateCurrentMenu"></anchor-navigator>
+        </div>
       </div>
     </div>
+    <my-footer></my-footer>
   </div>
 </template>
 
@@ -28,6 +30,8 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import MenuHeader from '@/pc/components/MenuHeader.vue';
+import MyFooter from '@/pc/components/MyFooter.vue';
+
 import AnchorNavigator from '@/pc/components/AnchorNavigator.vue';
 import { jumpToContent } from '@/common/util/anchor';
 import Preface from './content/Preface.vue';
@@ -41,6 +45,7 @@ import { MenuItem } from 'CommonTypes';
 @Component({
   components: {
     MenuHeader,
+    MyFooter,
     AnchorNavigator,
     Preface,
     LeaderCare,
@@ -115,12 +120,21 @@ export default class Home extends Vue {
   overflow: hidden;
   .content {
     min-height: 3500px;
-    padding-left: 360px;
-    width: calc(100% - 720px);
+    width: 100vw;
+    // padding-left: 360px;
+    // width: calc(100% - 720px);
+    // width: 1200px;
   }
   .left-menu {
-    min-height: 3500px;
-    width: 360px;
+    // min-height: 3500px;
+    // width: 360px;
+    position: absolute;
+    top: 170px;
+    right: 160px;
   }
+  .mb_25{
+    margin-bottom: 25px;
+  }
+  
 }
 </style>
