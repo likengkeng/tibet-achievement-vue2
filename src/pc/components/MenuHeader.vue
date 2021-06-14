@@ -1,5 +1,5 @@
 <template>
-  <div class="header tibet-achievement-header" v-sticky>
+  <div class="header tibet-achievement-header">
     <ul class="text-center">
       <li
         v-for="(menu, index) in menuList"

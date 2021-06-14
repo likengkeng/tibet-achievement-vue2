@@ -4,7 +4,7 @@
         <div class='article'>
             <div class='content'>
                 <div class='content_top'>
-                    <div>您的位置：首页   | 七地组声 | </div>
+                    <div>您的位置：首页   | {{name}} | </div>
                     <div>
                         <audio src="" controls class='audio'>
                             您的浏览器不支持 audio 标签。
@@ -12,10 +12,10 @@
                     </div>
                 </div>
                 <div class='content_center'>
-                    <div class='content_center_title'>「拉萨」党的十八大以来拉萨市组织工作综述</div>
-                    <div></div>
+                    <div class='content_center_title'>{{obj.articleVO.articleTitle}}</div>
+                    <div v-html='obj.articleVO.articleContent'></div>
                 </div>
-                <div class='comment'>
+                <div class='comment' v-if='obj.articleVO.articleCanDiscuss'>
                     <div class='comment_top'>
                         <span class='comment_title'>网友评论</span>
                         &nbsp;&nbsp;
@@ -27,7 +27,7 @@
                             <textarea class='textarea' name="" id="" placeholder="说两句吧"></textarea>
                             <div class='sumbit'>
                                 <div>游客</div>
-                                <div class='btn'>发表</div>
+                                <div class='btn' @click='add'>发表</div>
                             </div>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
                                     <span class='name'>游客1</span>&nbsp;&nbsp;<span class='time'>2020.06.29 13:00</span>
                                 </div>
                                 <div>
-                                    确石林六立件劳必精斗眼料部比众认路民声况京须意九西上白第想度级自并体按油。增民都并物在来需几机般写确记面龙育价果律严出群地意平队议族九见按适学物情备最间内层专热中重接人规设感应。华或行志量低越期期采反京红业极收术报型采是称今低达广越许研证车体音得何口细千权题将 
+                                     
                                 </div>
                             </div>
                         </div>
@@ -48,6 +48,9 @@
                 </div>
             </div>
         </div>
+        <div class="left-menu">
+        <anchor-navigator  @headerNav='headerNav'></anchor-navigator>
+    </div>
     </div>
     
 </template>
@@ -55,20 +58,46 @@
     import Vue from 'vue';
     import Component from 'vue-class-component';
     import MyHeader from '@/pc/components/MyHeader.vue';
+    import $http from '@/pc/api/event';
+import AnchorNavigator from '@/pc/components/AnchorNavigator.vue';
+
     @Component({
         components: {
-            MyHeader
+            MyHeader,AnchorNavigator
         },
     })
     export default class Article extends Vue {
-        list = [1,21,11,111,1111,11111,111111,1111111]
+        list = []
+        obj = {}
+        name = ''
+        add(){
+            // $http.commentAdd({
+
+            // })
+        }
+        mounted(){
+            this.obj = JSON.parse(this.$route.query.item)
+            this.name = this.$route.query.name
+            $http.commentList({
+                articleId: this.obj.articleId,
+                touristCommentType: this.$route.query.index
+            })
+            .then(res => {
+                this.list = res.data.data
+            })
+        }
     }
 </script>
 <style scoped lang="scss">
-.article_box{
-    
-background: #F1F1F1;
-}
+    .article_box{
+        
+        background: #F1F1F1;
+        .left-menu {
+            position: fixed;
+            top: 400px;
+            right: 160px;
+        }
+    }
     .article{
         background-image: url('/src/pc/static/imgs/organize-work_background.png');
         background-size: 100% 1261px;
@@ -178,5 +207,6 @@ background: #F1F1F1;
                 }
             }
         }
+        
     }
 </style>

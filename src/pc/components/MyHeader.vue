@@ -31,45 +31,54 @@ export default class MenuHeader extends Vue {
     icon2 = icon2
     myList = [
         {
-        text: '首页',
-        value: 'indexPage',
+            text: '首页',
+            value: 'indexPage',
+            myroute: {name: 'home'}
         },
         {
-        text: '序言',
-        value: 'preface',
+            text: '序言',
+            value: 'preface',
+            myroute: {name: 'list', query: {value: 'preface'}}
         },
         {
-        text: '领导关怀',
-        value: 'leaderCare',
+            text: '领导关怀',
+            value: 'leaderCare',
+            myroute: {name: 'list', query: {value: 'leaderCare'}}
         },
         {
-        text: '大事件',
-        value: 'bigEvent',
+            text: '大事件',
+            value: 'bigEvent',
+            myroute: {name: 'list', query: {value: 'bigEvent'}}
         },
         {
-        text: '组织工作',
-        value: 'organizeWork',
+            text: '组织工作',
+            value: 'organizeWork',
+            myroute: {name: 'list', query: {value: 'organizeWork'}}
         },
         {
-        text: '榜样力量',
-        value: 'roleModel',
+            text: '榜样力量',
+            value: 'roleModel',
+            myroute: {name: 'list', query: {value: 'roleModel'}}
         },
         {
-        text: '七地组声',
-        value: 'sevenGroup',
+            text: '七地组声',
+            value: 'sevenGroup',
+            myroute: {name: 'list', query: {value: 'sevenGroup'}}
         },
     ]
     selectValue = ''
     nav(item, index){
         if (this.$route.name == 'list') {
             this.selectValue = item.value
-            this.getList()
+            this.$router.push(item.myroute)
+            this.$emit('headerNav', item.value)
         } else {
-            this.$router.push({name: 'list', query: {value: item.value}})
+            this.$router.push(item.myroute)
         }
     }
     getList(){
         console.log(this.selectValue)
+
     }
     mounted(){
         this.selectValue = this.$route.query.value

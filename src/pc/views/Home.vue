@@ -60,36 +60,43 @@ export default class Home extends Vue {
     {
       text: '首页',
       value: 'indexPage',
+      myroute: {name: 'home'}
     },
     {
       text: '序言',
       value: 'preface',
       content: Preface,
+      myroute: {name: 'list', query: {value: 'preface'}}
     },
     {
       text: '领导关怀',
       value: 'leaderCare',
       content: LeaderCare,
+      myroute: {name: 'list', query: {value: 'leaderCare'}}
     },
     {
       text: '大事件',
       value: 'bigEvent',
       content: BigEvent,
+      myroute: {name: 'list', query: {value: 'bigEvent'}}
     },
     {
       text: '组织工作',
       value: 'organizeWork',
       content: OrganizeWork,
+      myroute: {name: 'list', query: {value: 'organizeWork'}}
     },
     {
       text: '榜样力量',
       value: 'roleModel',
       content: RoleModel,
+      myroute: {name: 'list', query: {value: 'roleModel'}}
     },
     {
       text: '七地组声',
       value: 'sevenGroup',
       content: SevenGroup,
+      myroute: {name: 'list', query: {value: 'sevenGroup'}}
     },
   ];
   anchorNavStickyOpts = {
@@ -110,7 +117,8 @@ export default class Home extends Vue {
 
   updateCurrentMenu(menu) {
     this.currentMenu = menu;
-    jumpToContent(`${this.currentMenu.value}_jump_page`);
+    this.$router.push(menu.myroute)
+    // jumpToContent(`${this.currentMenu.value}_jump_page`);
   }
 }
 </script>

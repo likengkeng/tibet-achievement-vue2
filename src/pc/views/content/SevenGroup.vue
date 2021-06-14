@@ -3,8 +3,8 @@
     <MyContentHeader :content='content' @click='detail'></MyContentHeader>
     <div class='content flex' @mouseleave='mouseleave'  @mouseenter='mouseenter'>
       <div v-for='(item, index) in list' :key='item.name' @mouseenter='item.check = true' @mouseleave='item.check = false' @click='nav(item, index)' class='list'>
-        <img :src="item.path" alt="" class='nav_img' :class='{hover_width: item.check}'>
-        <img :src="item.icon" alt="" class='name_icon'>
+        <img :src="item.areaVoiceCoverImagePath" alt="" class='nav_img' :class='{hover_width: item.check}'>
+        <img :src="nameList[item.areaVoiceMeunType].icon" alt="" class='name_icon'>
       </div>
     </div>
   </div>
@@ -31,7 +31,8 @@ import $http from '@/pc/api/event';
 })
 export default class SevenGroup extends Vue {
     content: string = content
-    list = [
+    nameList = [
+      {},
       {name: '拉萨', icon: ls, check: true, path: ''},
       {name: '日喀则', icon: rkz, check: false, path: ''},
       {name: '山南', icon: sn, check: false, path: ''},
@@ -40,6 +41,7 @@ export default class SevenGroup extends Vue {
       {name: '那曲', icon: nq, check: false, path: ''},
       {name: '阿里', icon: al, check: false, path: ''},
     ]
+    list = []
     detail(){this.$router.push({name: 'list', query: {value: 'sevenGroup'}})}
     nav(item, index){}
     mouseleave(){
@@ -48,21 +50,25 @@ export default class SevenGroup extends Vue {
     mouseenter(){
       this.list[0].check = false
     }
-    getList(index){
+    getList(){
       $http.voiceList({
-        areaVoiceType: 1,
-        areaVoiceMeunType: index
+        areaVoiceType: 1
       })
       .then(res => {
         console.log(res)
-        this.list[index].path = res.data.areaVoiceCoverImagePath
+        res.data.data.map(el => {
+          el.check = false
+          return el
+        })
+        res.data.data[0].check = true
+        this.list = res.data.data
       })
     }
     mounted() {
-      this.list.forEach((el, index) => {
-        this.getList(index)
-      });
-      // this.getList()
+      // this.list.forEach((el, index) => {
+      //   this.getList(index)
+      // });
+      this.getList()
     }
 }
 </script>

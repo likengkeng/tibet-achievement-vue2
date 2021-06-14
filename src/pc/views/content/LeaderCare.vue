@@ -58,6 +58,7 @@ export default class LeaderCare extends Vue {
   detail(){this.$router.push({name: 'list', query: {value: 'leaderCare'}})}
   navSelect(index){
     this.navIndex = index
+    this.imgListIndex = 0
     this.getList()
   }
   getList(){

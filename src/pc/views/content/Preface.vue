@@ -5,22 +5,14 @@
         <img @click='leftBtn' :src="left_icon" alt="" class='icon left'>
         <img @click='rightBtn' :src="right_icon" alt="" class='icon right'>
 
-      <div v-for='item in list' :key='item' class='list' :style='{transform: `translateX(-${pageSize*100}%)`}'>
-        <video-player
-          v-if='isVideo'
-          class="video-player-box"
-          ref="videoPlayer"
-          :options="playerOptions"
-          :playsinline="true"
-          customEventName="customstatechangedeventname"
-          @play="onPlayerPlay($event)"
-          @pause="onPlayerPause($event)"
-          @statechanged="playerStateChanged($event)"
-          @ready="playerReadied">
-        </video-player>
-        <img v-else :src="el.path" alt="" class='list_img'>
+      <div v-for='(item, index) in list' :key='item.prefaceId' class='list' :style='{transform: `translateX(-${pageSize*100}%)`}'>
+        
+        <video :src="item.materialVO.pathAll" class='video' :ref='`video${index}`' v-if='item.isVideo'>
+          您的浏览器不支持 video 标签。
+        </video>
+        <img v-else :src="item.materialVO.pathAll" alt="" class='list_img'>
         <div class='content'>
-          <div>以习近平为团长的中央代表团抵达日喀则地区，受到各族群众热烈欢迎！</div>
+          <div>{{item.materialVO.name}}</div>
           <div class='carousel_btn_box'>
             <div class='carousel_btn' @click='selectChange(index)' :class='{select: index == pageSize}' v-for='(item, index) in list' :key='item.articleId'></div>
           </div>
@@ -98,16 +90,15 @@ export default class Preface extends Vue {
   getList(){
     $http.prefaceList({prefaceType: 1})
     .then(res => {
-      // console.log(res)
-      // res.data.data.map(el => {
-      //   el.isVideo = false
-      //   const type = el.path?.substring(el.path.length-3)
-      //   if (type == 'mp4') {
-      //     el.isVideo = true
-      //   }
-      //   return el
-      // })
-      // this.list = res.data.data
+      console.log(res)
+      res.data.data.map(el => {
+        el.isVideo = false
+        if (el.materialVO.stffix == 'mp4') {
+          el.isVideo = true
+        }
+        return el
+      })
+      this.list = res.data.data
     })
   }
   mounted() {
@@ -147,6 +138,10 @@ export default class Preface extends Vue {
     overflow: hidden;
     display: flex;
     position: relative;
+    .video{
+      width: 100%;
+      height: 568px;
+    }
     .icon{
         width: 46px;
         height: 36px;

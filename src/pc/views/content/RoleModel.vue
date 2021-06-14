@@ -9,29 +9,41 @@
     </div>
     <div class='content'>
       <div class='nav_box'>
-        <div class='nav' :class='{nav_select: item.check}' v-for='(item, index) in navTitle' :key='item.name' @click='navSelect(item, index)'>
+        <div class='nav' :class='{nav_select: navIndex==index}' v-for='(item, index) in navTitle' :key='item.name' @click='navSelect(item, index)'>
           <div class='nav_name'>{{item.name}}</div>
         </div>
       </div>
       <div class='article'>
-        <div class='content1'>
-          <div class='article_content_header'>大标题大标题大标题大大标题标题</div>
-          <div>步区便斗造何同把律接必接调广之历界的装众究阶那铁始每志相意见型前决指经影此界少较连被酸置张离。术从线候子历回一口省度验斗术术保变土思们先装技基老方回<span class='color'>【详情】</span></div>
+        <div class='content1' v-if='list[0]'>
+          <div class='article_content_header'>{{list[0].articleVO.articleTitle}}</div>
+          <div v-html='list[0].articleVO.articleContent'><span class='color'>【详情】</span></div>
         </div>
-        <div>
-          <img :src="roleModel_icon" alt="" class='content2'>
+        <div v-if='list[0]'>
+          <img :src="list[0].articleVO.articleCoverImagePath" alt="" class='content2'>
         </div>
         <div>
           <div class='flex'>
-            <div class='content3'>
-              <img :src="roleModel_icon" alt="" class='content3_img'>
+            <div class='content3 relative' @mouseover.stop="mouseOver(1)" @mouseleave.stop="mouseLeave(1)" v-if='list[1]'>
+              <img :src="list[1].articleVO.articleCoverImagePath" alt="" class='content3_img'>
+              <div class='modal' v-show='isShow1'>
+                <div class='modal_title'>{{list[1].articleVO.articleTitle}}</div>
+                <div v-html='list[1].articleVO.articleContent'><span class='color'>【详情】</span></div>
+              </div>
             </div>
-            <div class='content4'>
-              <img :src="roleModel_icon" alt="" class='content4_img'>
+            <div class='content4 relative' @mouseover.stop="mouseOver(2)" @mouseleave.stop="mouseLeave(2)" v-if='list[2]'>
+              <img :src="list[2].articleVO.articleCoverImagePath" alt="" class='content4_img'>
+              <div class='modal' v-show='isShow2'>
+                <div class='modal_title'>{{list[2].articleVO.articleTitle}}</div>
+                <div v-html='list[2].articleVO.articleContent'><span class='color'>【详情】</span></div>
+              </div>
             </div>
           </div>
-          <div>
-            <img :src="roleModel_icon" alt="" class='content5'>
+          <div class='relative' @mouseover.stop="mouseOver(3)" @mouseleave.stop="mouseLeave(3)" v-if='list[3]'>
+            <img :src="list[3].articleVO.articleCoverImagePath" alt="" class='content5'>
+            <div class='modal' v-show='isShow3'>
+              <div class='modal_title'>{{list[3].articleVO.articleTitle}}</div>
+              <div v-html='list[3].articleVO.articleContent'><span class='color'>【详情】</span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -61,23 +73,48 @@ export default class RoleModel extends Vue {
 
   roleModel_icon: string = roleModel_icon
   navTitle = [
-    {name: '老西藏', check: true},
-    {name: '优秀共产党员', check: false},
-    {name: '优秀党务工作者', check: false},
-    {name: '先进基层党组织', check: false},
-    {name: '优秀援藏干部人才', check: false},
-    {name: '优秀组工干部', check: false},
-    {name: '最美公务员', check: false},
+    {name: '老西藏'},
+    {name: '优秀共产党员'},
+    {name: '优秀党务工作者'},
+    {name: '先进基层党组织'},
+    {name: '优秀援藏干部人才'},
+    {name: '优秀组工干部'},
+    {name: '最美公务员'},
   ]
+  navIndex = 0
+  list = [{},{},{},{},{},{},{}]
+  isShow1 = false
+  isShow2 = false
+  isShow3 = false
+  isShow4 = false
+  isShow5 = false
   detailBtn(){
       this.$router.push({name: 'list', query: {value: 'roleModel'}})
   }
-  navSelect(item, index){
-    this.navTitle.map(el => {
-      el.check = false
-      return el
+  mouseOver(index){
+    console.log(index)
+    this[`isShow${index}`] = true
+  }
+  mouseLeave(index){
+    this[`isShow${index}`] = false
+  }
+  navSelect(index){
+    
+    this.navIndex = index
+    this.getList()
+  }
+  getList(){
+    $http.powerList({
+      organizationPowerMeunType: 2,
+      organizationPowerType: this.navIndex+1
     })
-    item.check = true
+    .then(res => {
+      console.log(res)
+      this.list = res.data.data
+    })
+  }
+  mounted(){
+    this.getList()
   }
 }
 </script>
@@ -186,6 +223,11 @@ export default class RoleModel extends Vue {
       .content5{
         width: 379px;
         height: 170px;
+        margin-top: 10px;
+        display: block;
+      }
+      .content5:hover .modal{
+        display: block;
       }
     }
   }
@@ -196,6 +238,22 @@ export default class RoleModel extends Vue {
     width: 88px;
     height: 67px;
     margin-right: -30px;
+  }
+  .modal{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 13px 13px 23px;
+    color: #fff;
+    font-size: 16px;
+    z-index: 10;
+    box-sizing: border-box;
+    .modal_title{
+      font-weight: bold;
+    }
   }
 }
 </style>

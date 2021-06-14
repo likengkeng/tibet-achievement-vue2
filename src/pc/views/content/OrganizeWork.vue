@@ -12,36 +12,38 @@
           <div class='article'>
             <img @click='leftBtn' :src="left_icon" alt="" class='icon left'>
             <img @click='rightBtn' :src="right_icon" alt="" class='icon right'>
-            <div class='article_left'>
-              <div>
-                <img class='left_img' :src="content" alt="">
-              </div>
-              <div class='copywriting'>
-                <div class='line_clamp2 title'>大标题大标题大标题大大标题标题</div>
-                <div class='copywriting_content'>
-                  步区便斗造何同把律接接调广之历界的装众究阶那铁始每志相意见型前决指经影此界少较连万内别被酸置步张离。术从线候子历回一口省度验斗术术保变土思们先装技基则马很直老方回
-                  <span class='color'>【详情】</span>
-                </div>
-              </div>
-            </div>
-            <div class='article_right'>
-              <div class='article_right_content mb_15'>
-                <div><img class='right_img' :src="content" alt=""></div>
-                <div class='content1'>
-                  <div class='line_clamp2 title'>大标题大标题大标题大大标题标题</div>
-                  <div class='copywriting_content'>
-                    步区便斗造何同把律接接调广之历界的装众究阶那铁始每志相意见型前决指经影此界少较连万内别被酸置步张离。术从线候子历回一口省度验斗术术保变土思们先装技基则马很直老方回
-                    <span class='color'>【详情】</span>
+            <div class='article_list_box'>
+              <div v-for='item in list' :key='item.organizationPowerId' class='article_list' :style='{transform: `translateX(-${pageSize*100}%)`}'>
+                <div class='article_left' v-if='item[0]'>
+                  <div>
+                    <img class='left_img' :src="item[0].articleVO.articleCoverImagePath" alt="">
+                  </div>
+                  <div class='copywriting'>
+                    <div class='line_clamp2 title'>{{item[0].articleVO.articleTitle}}</div>
+                    <div class='copywriting_content' v-html='item[0].articleVO.articleContent'>
+                      <!-- {{item[0].articleVO.articleTitle}} -->
+                      <!-- <span class='color'>【详情】</span> -->
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class='article_right_content'>
-                <div><img class='right_img' :src="content" alt=""></div>
-                <div class='content1'>
-                  <div class='line_clamp2 title'>大标题大标题大标题大大标题标题</div>
-                  <div class='copywriting_content'>
-                    步区便斗造何同把律接接调广之历界的装众究阶那铁始每志相意见型前决指经影此界少较连万内别被酸置步张离。术从线候子历回一口省度验斗术术保变土思们先装技基则马很直老方回
-                    <span class='color'>【详情】</span>
+                <div class='article_right'>
+                  <div class='article_right_content mb_15' v-if='item[1]'>
+                    <div><img class='right_img' :src="item[1].articleVO.articleCoverImagePath" alt=""></div>
+                    <div class='content1'>
+                      <div class='line_clamp2 title'>{{item[1].articleVO.articleTitle}}</div>
+                      <div class='copywriting_content' v-html='item[1].articleVO.articleContent'>
+                        <!-- <span class='color'>【详情】</span> -->
+                      </div>
+                    </div>
+                  </div>
+                  <div class='article_right_content' v-if='item[2]'>
+                    <div><img class='right_img' :src="item[2].articleVO.articleCoverImagePath" alt=""></div>
+                    <div class='content1'>
+                      <div class='line_clamp2 title'>{{item[2].articleVO.articleTitle}}</div>
+                      <div class='copywriting_content' v-html='item[2].articleVO.articleContent'>
+                        <!-- <span class='color'>【详情】</span> -->
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -108,17 +110,37 @@ export default class OrganizeWork extends Vue {
     },
   ];
   currentMenu: MenuItem = {} as MenuItem;
-
+  list = []
+  pageSize = 0
   detail(){this.$router.push({name: 'list', query: {value: 'organizeWork'}})}
-  leftBtn(){}
-  rightBtn(){}
+  leftBtn(){
+    if (this.pageSize == 0) {
+      return
+    }
+    this.pageSize -= 1
+  }
+  rightBtn(){
+    if (this.pageSize == this.list.length-1) {
+      return
+    }
+    this.pageSize += 1
+  }
   getList(){
     $http.powerList({
       organizationPowerMeunType: 1,
       organizationPowerType: this.currentMenu.index
     })
     .then(res => {
+      let arr = []
+      res.data.data.forEach((el,index) => {
+        if (arr[Math.ceil((index+1)/3)-1]) {
+          arr[Math.ceil((index+1)/3)-1].push(el)
+        } else {
+          arr[Math.ceil((index+1)/3)-1] = [el]
+        }
+      });
       console.log(res)
+      this.list = arr
     })
   }
   mounted() {
@@ -153,6 +175,17 @@ export default class OrganizeWork extends Vue {
   .article{
     display: flex;
     position: relative;
+    .article_list_box{
+      width: 1200px;
+      overflow: hidden;
+      display: flex;
+    }
+    .article_list{
+      display: flex;
+      position: relative;
+      flex-shrink: 0;
+      transition: .5s;
+    }
     .icon{
       width: 46px;
       height: 36px;
@@ -175,6 +208,7 @@ export default class OrganizeWork extends Vue {
       display: flex;
       margin-right: 15px;
       flex-shrink: 0;
+      box-sizing: border-box;
       .left_img{
         width: 452px;
         height: 410px;
@@ -197,6 +231,8 @@ export default class OrganizeWork extends Vue {
     .article_right{
       display: flex;
       flex-direction: column;
+      width: 476px;
+      flex-shrink: 0;
       .mb_15{
         margin-bottom: 15px;
       }

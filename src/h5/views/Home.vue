@@ -1,10 +1,13 @@
 <template>
   <div class="tibet-achievement-H5">
     <div class="cover-logo-h5"></div>
-    <menu-header
+    <div class='mb_25'>
+      <menu-header
       :menuList="menuList"
       :current="currentMenu"
       @selectMenu="updateCurrentMenu"></menu-header>
+    </div>
+    
     <div class="home-content">
       <preface></preface>
       <leader-care></leader-care>
@@ -68,7 +71,10 @@ export default class Home extends Vue {
       value: 'interactiveArea',
     },
   ];
-  currentMenu: MenuItem = {} as MenuItem;
+  currentMenu: MenuItem = {
+      text: '首页',
+      value: 'indexPage',
+    } as MenuItem;
   updateCurrentMenu(menu) {
     this.currentMenu = menu;
   }
@@ -76,4 +82,10 @@ export default class Home extends Vue {
 </script>
 
 <style scoped lang="scss">
+.tibet-achievement-H5{
+  background: rgba(237, 237, 237, 0.9);
+  .mb_25{
+    margin-bottom: 25px;
+  }
+}
 </style>

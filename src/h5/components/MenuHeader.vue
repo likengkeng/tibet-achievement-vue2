@@ -41,11 +41,14 @@ export default class MenuHeader extends Vue {
 </script>
 <style scoped lang="scss">
 .header {
-  height: 100px;
+  padding: 12px;
+  background: #fff;
   ul {
     height: 100%;
     li.active {
       background: #B01516;
+      
+      border-radius: 2px;
       a {
         color: #fff;
       }

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { AxiosInstance } from 'axios';
-const apiUrl = 'http://182.61.5.103:9999/cms/'
+const apiUrl = 'http://182.61.5.103:9998/web/'
 
 function createAPI({ url, headers } : any) {
   const instance = axios.create({
