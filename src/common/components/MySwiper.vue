@@ -54,7 +54,7 @@ export default class MySwiper extends Vue {
     return this.$refs.mySwiper.swiper;
   }
   mounted() {
-    this.swiper.slideTo(3, 1000, false);
+    this.swiper.slideTo(0, 1000, false);
   }
   updateOption(options) {
     this.swiperOptions = {

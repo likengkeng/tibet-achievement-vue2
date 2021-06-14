@@ -1,18 +1,15 @@
 <template>
   <div class="preface">
     <img :src="logo" alt="" class='preface-logo'>
-    <image-swiper :p2="true" :list="list" width="100%" height="375px" key="preface" @slideChanged='slideChanged'>
-      <template slot-scope='slide'>
-        <video name='content' :src="slide.materialVO.pathAll" class='video' :ref='`video${index}`' v-if='slide.isVideo'>
+    <image-swiper :p2="true" :list="list" width="100%" height="199px" key="preface" @slideChanged='slideChanged'>
+      <div slot-scope='slide' slot='content'>
+        <video :src="slide.slide.materialVO.pathAll" class='video' :ref='`video${index}`' v-if='slide.slide.isVideo'>
             您的浏览器不支持 video 标签。
         </video>
-      </template>
-      
-      <div name='pagination'>测试</div>
+        <img v-else :src="slide.slide.materialVO.pathAll" alt="图片">
+      </div>
+      <div name='pagination'>{{currentDesc}}</div>
     </image-swiper>
-    <div class="text-content">
-      {{ currentDesc }}
-    </div>
   </div>
 </template>
 
@@ -30,20 +27,11 @@ import $http from '@/pc/api/event';
 })
 export default class Preface extends Vue {
   logo = logo
-  list = [
-    {
-      src: '/static/imgs/test01.jpg',
-    },
-    {
-      src: '/static/imgs/test02.jpg',
-    },
-    {
-      src: '/static/imgs/test03.jpg',
-    },
-  ];
+  list = [];
   currentDesc: string = '以习近平为团长的中央代表团抵达日喀则地区，收到...';
   slideChanged(index){
     console.log(index)
+    // this.currentDesc = this.list[index].materialVO.name
   }
   getList(){
     $http.prefaceList({prefaceType: 1})
@@ -74,11 +62,9 @@ export default class Preface extends Vue {
     display: block;
     margin: 0px auto 9px;
   }
-  .text-content {
-    height: 44px;
-    line-height: 44px;
-    font-size: 15px;
-    padding-left: 20px;
+  .video{
+    width: 100%;
+    height: 199px;
   }
 }
 </style>
