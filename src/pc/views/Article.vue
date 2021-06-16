@@ -45,11 +45,11 @@
 
                     </template>
                     <template v-else>
-                        <div class='content_center_title'>{{obj.articleVO.articleTitle}}</div>
-                        <div v-html='obj.articleVO.articleContent'></div>
+                        <div class='content_center_title'>{{(obj.articleVO || {}).articleTitle}}</div>
+                        <div v-html='(obj.articleVO || {}).articleContent'></div>
                     </template>
                 </div>
-                <div class='comment' v-if='obj.articleVO.articleCanDiscuss'>
+                <div class='comment' v-if='(obj.articleVO || {}).articleCanDiscuss'>
                     <div class='comment_top'>
                         <span class='comment_title'>网友评论</span>
                         &nbsp;&nbsp;
@@ -59,7 +59,7 @@
                         <div class='header_img'></div>
                         <div class='input_box'>
                             <quill-editor
-                                 class='textarea'
+                                class='textarea'
                                 v-model="touristCommentContent"
                                 ref="myQuillEditor"
                                 :options="editorOption"
@@ -139,7 +139,10 @@
     ]
     @Component({
         components: {
-            MyHeader,AnchorNavigator,quillEditor, Quill
+            MyHeader,
+            AnchorNavigator,
+            quillEditor,
+            Quill,
         },
     })
     export default class Article extends Vue {
@@ -188,7 +191,7 @@
         }
         isHistory = false
         get editor() {
-            return this.$refs.myQuillEditor.quill
+            return this.$refs?.myQuillEditor?.quill
         }
         onEditorReady(editor) { // 准备编辑器
 
@@ -242,9 +245,9 @@
                 touristCommentType: this.$route.query.index
             })
             .then(res => {
-                res.data.data.map((el, index) => {
+                res?.data?.data?.map((el, index) => {
                     el.createDatetime = this.format(el.createDatetime)
-                    el.replyList.map(ele => {
+                    el.replyList?.map(ele => {
                         ele.createDatetime = this.format(ele.createDatetime)
                         return ele
                     })
@@ -257,7 +260,7 @@
             $http.memorabiliaList()
             .then(res => {
                 let arr1 = [], arr2 = []
-                res.data.data.map((el, index) => {
+                res?.data?.data?.map((el, index) => {
                     el.memorabiliaDatetime = this.format1(el.memorabiliaDatetime)
                     if (index%2==0) {
                         arr1.push(el)

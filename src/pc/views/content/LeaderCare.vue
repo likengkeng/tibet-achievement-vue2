@@ -21,8 +21,8 @@
             <div v-for='item in list' :key='item.articleId' class='list' @click='jump(item)'>
               <div class='my_flex list_left'>
                 <img :src="leaderCare_icon" alt="" class='icon'>
-                <div v-if='navIndex==3'>第{{item.leaderVO.leaderSort}}任-{{item.leaderVO.leaderName}} </div>
-                <div v-else>{{item.articleVO.articleTitle}}</div>
+                <div v-if='navIndex==3'>第{{(item.leaderVO || {}).leaderSort}}任-{{(item.leaderVO || {}).leaderName}} </div>
+                <div v-else>{{(item.articleVO || {}).articleTitle}}</div>
               </div>
               <div>{{item.createDatetime}}</div>
             </div>
@@ -58,9 +58,9 @@ export default class LeaderCare extends Vue {
   jump(item){
     // this.$router.push({name: 'Article', query: {value: 'leaderCare'}})
     this.$router.push({name: 'article', query: {
-      isHistory: this.navIndex == 3, 
-      item: JSON.stringify(item), 
-      name: '领导关怀', 
+      isHistory: this.navIndex == 3,
+      item: JSON.stringify(item),
+      name: '领导关怀',
       index: 2
     }})
 
@@ -76,7 +76,7 @@ export default class LeaderCare extends Vue {
     .then(res => {
       console.log(res)
       this.imgList = []
-      res.data.data.map(el => {
+      res?.data?.data?.map(el => {
         el.articleVO?.createDatetime && (el.createDatetime = this.format(el.articleVO.createDatetime))
         el.leaderVO?.createDatetime && (el.createDatetime = this.format(el.leaderVO.createDatetime))
         if (this.navIndex == 3) {
@@ -97,7 +97,7 @@ export default class LeaderCare extends Vue {
     var d = time.getDate() < 10 ? `0${time.getDate()}` : time.getDate();
 
     var h = time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
-    var mm = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes(); 
+    var mm = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
     var s = time.getSeconds() < 10 ? `0${time.getSeconds()}` : time.getSeconds();
     return `${y}-${m}-${d} ${h}:${mm}:${s}`
   }

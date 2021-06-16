@@ -10,9 +10,20 @@ yarn run dev:h5  (for H5)
 
 ## 线上build
 ```
-yarn run build (for pc)
+yarn run build (for both pc and h5)
 
 yarn run build:h5  (for H5)
+
+yarn run build:pc  (for pc)
+
+```
+
+## 打包分析
+```
+
+yarn run analyzer:h5  (for H5)
+
+yarn run analyzer:pc  (for pc)
 
 ```
 

@@ -16,11 +16,11 @@
               <div v-for='item in list' :key='item.organizationPowerId' class='article_list' :style='{transform: `translateX(-${pageSize*100}%)`}'>
                 <div class='article_left' v-if='item[0]' @click='jump(item[0])'>
                   <div>
-                    <img class='left_img' :src="item[0].articleVO.articleCoverImagePath" alt="">
+                    <img class='left_img' :src="(item[0].articleVO || {}).articleCoverImagePath" alt="">
                   </div>
                   <div class='copywriting'>
-                    <div class='line_clamp2 title'>{{item[0].articleVO.articleTitle}}</div>
-                    <div class='copywriting_content' v-html='item[0].articleVO.articleContent'>
+                    <div class='line_clamp2 title'>{{(item[0].articleVO || {}).articleTitle}}</div>
+                    <div class='copywriting_content' v-html='(item[0].articleVO || {}).articleContent'>
                       <!-- {{item[0].articleVO.articleTitle}} -->
                       <!-- <span class='color'>【详情】</span> -->
                     </div>
@@ -28,19 +28,19 @@
                 </div>
                 <div class='article_right'>
                   <div class='article_right_content mb_15' v-if='item[1]' @click='jump(item[1])'>
-                    <div><img class='right_img' :src="item[1].articleVO.articleCoverImagePath" alt=""></div>
+                    <div><img class='right_img' :src="(item[1].articleVO || {}).articleCoverImagePath" alt=""></div>
                     <div class='content1'>
-                      <div class='line_clamp2 title'>{{item[1].articleVO.articleTitle}}</div>
-                      <div class='copywriting_content' v-html='item[1].articleVO.articleContent'>
+                      <div class='line_clamp2 title'>{{(item[1].articleVO || {}).articleTitle}}</div>
+                      <div class='copywriting_content' v-html='(item[1].articleVO || {}).articleContent'>
                         <!-- <span class='color'>【详情】</span> -->
                       </div>
                     </div>
                   </div>
                   <div class='article_right_content' v-if='item[2]' @click='jump(item[2])'>
-                    <div><img class='right_img' :src="item[2].articleVO.articleCoverImagePath" alt=""></div>
+                    <div><img class='right_img' :src="(item[2].articleVO || {}).articleCoverImagePath" alt=""></div>
                     <div class='content1'>
-                      <div class='line_clamp2 title'>{{item[2].articleVO.articleTitle}}</div>
-                      <div class='copywriting_content' v-html='item[2].articleVO.articleContent'>
+                      <div class='line_clamp2 title'>{{(item[2].articleVO || {}).articleTitle}}</div>
+                      <div class='copywriting_content' v-html='(item[2].articleVO || {}).articleContent'>
                         <!-- <span class='color'>【详情】</span> -->
                       </div>
                     </div>
@@ -122,8 +122,8 @@ export default class OrganizeWork extends Vue {
   jump(item){
     // this.$router.push({name: 'Article', query: {value: 'leaderCare'}})
     this.$router.push({name: 'article', query: {
-      item: JSON.stringify(item), 
-      name: '组织工作', 
+      item: JSON.stringify(item),
+      name: '组织工作',
       index: 4
     }})
 
@@ -287,6 +287,6 @@ export default class OrganizeWork extends Vue {
     line-clamp: 2;
     -webkit-box-orient: vertical;
   }
-  
+
 }
 </style>

@@ -44,7 +44,7 @@
     getList(){
       $http.prefaceList({prefaceType: 1})
       .then(res => {
-        res.data.data.map(el => {
+        res?.data?.data?.map(el => {
           el.isVideo = false
           if (el.materialVO.stffix == 'mp4') {
             el.isVideo = true

@@ -59,7 +59,7 @@ export default class SevenGroup extends Vue {
       })
       .then(res => {
         console.log(res)
-        res.data.data.map(el => {
+        res?.data?.data?.map(el => {
           el.check = false
           return el
         })
@@ -100,7 +100,7 @@ export default class SevenGroup extends Vue {
         display: block;
       }
     }
-    
+
   }
 }
 </style>
