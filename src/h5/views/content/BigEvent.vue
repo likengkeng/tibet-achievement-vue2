@@ -37,7 +37,7 @@
     getList(){
       $http.memorabiliaList()
         .then((res) => {
-          res.data.data.map(el => {
+          res?.data?.data?.map(el => {
             el.time = this.format(el.memorabiliaDatetime)
             return el
           })

@@ -4,7 +4,7 @@ const path = require('path');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const project = process.env.PROJECT || 'pc';
 const isPC = project === 'pc';
-const port = isPC ? '8000' : '8888';
+const port = isPC ? '8000' : '9000';
 
 module.exports = merge(common, {
   devtool: 'inline-source-map',

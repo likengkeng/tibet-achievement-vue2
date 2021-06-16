@@ -19,7 +19,7 @@
                     </div>
                 </div>-->
                 <img v-if='navIndex==3 && queryValue=="leaderCare"' :src="dataList[0].leaderVO.leaderImagePathAlls[0]" alt="">
-                <img v-else :src="(dataList[0].articleVO || {}).articleCoverImagePath" alt="">
+                <img v-else :src="((dataList[0] || {}).articleVO || {}).articleCoverImagePath" alt="">
             </div>
             <div class='content_bottom'>
                 <div class='nav' v-if='dataObj[queryValue]'>
@@ -28,15 +28,15 @@
                 <div class='data_list'>
                     <div v-for='(item, index) in dataList' :key='index' class='data_list_content'>
                         <div v-if='navIndex==3 && queryValue=="leaderCare"' @click='jump(item, "history")'>
-                            <img :src="item.leaderVO.leaderImagePathAlls[0]" alt="" class='data_list_img'>
-                            <div clas='data_list_title line_clamp1'>{{item.leaderVO.leaderName}}</div>
-                            <div class='data_list_text line_clamp1 myhtml' v-html='item.leaderVO.leaderComment'></div>
+                            <img :src="(item.articleVO || {}).leaderImagePathAlls[0]" alt="" class='data_list_img'>
+                            <div clas='data_list_title line_clamp1'>{{(item.articleVO || {}).leaderName}}</div>
+                            <div class='data_list_text line_clamp1 myhtml' v-html='(item.articleVO || {}).leaderComment'></div>
                             <div class='data_list_time'>{{item.time}}</div>
                         </div>
                         <div v-else @click='jump(item)'>
-                            <img :src="item.articleVO.articleCoverImagePath" alt="" class='data_list_img'>
-                            <div clas='data_list_title line_clamp1'>{{item.articleVO.articleTitle}}</div>
-                            <div class='data_list_text line_clamp1 myhtml' v-html='item.articleVO.articleContent'></div>
+                            <img :src="(item.articleVO || {}).articleCoverImagePath" alt="" class='data_list_img'>
+                            <div clas='data_list_title line_clamp1'>{{(item.articleVO || {}).articleTitle}}</div>
+                            <div class='data_list_text line_clamp1 myhtml' v-html='(item.articleVO || {}).articleContent'></div>
                             <div class='data_list_time'>{{item.time}}</div>
                         </div>
 
@@ -58,30 +58,16 @@
     import MyHeader from '@/pc/components/MyHeader.vue';
     import right_icon from '@/pc/static/imgs/right_icon.png'
     import left_icon from '@/pc/static/imgs/left_icon.png'
-    import 'video.js/dist/video-js.css';
-    import '@/pc/static/styles/video-custom.css';
-    import { videoPlayer } from 'vue-video-player';
     import $http from '@/pc/api/event';
     import AnchorNavigator from '@/pc/components/AnchorNavigator.vue';
 
     @Component({
     components: {
-        MyHeader,videoPlayer,AnchorNavigator
+        MyHeader,
+        AnchorNavigator,
     },
     })
     export default class List extends Vue {
-    playerOptionsDefault = {
-        // videojs options
-        muted: true,
-        language: 'en',
-        height: '540',
-        width: '100%',
-        playbackRates: [0.7, 1.0, 1.5, 2.0],
-        sources: [{
-        type: 'video/mp4',
-        src: 'http://vjs.zencdn.net/v/oceans.mp4',
-        }],
-    }
     left_icon = left_icon
     right_icon = right_icon
     playerOptions = {};
@@ -229,7 +215,7 @@
                 ...mydata
             })
             .then(res => {
-                res.data.data.map(el => {
+                res?.data?.data?.map(el => {
                     el.leaderVO && (el.time = this.format(el.leaderVO.updateDatetime))
                     el.articleVO && (el.time = this.format(el.articleVO.createDatetime))
                     return el
@@ -239,16 +225,12 @@
     }
     mounted(){
         this.queryValue = this.$route.query.value
-        this.$nextTick(() => {
-            this.playerOptions = { ...this.playerOptionsDefault };
-        })
         this.getList()
-
     }
     updated(){
         const list = Array.from(document.getElementsByClassName('myhtml'))
         list.forEach(el => {
-            el.children[0].setAttribute('style', 'margin: 0px')
+            el.children[0]?.setAttribute('style', 'margin: 0px')
         });
     }
     }

@@ -19,16 +19,14 @@
         </div>
       </div>
     </div>
-    
+
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import 'video.js/dist/video-js.css';
 import '@/pc/static/styles/video-custom.css';
-import { videoPlayer } from 'vue-video-player';
 import content from '@/pc/static/imgs/title_1.png'
 import play from '@/pc/static/imgs/play.png'
 import MyContentHeader from '@/pc/components/MyContentHeader.vue';
@@ -38,28 +36,14 @@ import $http from '@/pc/api/event';
 
 @Component({
   components: {
-    videoPlayer,MyContentHeader
+    MyContentHeader
   }
 })
 export default class Preface extends Vue {
   play=play
-  playerOptionsDefault = {
-    // videojs options
-    muted: true,
-    language: 'en',
-    height: '568',
-    width: '100%',
-    playbackRates: [0.7, 1.0, 1.5, 2.0],
-    sources: [{
-      type: 'video/mp4',
-      src: 'http://vjs.zencdn.net/v/oceans.mp4',
-    }],
-    // poster: '/static/imgs/author.jpg',
-  }
   left_icon = left_icon
   right_icon = right_icon
-  playerOptions = {};
-  
+
   content = content
   list = []
   pageSize = 0
@@ -97,14 +81,11 @@ export default class Preface extends Vue {
   detail(){
     this.$router.push({name: 'list', query: {value: 'preface'}})
   }
-  getData() {
-    this.playerOptions = { ...this.playerOptionsDefault };
-  }
   getList(){
     $http.prefaceList({prefaceType: 1})
     .then(res => {
       console.log(res)
-      res.data.data.map(el => {
+      res?.data?.data?.map(el => {
         el.isVideo = false
         if (el.materialVO.stffix == 'mp4') {
           el.isVideo = true
@@ -116,29 +97,6 @@ export default class Preface extends Vue {
   }
   mounted() {
     this.getList()
-    this.$nextTick(() => {
-      this.getData();
-    })
-  }
-
-  onPlayerPlay(player) {
-    // console.log('player play!', player)
-  }
-  onPlayerPause(player) {
-    // console.log('player pause!', player)
-  }
-  // ...player event
-
-  // or listen state event
-  playerStateChanged(playerCurrentState) {
-    // console.log('player current update state', playerCurrentState)
-  }
-
-  // player is ready
-  playerReadied(player) {
-    console.log('the player is readied', player)
-    // you can use it to do something...
-    // player.[methods]
   }
 }
 </script>
@@ -207,11 +165,11 @@ export default class Preface extends Vue {
             background: #fff;
           }
         }
-        
+
       }
     }
   }
-  
+
 }
 .play{
   position: absolute;

@@ -58,7 +58,7 @@
     getList(){
       $http.leaderList({leaderCareType: this.navIndex+1})
       .then(res => {
-        res.data.data.map(el => {
+        res?.data?.data?.map(el => {
           this.imgList.push(el[this.key].articleCoverImagePath)
           el[this.key].createDatetime = this.format(el[this.key].createDatetime)
           return el

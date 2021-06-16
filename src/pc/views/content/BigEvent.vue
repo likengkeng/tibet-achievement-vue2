@@ -82,7 +82,7 @@ export default class BigEvent extends Vue {
     $http.memorabiliaList()
       .then((res) => {
         console.log(res)
-        res.data.data.map(el => {
+        res?.data?.data?.map(el => {
           el.time = this.format(el.memorabiliaDatetime)
           el.check = false
           return el
