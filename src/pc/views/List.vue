@@ -19,10 +19,10 @@
                     </div>
                 </div>-->
                 <img v-if='navIndex==3 && queryValue=="leaderCare"' :src="dataList[0].leaderVO.leaderImagePathAlls[0]" alt="">
-                <img v-else :src="dataList[0].articleVO.articleCoverImagePath" alt="">
+                <img v-else :src="(dataList[0].articleVO || {}).articleCoverImagePath" alt="">
             </div>
             <div class='content_bottom'>
-                <div class='nav' v-if='dataObj[queryValue]'>
+                <div class='nav' v-if='dataObj[queryValue].tab'>
                     <div class='nav_btn' :class='{nav_btn_check: item.index == navIndex}' v-for='(item, index) in dataObj[queryValue].tab' :key='item.name' @click='navCheck(index)'>{{item.name}}</div>
                 </div>
                 <div class='data_list'>
@@ -39,11 +39,11 @@
                             <div class='data_list_text line_clamp1 myhtml' v-html='item.articleVO.articleContent'></div>
                             <div class='data_list_time'>{{item.time}}</div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
     <div class="left-menu">
@@ -153,7 +153,7 @@
                 {name: '干部人才援藏工作', index: 5},
                 {name: '自身建设', index: 6},
             ]
-        },    
+        },
         roleModel: {
             url: 'powerList',
                         name: '榜样力量',
@@ -222,7 +222,7 @@
                     sessionStorage.removeItem("myqidi")
                 }
                 mydata[key] = myobj[key] || this.navIndex
-                
+
             }
         }
             $http[key]({
@@ -243,7 +243,7 @@
             this.playerOptions = { ...this.playerOptionsDefault };
         })
         this.getList()
-        
+
     }
     updated(){
         const list = Array.from(document.getElementsByClassName('myhtml'))
@@ -297,7 +297,7 @@
                     flex-shrink: 0;
                     position: relative;
                     transition: .5s;
-                    
+
                     .content{
                         position: absolute;
                         z-index: 9;
@@ -326,7 +326,7 @@
                             background: #fff;
                         }
                         }
-                        
+
                     }
                     }
                 }
@@ -356,7 +356,7 @@
                         flex-wrap: wrap;
                         padding: 38px 32px;
                         .data_list_content{
-                            padding: 10px 10px 29px;                       
+                            padding: 10px 10px 29px;
                             box-shadow: 0px 2px 18px 0px rgba(211, 211, 211, 0.5);
                             background: #FFFFFF;
                             border-radius: 4px;
@@ -391,7 +391,7 @@
                         }
                     }
                 }
-                
+
             }
         }
         .line_clamp1 {

@@ -14,8 +14,8 @@
       <big-event></big-event>
       <organize-work></organize-work>
       <role-model></role-model>
-      <div>sadas</div>
-
+      <seven-group></seven-group>  
+      <clothing></clothing>
     </div>
   </div>
 </template>
@@ -29,6 +29,8 @@ import LeaderCare from './content/LeaderCare.vue';
 import BigEvent from './content/BigEvent.vue';
 import OrganizeWork from './content/OrganizeWork.vue';
 import RoleModel from './content/RoleModel.vue';
+import SevenGroup from './content/SevenGroup.vue';
+import Clothing from './content/Clothing.vue';
 
 import { MenuItem } from 'CommonTypes';
 
@@ -39,7 +41,9 @@ import { MenuItem } from 'CommonTypes';
     LeaderCare,
     BigEvent,
     OrganizeWork,
-    RoleModel
+    RoleModel,
+    SevenGroup,
+    Clothing
   },
 })
 export default class Home extends Vue {
@@ -82,7 +86,8 @@ export default class Home extends Vue {
       value: 'indexPage',
     } as MenuItem;
   updateCurrentMenu(menu) {
-    this.currentMenu = menu;
+    // this.currentMenu = menu;
+    this.$router.push({name: 'list', query: {value: menu.value}})
   }
 }
 </script>

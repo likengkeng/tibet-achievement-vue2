@@ -1,8 +1,8 @@
 <template>
   <div class="preface">
-    <img :src="logo" alt="" class='preface-logo'>
+    <img :src="logo" alt="" class='preface-logo' @click='detail'>
     <van-swipe @change="onChange">
-      <van-swipe-item v-for='item in list'>
+      <van-swipe-item v-for='(item, index) in list' :key="index">
         <video :src="item.materialVO.pathAll" class='video' :ref='`video${index}`' v-if='item.isVideo'>
             您的浏览器不支持 video 标签。
         </video>
@@ -24,7 +24,7 @@
   import Component from 'vue-class-component';
   import ImageSwiper from '@/common/components/MySwiper.vue';
   import logo from '@/h5/static/imgs/title1.png'
-  import $http from '@/pc/api/event';
+  import $http from '@/h5/api/event';
 
   @Component({
     components: {
@@ -38,10 +38,12 @@
     onChange(index) {
       this.current = index;
     }
+    detail(){
+      this.$router.push({name: 'list', query: {value: 'preface'}})
+    }
     getList(){
       $http.prefaceList({prefaceType: 1})
       .then(res => {
-        console.log(res)
         res.data.data.map(el => {
           el.isVideo = false
           if (el.materialVO.stffix == 'mp4') {

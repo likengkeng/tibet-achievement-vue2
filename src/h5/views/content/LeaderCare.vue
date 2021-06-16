@@ -1,10 +1,10 @@
 <template>
   <div class="leaderCare">
-    <img :src="logo" alt="" class='leaderCare-logo'>
-    <van-tabs title-active-color="#BA0C00FF" color='#BA0C00FF' @click="navTab">
+    <img :src="logo" alt="" class='leaderCare-logo' @click='detail'>
+    <van-tabs title-active-color="#BA0C00FF" color='#BA0C00FF' v-model='navIndex' @click="navTab">
       <van-tab v-for="item in navList" :title="item.name" :key='item.name'>
         <van-swipe>
-          <van-swipe-item v-for='item in imgList'>
+          <van-swipe-item v-for='(item, index) in imgList' :key="index">
             <img :src="item" class='img' alt="图片">
           </van-swipe-item>
           <template #indicator>
@@ -13,9 +13,9 @@
             </div>
           </template>
         </van-swipe>
-        <div class='article_list' v-for='item in list' :key='item[key].articleId'>
+        <div class='article_list' v-for='item in list' :key='item[key].articleId || item[key].leaderCareId' @click='jump(item)'>
           <div class='article_list_header line_clamp1'>
-            <span v-if='navIndex==2'>{{item[key].leaderName}}</span>
+            <span v-if='navIndex==3'>{{item[key].leaderName}}</span>
             <span v-else>{{item[key].articleTitle}}</span>
           </div>
           <div class='article_list_time'>{{item[key].createDatetime}}</div>
@@ -28,7 +28,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  import $http from '@/pc/api/event';
+  import $http from '@/h5/api/event';
   import logo from '@/h5/static/imgs/title2.png'
 
   @Component({
@@ -47,19 +47,16 @@
     list = []
     key = 'articleVO'
     navTab(item){
-      console.log(item)
       if (item == 2) {
         this.key = 'leaderVO'
       } else {
         this.key = 'articleVO'
       }
-      this.navIndex = this.navList[item].index
       this.getList()
     }
     getList(){
       $http.leaderList({leaderCareType: this.navIndex+1})
       .then(res => {
-        console.log(res)
         res.data.data.map(el => {
           this.imgList.push(el[this.key].articleCoverImagePath)
           el[this.key].createDatetime = this.format(el[this.key].createDatetime)
@@ -76,10 +73,24 @@
       var d = time.getDate() < 10 ? `0${time.getDate()}` : time.getDate();
 
       var h = time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
-      var mm = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes(); 
+      var mm = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
       var s = time.getSeconds() < 10 ? `0${time.getSeconds()}` : time.getSeconds();
       return `${y}-${m}-${d} ${h}:${mm}:${s}`
     }
+    detail(){this.$router.push({name: 'list', query: {value: 'leaderCare'}})}
+
+    jump(item){
+      if (this.navIndex == 3) {
+        this.$router.push({name: 'minister'})
+      } else {
+        this.$router.push({name: 'article', query: {
+          isHistory: this.navIndex == 3, 
+          item: JSON.stringify(item), 
+          name: '领导关怀', 
+          index: 2
+        }})
+      }
+  }
     mounted() {
       this.getList()
     }
@@ -104,7 +115,7 @@
   .article_list{
     padding: 11px 20px 11px 0px;
     border-bottom: 1px solid #EEEEEEFF;
-    
+
     .article_list_header{
       font-size: 15px;
       font-weight: bold;
@@ -129,6 +140,6 @@
     transform: translateY(-50%);
     left: 17px
   }
-  
+
 }
 </style>

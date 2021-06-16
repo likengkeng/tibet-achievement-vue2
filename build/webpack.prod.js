@@ -4,12 +4,14 @@ const common = require('./webpack.base.js');
 // 压缩CSS插件
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const project = process.env?.PROJECT || 'pc';
+const project = process.env.PROJECT || 'pc';
+const isAnalysis = process.env.ANALYZE_BUNDLE === 'true';
 
 var plugins = [
   new CleanWebpackPlugin({
-    cleanOnceBeforeBuildPatterns: [`dist/${project}`]
+    // cleanOnceBeforeBuildPatterns: [`dist/${project}/`]
   }), //删除打包的目录
   new MiniCssExtractPlugin({
     // Options similar to the same options in webpackOptions.output
@@ -19,6 +21,10 @@ var plugins = [
   }),
 ];
 
+if (isAnalysis) {
+  plugins.push(new BundleAnalyzerPlugin()); //http://127.0.0.1:8888 分析bundle
+}
+
 const cssLoader = [
   'css-loader',
   'postcss-loader',
@@ -26,7 +32,6 @@ const cssLoader = [
 ];
 
 module.exports = merge(common, {
-  devtool: 'cheap-module-source-map',
   optimization: {
     // 分离chunks
     splitChunks: {

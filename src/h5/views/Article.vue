@@ -110,7 +110,7 @@
     import Vue from 'vue';
     import Component from 'vue-class-component';
     import MyHeader from '@/pc/components/MyHeader.vue';
-    import $http from '@/pc/api/event';
+    import $http from '@/h5/api/event';
     import rocket from '@/pc/static/imgs/rocket.png'
     import AnchorNavigator from '@/pc/components/AnchorNavigator.vue';
     import { quillEditor, Quill } from "vue-quill-editor"; //调用编辑器

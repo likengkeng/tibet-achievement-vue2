@@ -8,12 +8,11 @@
         <div class='time1'>{{item.time[0]}}</div>
         <div class='time2'>{{item.time[0]}}</div>
         <div class='division'></div>
-        <div class='padding_lf13'>
+        <div class='padding_lf13' @click='jump(item)'>
           <div class='img_box'>
             <img :src="item.memorabiliaImagePathAlls[0]" alt="" class='img'>
             <img :src="rightIcon" alt="" class='right_icon' @click='rightBtn'>
             <img :src="rightIcon" alt="" class='right_icon left_icon' @click='leftBtn'>
-
           </div>
           <div class='list_title'>{{item.memorabiliaTitle}}</div>
           <div class='list_text'>{{item.memorabiliaContent}}</div>
@@ -26,14 +25,10 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  import { eventList } from '../mock';
   import logo from '@/h5/static/imgs/title3.png'
   import rightIcon from '@/h5/static/imgs/right_icon.png'
-  import $http from '@/pc/api/event';
-  @Component({
-    components: {
-    }
-  })
+  import $http from '@/h5/api/event';
+  @Component({})
   export default class BigEvent extends Vue {
     list = [];
     logo = logo
@@ -42,7 +37,6 @@
     getList(){
       $http.memorabiliaList()
         .then((res) => {
-          console.log(res)
           res.data.data.map(el => {
             el.time = this.format(el.memorabiliaDatetime)
             return el
@@ -61,7 +55,7 @@
       var d = time.getDate() < 10 ? `0${time.getDate()}` : time.getDate();
 
       var h = time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
-      var mm = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes(); 
+      var mm = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
       var s = time.getSeconds() < 10 ? `0${time.getSeconds()}` : time.getSeconds();
       return [`${y}年`, `${m}月${d}日`]
       // return `${y}年${m}月${d}日 ${h}:${mm}:${s}`
@@ -78,6 +72,16 @@
       }
       this.pageSize--
     }
+    jump(item){
+      // this.$router.push({name: 'Article', query: {value: 'leaderCare'}})
+      this.$router.push({name: 'article', query: {
+        item: JSON.stringify(item), 
+        name: '大事记', 
+        index: 3
+      }})
+
+    }
+    detail(){this.$router.push({name: 'BigEventList', query: {value: 'bigEvent'}})}
     mounted() {
       this.getList()
     }
@@ -171,7 +175,7 @@
             font-size: 14px;
           }
         }
-        
+
       }
     }
   }

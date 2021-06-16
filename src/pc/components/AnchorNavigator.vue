@@ -66,16 +66,16 @@ export default class AnchorNavigator extends Vue {
   }
   selectMenu(item) {
     if (this.$route.name == 'list') {
-            this.selectValue = item.value
-            this.$router.push(item.myroute)
-            this.$emit('headerNav', item.value)
-        } else {
-            this.$router.push(item.myroute)
-        }
+      this.selectValue = item.value
+      this.$router.push(item.myroute)
+      this.$emit('headerNav', item.value)
+    } else {
+        this.$router.push(item.myroute)
+     }
   }
-   mounted(){
-        this.selectValue = this.$route.query.value
-    }
+  mounted(){
+    this.selectValue = this.$route.query.value
+  }
 }
 </script>
 <style scoped lang="scss">

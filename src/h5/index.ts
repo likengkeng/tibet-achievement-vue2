@@ -8,11 +8,12 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import { Swipe, SwipeItem } from 'vant';
 import { Tab, Tabs } from 'vant';
-
+import { Popup } from 'vant';
 Vue.use(Swipe);
 Vue.use(SwipeItem);
 Vue.use(Tab);
 Vue.use(Tabs);
+Vue.use(Popup);
 Object.keys(directive).forEach(key => {
   // @ts-ignore
   Vue.directive(key, directive[key]);

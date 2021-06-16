@@ -5,7 +5,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 // html插件
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { resolve } = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+// const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const PROJECT = process.env.PROJECT || 'pc';
 
@@ -62,12 +62,12 @@ module.exports = {
       template: path.resolve(__dirname, '../src/index.html'),
     }),
     // 处理静态文件夹 static 复制到打包的 static 文件夹
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, `../src/${PROJECT}/static`),
-        to: 'static',
-      },
-    ]),
+    // new CopyWebpackPlugin([
+    //   {
+    //     from: path.resolve(__dirname, `../src/${PROJECT}/static`),
+    //     to: 'static',
+    //   },
+    // ]),
     new webpack.DefinePlugin({
       'process.env': {
         PROJECT: JSON.stringify(PROJECT),

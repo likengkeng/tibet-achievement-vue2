@@ -15,11 +15,10 @@ export default class App extends Vue {
     if (!localStorage.getItem('touristId')) {
       $http.touristCreate()
         .then(res => {
-          console.log(res)
           localStorage.setItem('touristId', res.data.id)
         })
     }
-            
+
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <div class="my_header">
     <div class='my_header_top'>
         <div class=' my_header_top_left'>
-            <img :src="ghIcon" alt="" class='gh_icon'> 
+            <img :src="ghIcon" alt="" class='gh_icon'>
             <img :src="titleIcon" alt="" class='title_icon'>
         </div>
         <img :src="icon2" alt="" class='icon_2'>
@@ -20,11 +20,8 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import ghIcon from '@/pc/static/imgs/gh_icon.png'
 import titleIcon from '@/pc/static/imgs/title_icon.png'
-
 import icon2 from '@/pc/static/imgs/100_icon.png'
-@Component({
-  
-})
+
 export default class MenuHeader extends Vue {
     ghIcon = ghIcon
     titleIcon = titleIcon
@@ -111,7 +108,7 @@ export default class MenuHeader extends Vue {
                     display: block;
                 }
             }
-            
+
             .icon_2{
                 width: 100px;
                 height: 74px;

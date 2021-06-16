@@ -1,31 +1,31 @@
 <template>
   <div class="organizeWork">
     <div class='solid'></div>
-    <img :src="logo" alt="" class='organizeWork-logo'>
+    <img :src="logo" alt="" class='organizeWork-logo' @click='detail'>
 
-    <van-tabs title-active-color="#BA0C00FF" color='#BA0C00FF' @click="navTab">
+    <van-tabs title-active-color="#BA0C00FF" v-model='navIndex' color='#BA0C00FF' @click="navTab">
       <van-tab v-for="item in navList" :title="item.text" :key='item.text'>
         <div class='content'>
            <div class='content_top'>
-            <div class='left' v-if='list[0]'>
-              <img :src="list[0].articleVO.articleCoverImagePath" alt="" class='img'>
+            <div class='left' v-if='list[0]' @click='jump(list[0])'>
+              <img :src="(list[0].articleVO || {}).articleCoverImagePath" alt="" class='img'>
               <div class='pd'>
-                <div class='title line_clamp1'>{{list[0].articleVO.articleTitle}}</div>
-                <div class='text line_clamp2' v-html='list[0].articleVO.articleContent'>{{list[1].articleVO.articleContent}}</div>
+                <div class='title line_clamp1'>{{ (list[0].articleVO || {}).articleTitle }}</div>
+                <div class='text line_clamp2' v-html='(list[0].articleVO || {}).articleContent'>{{(list[1].articleVO || {}).articleContent}}</div>
               </div>
             </div>
-            <div class='right' v-if='list[1]'>
-              <img :src="list[1].articleVO.articleCoverImagePath" alt="" class='img'>
+            <div class='right' v-if='list[1]' @click='jump(list[1])'>
+              <img :src="(list[1].articleVO || {}).articleCoverImagePath" alt="" class='img'>
               <div class='pd'>
-                <div class='title line_clamp1'>{{list[1].articleVO.articleTitle}}</div>
-                <div class='text line_clamp2' v-html='list[1].articleVO.articleContent'>{{list[1].articleVO.articleContent}}</div>
+                <div class='title line_clamp1'>{{ (list[1].articleVO || {}).articleTitle }}</div>
+                <div class='text line_clamp2' v-html='(list[1].articleVO || {}).articleContent'>{{(list[1].articleVO || {}).articleContent}}</div>
               </div>
             </div>
           </div>
-          <div class='content_bottom' v-if='list[2]'>
-            <img :src="list[2].articleVO.articleCoverImagePath" alt="" class='img'>
-            <div class='title line_clamp1'>{{list[2].articleVO.articleTitle}}</div>
-            <div class='text line_clamp2' v-html='list[2].articleVO.articleContent'>{{list[1].articleVO.articleContent}}</div>
+          <div class='content_bottom' v-if='list[2]' @click='jump(list[2])'>
+            <img :src="(list[2].articleVO || {}).articleCoverImagePath" alt="" class='img'>
+            <div class='title line_clamp1'>{{ (list[2].articleVO || {}).articleTitle }}</div>
+            <div class='text line_clamp2' v-html='(list[2].articleVO || {}).articleContent'>{{(list[2].articleVO || {}).articleContent}}</div>
           </div>
         </div>
       </van-tab>
@@ -36,12 +36,10 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import ContentHeader from './ContentHeader.vue';
 import logo from '@/h5/static/imgs/title4.png'
-import $http from '@/pc/api/event';
+import $http from '@/h5/api/event';
 @Component({
   components: {
-    ContentHeader,
   }
 })
 export default class OrganizeWork extends Vue {
@@ -79,16 +77,29 @@ export default class OrganizeWork extends Vue {
     },
   ]
   list = []
-  navIndex = 1
-  navTab(){}
+  navIndex = 0
+  navTab(){
+    this.getList()
+  }
   getList(){
     $http.powerList({
       organizationPowerMeunType: 1,
-      organizationPowerType: this.navIndex
+      organizationPowerType: this.navIndex+1
     })
     .then(res => {
       this.list = res.data.data
     })
+  }
+  detail(){this.$router.push({name: 'list', query: {value: 'organizeWork'}})}
+
+  jump(item){
+    // this.$router.push({name: 'Article', query: {value: 'leaderCare'}})
+    this.$router.push({name: 'article', query: {
+      item: JSON.stringify(item), 
+      name: '组织工作', 
+      index: 4
+    }})
+
   }
   mounted() {
     this.getList()
