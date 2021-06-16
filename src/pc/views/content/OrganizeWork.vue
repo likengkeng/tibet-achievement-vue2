@@ -14,7 +14,7 @@
             <img @click='rightBtn' :src="right_icon" alt="" class='icon right'>
             <div class='article_list_box'>
               <div v-for='item in list' :key='item.organizationPowerId' class='article_list' :style='{transform: `translateX(-${pageSize*100}%)`}'>
-                <div class='article_left' v-if='item[0]'>
+                <div class='article_left' v-if='item[0]' @click='jump(item[0])'>
                   <div>
                     <img class='left_img' :src="item[0].articleVO.articleCoverImagePath" alt="">
                   </div>
@@ -27,7 +27,7 @@
                   </div>
                 </div>
                 <div class='article_right'>
-                  <div class='article_right_content mb_15' v-if='item[1]'>
+                  <div class='article_right_content mb_15' v-if='item[1]' @click='jump(item[1])'>
                     <div><img class='right_img' :src="item[1].articleVO.articleCoverImagePath" alt=""></div>
                     <div class='content1'>
                       <div class='line_clamp2 title'>{{item[1].articleVO.articleTitle}}</div>
@@ -36,7 +36,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class='article_right_content' v-if='item[2]'>
+                  <div class='article_right_content' v-if='item[2]' @click='jump(item[2])'>
                     <div><img class='right_img' :src="item[2].articleVO.articleCoverImagePath" alt=""></div>
                     <div class='content1'>
                       <div class='line_clamp2 title'>{{item[2].articleVO.articleTitle}}</div>
@@ -118,6 +118,15 @@ export default class OrganizeWork extends Vue {
       return
     }
     this.pageSize -= 1
+  }
+  jump(item){
+    // this.$router.push({name: 'Article', query: {value: 'leaderCare'}})
+    this.$router.push({name: 'article', query: {
+      item: JSON.stringify(item), 
+      name: '组织工作', 
+      index: 4
+    }})
+
   }
   rightBtn(){
     if (this.pageSize == this.list.length-1) {
@@ -201,6 +210,7 @@ export default class OrganizeWork extends Vue {
       right: -86px;
     }
     .article_left{
+      cursor: pointer;
       border-radius: 10px;
       width: 709px;
       background: #fff;
@@ -243,6 +253,7 @@ export default class OrganizeWork extends Vue {
         margin-right: 15px;
       }
       .article_right_content{
+        cursor: pointer;
         display: flex;
         flex-grow: 1;
         background: #fff;

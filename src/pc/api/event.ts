@@ -46,6 +46,10 @@ const http = {
     const url = 'tourist/query';
     return apiCreator().get(url);
   },
+  fileUpload: (data: any) => {
+    const url = 'file/upload';
+    return apiCreator().post(url, data);
+  },
 }
 
 export default {...http}

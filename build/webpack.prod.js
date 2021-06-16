@@ -5,7 +5,7 @@ const common = require('./webpack.base.js');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const project = process.env.PROJECT || 'pc';
+const project = process.env?.PROJECT || 'pc';
 
 var plugins = [
   new CleanWebpackPlugin({

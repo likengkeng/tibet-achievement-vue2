@@ -82,6 +82,7 @@ export default class AnchorNavigator extends Vue {
 .anchor-nav {
   ul {
     text-align: center;
+    overflow: hidden;
     .navigator {
       margin-top: 80px;
     }
@@ -89,14 +90,52 @@ export default class AnchorNavigator extends Vue {
       background: #7A0001;
     }
     li {
-      margin: 8px auto;
-      height: 52px;
+      margin: 20px auto;
+      height: 50px;
       line-height: 52px;
-      width: 136px;
+      width: 122px;
       background: #B01516;
       color: #FFFFFF;
       cursor: pointer;
+      position: relative;
     }
+    li::before{
+      content: '';
+      display: block;
+      position: absolute;
+      top: -30px;
+      width: 102px;
+      height: 20px;
+      background: transparent;
+      border-bottom: 10px solid rgba(122, 0, 1, 1);
+      border-left: 10px solid  transparent;
+      border-right: 10px solid  transparent;
+    }
+    li::after{
+      content: '';
+      position: absolute;
+      background: linear-gradient(90deg, #F07D7D 0%, #D32F2F 100%);
+      border-radius: 3px;
+      height: 18px;
+      width: 6px;
+      bottom: -17px;
+      right: 22px;
+      z-index: 10;
+    }
+    li a::before{
+      content: '';
+      position: absolute;
+      background: linear-gradient(90deg, #F07D7D 0%, #D32F2F 100%);
+      border-radius: 3px;
+      height: 18px;
+      width: 6px;
+      bottom: -17px;
+      left: 22px;
+      z-index: 10;
+    }
+  }
+  ul li:last-child{
+    margin-bottom: 0px
   }
 }
 </style>

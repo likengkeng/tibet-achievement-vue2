@@ -16,6 +16,8 @@ li {
 .cover-logo {
   height: 1078px;
   background: url('../imgs/cover-logo-1x.png');
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .flex {

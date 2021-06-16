@@ -43,7 +43,10 @@ export default class SevenGroup extends Vue {
     ]
     list = []
     detail(){this.$router.push({name: 'list', query: {value: 'sevenGroup'}})}
-    nav(item, index){}
+    nav(item, index){
+      sessionStorage.setItem("myqidi",index+1)
+      this.$router.push({name: 'list', query: {value: 'sevenGroup', index: index+1}})
+    }
     mouseleave(){
       this.list[0].check = true
     }

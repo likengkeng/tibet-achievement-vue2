@@ -7,8 +7,21 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
+    import $http from '@/pc/api/event';
+
 @Component({})
-export default class App extends Vue {}
+export default class App extends Vue {
+  mounted(){
+    if (!localStorage.getItem('touristId')) {
+      $http.touristCreate()
+        .then(res => {
+          console.log(res)
+          localStorage.setItem('touristId', res.data.id)
+        })
+    }
+            
+  }
+}
 </script>
 
 <style scoped>

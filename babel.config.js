@@ -30,5 +30,10 @@ module.exports = {
       }
     ],
     ["@babel/proposal-decorators", { "legacy": true }],
+    ["import", {
+      "libraryName": "vant",
+      "libraryDirectory": "es",
+      "style": true
+    }]
   ],
 }

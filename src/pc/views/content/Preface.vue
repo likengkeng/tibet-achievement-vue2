@@ -6,8 +6,8 @@
         <img @click='rightBtn' :src="right_icon" alt="" class='icon right'>
 
       <div v-for='(item, index) in list' :key='item.prefaceId' class='list' :style='{transform: `translateX(-${pageSize*100}%)`}'>
-        
-        <video :src="item.materialVO.pathAll" class='video' :ref='`video${index}`' v-if='item.isVideo'>
+        <img v-show='isShowPlay' :src="play" alt="" class='play'  v-if='item.isVideo' @click='playVideo(index)'>
+        <video :src="item.materialVO.pathAll" class='video' :id="'videoPlay'+index" :ref='`video${index}`' v-if='item.isVideo'>
           您的浏览器不支持 video 标签。
         </video>
         <img v-else :src="item.materialVO.pathAll" alt="" class='list_img'>
@@ -30,6 +30,7 @@ import 'video.js/dist/video-js.css';
 import '@/pc/static/styles/video-custom.css';
 import { videoPlayer } from 'vue-video-player';
 import content from '@/pc/static/imgs/title_1.png'
+import play from '@/pc/static/imgs/play.png'
 import MyContentHeader from '@/pc/components/MyContentHeader.vue';
 import right_icon from '@/pc/static/imgs/right_icon.png'
 import left_icon from '@/pc/static/imgs/left_icon.png'
@@ -41,6 +42,7 @@ import $http from '@/pc/api/event';
   }
 })
 export default class Preface extends Vue {
+  play=play
   playerOptionsDefault = {
     // videojs options
     muted: true,
@@ -61,7 +63,18 @@ export default class Preface extends Vue {
   content = content
   list = []
   pageSize = 0
+  isShowPlay = true
+  playVideo(index){
+      var vdo = document.getElementById(`videoPlay${index}`);
+      vdo.play();
+      this.isShowPlay = false
+  }
   selectChange(index){
+    this.isShowPlay = true
+    this.list.forEach((el, index) => {
+      var vdo = document.getElementById(`videoPlay${index}`);
+      vdo.pause();
+    })
     this.pageSize = index
   }
   leftBtn(){
@@ -199,6 +212,16 @@ export default class Preface extends Vue {
     }
   }
   
+}
+.play{
+  position: absolute;
+  top: 50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  width: 102px;
+  height: 102px;
+  cursor: pointer;
+  z-index: 111
 }
 ::v-deep .vjs-has-started .vjs-control-bar{
   display: none;

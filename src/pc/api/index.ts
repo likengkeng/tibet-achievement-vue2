@@ -1,6 +1,11 @@
+
+const apiUrl = 'http://182.61.5.103:9998/web/'
+
 import axios from 'axios';
 import { AxiosInstance } from 'axios';
-const apiUrl = 'http://182.61.5.103:9998/web/'
+import { Loading, Message } from 'element-ui'
+console.log(apiUrl)
+let loadingInstance: any;
 
 function createAPI({ url, headers } : any) {
   const instance = axios.create({
@@ -11,6 +16,12 @@ function createAPI({ url, headers } : any) {
 
   instance.interceptors.request.use(
     (request: any): any => {
+      loadingInstance  = Loading.service({ //加载loading
+				fullscreen: true, 
+				text: 'Loading',
+	            spinner: 'el-icon-loading',
+	            background: 'rgba(0, 0, 0, 0.7)' 
+	      });
       if (request.method === 'get') {
         request.headers.common['Pragma'] = 'no-cache';
         request.headers.common['Cache-control'] = 'no-cache';
@@ -24,15 +35,26 @@ function createAPI({ url, headers } : any) {
 
   instance.interceptors.response.use(
     (response: any): any => {
-      return response;
+      loadingInstance.close()
+      if (response.data.errorCode == '0000') {
+        return response;
+      }
+      Message({  //elemen组件库中的提示组件
+        message: response.data.errorMessage,
+        type:'error',
+        duration: 2000
+      })
+      return Promise.reject(response || {});
     },
     (errorData: any): any => {
+      loadingInstance.close()
       return Promise.reject(errorData?.response || {});
     },
   );
 
   return instance;
 }
+
 
 export const apiCreator: (headers?: any) => AxiosInstance = (headers) => {
   return createAPI({

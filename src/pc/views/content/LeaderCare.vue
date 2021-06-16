@@ -18,7 +18,7 @@
             <div class='btn' :class='{select_nav: navIndex==3}' @click='navSelect(3)'>历任组织部部长</div>
           </div>
           <div class='list_box'>
-            <div v-for='item in list' :key='item.articleId' class='list'>
+            <div v-for='item in list' :key='item.articleId' class='list' @click='jump(item)'>
               <div class='my_flex list_left'>
                 <img :src="leaderCare_icon" alt="" class='icon'>
                 <div v-if='navIndex==3'>第{{item.leaderVO.leaderSort}}任-{{item.leaderVO.leaderName}} </div>
@@ -55,6 +55,16 @@ export default class LeaderCare extends Vue {
   imgListIndex = 0
   navIndex: Number = 1
   list = []
+  jump(item){
+    // this.$router.push({name: 'Article', query: {value: 'leaderCare'}})
+    this.$router.push({name: 'article', query: {
+      isHistory: this.navIndex == 3, 
+      item: JSON.stringify(item), 
+      name: '领导关怀', 
+      index: 2
+    }})
+
+  }
   detail(){this.$router.push({name: 'list', query: {value: 'leaderCare'}})}
   navSelect(index){
     this.navIndex = index
@@ -191,6 +201,7 @@ export default class LeaderCare extends Vue {
       }
       .list{
         font-size: 16px;
+            cursor: pointer;
         display: flex;
         align-content: center;
         justify-content: space-between;

@@ -4,7 +4,7 @@
     <div class='content_box'>
         <div class='content'>
             <div class='list_box'>
-                <img @click='leftBtn' :src="left_icon" alt="" class='icon left'>
+                <!--<img @click='leftBtn' :src="left_icon" alt="" class='icon left'>
                 <img @click='rightBtn' :src="right_icon" alt="" class='icon right'>
 
                 <div v-for='item in list' :key='item' class='videolist' :style='{transform: `translateX(-${pageSize*100}%)`}'>
@@ -17,18 +17,29 @@
                         <div class='carousel_btn' @click='selectChange(index)' :class='{select: index == pageSize}' v-for='(item, index) in list' :key='index'></div>
                     </div>
                     </div>
-                </div>
+                </div>-->
+                <img v-if='navIndex==3 && queryValue=="leaderCare"' :src="dataList[0].leaderVO.leaderImagePathAlls[0]" alt="">
+                <img v-else :src="dataList[0].articleVO.articleCoverImagePath" alt="">
             </div>
             <div class='content_bottom'>
                 <div class='nav' v-if='dataObj[queryValue]'>
                     <div class='nav_btn' :class='{nav_btn_check: item.index == navIndex}' v-for='(item, index) in dataObj[queryValue].tab' :key='item.name' @click='navCheck(index)'>{{item.name}}</div>
                 </div>
                 <div class='data_list'>
-                    <div v-for='(item, index) in dataList' :key='index' class='data_list_content' @click='jump(item)'>
-                        <img :src="item.articleVO.articleCoverImagePath" alt="" class='data_list_img'>
-                        <div clas='data_list_title line_clamp1'>{{item.articleVO.articleTitle}}</div>
-                        <div class='data_list_text line_clamp1 myhtml' v-html='item.articleVO.articleContent'></div>
-                        <div class='data_list_time'>{{item.time}}</div>
+                    <div v-for='(item, index) in dataList' :key='index' class='data_list_content'>
+                        <div v-if='navIndex==3 && queryValue=="leaderCare"' @click='jump(item, "history")'>
+                            <img :src="item.leaderVO.leaderImagePathAlls[0]" alt="" class='data_list_img'>
+                            <div clas='data_list_title line_clamp1'>{{item.leaderVO.leaderName}}</div>
+                            <div class='data_list_text line_clamp1 myhtml' v-html='item.leaderVO.leaderComment'></div>
+                            <div class='data_list_time'>{{item.time}}</div>
+                        </div>
+                        <div v-else @click='jump(item)'>
+                            <img :src="item.articleVO.articleCoverImagePath" alt="" class='data_list_img'>
+                            <div clas='data_list_title line_clamp1'>{{item.articleVO.articleTitle}}</div>
+                            <div class='data_list_text line_clamp1 myhtml' v-html='item.articleVO.articleContent'></div>
+                            <div class='data_list_time'>{{item.time}}</div>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -42,208 +53,215 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import Component from 'vue-class-component';
-import MyHeader from '@/pc/components/MyHeader.vue';
-import right_icon from '@/pc/static/imgs/right_icon.png'
-import left_icon from '@/pc/static/imgs/left_icon.png'
-import 'video.js/dist/video-js.css';
-import '@/pc/static/styles/video-custom.css';
-import { videoPlayer } from 'vue-video-player';
-import $http from '@/pc/api/event';
-import AnchorNavigator from '@/pc/components/AnchorNavigator.vue';
+    import Vue from 'vue';
+    import Component from 'vue-class-component';
+    import MyHeader from '@/pc/components/MyHeader.vue';
+    import right_icon from '@/pc/static/imgs/right_icon.png'
+    import left_icon from '@/pc/static/imgs/left_icon.png'
+    import 'video.js/dist/video-js.css';
+    import '@/pc/static/styles/video-custom.css';
+    import { videoPlayer } from 'vue-video-player';
+    import $http from '@/pc/api/event';
+    import AnchorNavigator from '@/pc/components/AnchorNavigator.vue';
 
-@Component({
-  components: {
-      MyHeader,videoPlayer,AnchorNavigator
-  },
-})
-export default class List extends Vue {
-  playerOptionsDefault = {
-    // videojs options
-    muted: true,
-    language: 'en',
-    height: '540',
-    width: '100%',
-    playbackRates: [0.7, 1.0, 1.5, 2.0],
-    sources: [{
-      type: 'video/mp4',
-      src: 'http://vjs.zencdn.net/v/oceans.mp4',
-    }],
-  }
-  left_icon = left_icon
-  right_icon = right_icon
-  playerOptions = {};
-  list = [1,2,3,4,5]
-  pageSize = 0
-  dataList = []
-  httpKey = null
-  navIndex = 1
-  selectChange(index){
-    this.pageSize = index
-  }
-  headerNav(){
-      this.getList()
-  }
-  leftBtn(){
-    console.log(this.pageSize)
-    if (this.pageSize == 0) {
-      return
-    }
-    this.pageSize -= 1
-  }
-  rightBtn(){
-    console.log(this.pageSize)
-    if (this.pageSize == this.list.length-1) {
-      return
-    }
-    this.pageSize += 1
-  }
-  navCheck(index){
-      this.navIndex = index +1
-      this.getList()
-  }
-  jump(item){
-      this.$router.push({name: 'article', query: {item: JSON.stringify(item), name: this.dataObj[this.queryValue].name, index: this.dataObj[this.queryValue].index}})
-  }
-  queryValue = ''
-  dataObj = {
-      bigEvent: {
-          url: 'memorabiliaList',
-          name: '大事记',
-          index: 3
-      },
-      leaderCare: {
-          url: 'leaderList',
-          name: '领导关怀',
-                    index: 2,
-
-          data: {leaderCareType: ''},
-          tab: [
-              {name: '中央领导关怀', index: 1},
-              {name: '自治区党委书记', index: 2},
-              {name: '历任组织部部长', index: 3},
-          ]
-      },
-      organizeWork: {
-          url: 'powerList',
-          name: '组织工作',
-                    index: 4,
-
-          data: {
-              organizationPowerMeunType: 1,
-              organizationPowerType: ''
-          },
-          tab: [
-              {name: '党的政治建设', index: 1},
-              {name: '干部工作', index: 2},
-              {name: '党的组织建设', index: 3},
-              {name: '人才工作', index: 4},
-              {name: '干部人才援藏工作', index: 5},
-              {name: '自身建设', index: 6},
-          ]
-      },    
-      roleModel: {
-          url: 'powerList',
-                    name: '榜样力量',
-          index: 5,
-
-          data: {
-              organizationPowerMeunType: 2,
-              organizationPowerType: ''
-          },
-          tab: [
-                {name: '老西藏', index: 1},
-                {name: '优秀共产党员', index: 2},
-                {name: '优秀党务工作者', index: 3},
-                {name: '先进基层党组织', index: 4},
-                {name: '优秀援藏干部人才', index: 5},
-                {name: '优秀组工干部', index: 6},
-                {name: '最美公务员', index: 7},
-          ]
-      },
-      preface: {
-          url: 'prefaceList',
-                    name: '序言',
-          index: 1,
-
-          data: {
-              prefaceType: 2
-          }
-      },
-      sevenGroup: {
-          url: 'voiceList',
-                    name: '七地之声',
-          index: 6,
-
-          data: {
-              areaVoiceMeunType: '',
-              areaVoiceType: 2
-          },
-          tab: [
-              {name: '拉萨', index: 1},
-                {name: '日喀则', index: 2},
-                {name: '山南', index: 3},
-                {name: '林芝', index: 4},
-                {name: '昌都', index: 5},
-                {name: '那曲', index: 6},
-                {name: '阿里', index: 7},
-          ]
-      }
-  }
-  format(shijianchuo){
-    //shijianchuo是整数，否则要parseInt转换
-    var time = new Date(shijianchuo);
-    var y = time.getFullYear();
-    var m = time.getMonth()+1;
-    var d = time.getDate();
-    return `${y}-${m}-${d}`
-  }
-  getList(){
-      this.queryValue = this.$route.query.value
-      const key = this.dataObj[this.queryValue].url
-      const myobj = this.dataObj[this.queryValue].data || {}
-      let mydata = {}
-      for (const key in myobj) {
-          if (Object.prototype.hasOwnProperty.call(myobj, key)) {
-              mydata[key] = myobj[key] || this.navIndex
-          }
-      }
-        $http[key]({
-            ...mydata
-        })
-        .then(res => {
-            res.data.data.map(el => {
-                el.leaderVO && (el.time = this.format(el.leaderVO.updateDatetime))
-                el.articleVO && (el.time = this.format(el.articleVO.createDatetime))
-                return el
-            })
-            this.dataList = res.data.data
-        })
-  }
-  mounted(){
-      this.queryValue = this.$route.query.value
-    this.$nextTick(() => {
-        this.playerOptions = { ...this.playerOptionsDefault };
+    @Component({
+    components: {
+        MyHeader,videoPlayer,AnchorNavigator
+    },
     })
-    this.getList()
-    
-  }
-  updated(){
-      const list = Array.from(document.getElementsByClassName('myhtml'))
-      list.forEach(el => {
-          el.children[0].setAttribute('style', 'margin: 0px')
-      });
-  }
-}
+    export default class List extends Vue {
+    playerOptionsDefault = {
+        // videojs options
+        muted: true,
+        language: 'en',
+        height: '540',
+        width: '100%',
+        playbackRates: [0.7, 1.0, 1.5, 2.0],
+        sources: [{
+        type: 'video/mp4',
+        src: 'http://vjs.zencdn.net/v/oceans.mp4',
+        }],
+    }
+    left_icon = left_icon
+    right_icon = right_icon
+    playerOptions = {};
+    list = [1,2,3,4,5]
+    pageSize = 0
+    dataList = []
+    httpKey = null
+    navIndex = 1
+    selectChange(index){
+        this.pageSize = index
+    }
+    headerNav(){
+        this.getList()
+    }
+    leftBtn(){
+        console.log(this.pageSize)
+        if (this.pageSize == 0) {
+        return
+        }
+        this.pageSize -= 1
+    }
+    rightBtn(){
+        console.log(this.pageSize)
+        if (this.pageSize == this.list.length-1) {
+        return
+        }
+        this.pageSize += 1
+    }
+    navCheck(index){
+        this.navIndex = index +1
+        this.getList()
+    }
+    jump(item, boo=false){
+        this.$router.push({name: 'article', query: {isHistory: boo, item: JSON.stringify(item), name: this.dataObj[this.queryValue].name, index: this.dataObj[this.queryValue].index}})
+    }
+    queryValue = ''
+    dataObj = {
+        bigEvent: {
+            url: 'memorabiliaList',
+            name: '大事记',
+            index: 3
+        },
+        leaderCare: {
+            url: 'leaderList',
+            name: '领导关怀',
+                        index: 2,
+
+            data: {leaderCareType: ''},
+            tab: [
+                {name: '中央领导关怀', index: 1},
+                {name: '自治区党委书记', index: 2},
+                {name: '历任组织部部长', index: 3},
+            ]
+        },
+        organizeWork: {
+            url: 'powerList',
+            name: '组织工作',
+                        index: 4,
+
+            data: {
+                organizationPowerMeunType: 1,
+                organizationPowerType: ''
+            },
+            tab: [
+                {name: '党的政治建设', index: 1},
+                {name: '干部工作', index: 2},
+                {name: '党的组织建设', index: 3},
+                {name: '人才工作', index: 4},
+                {name: '干部人才援藏工作', index: 5},
+                {name: '自身建设', index: 6},
+            ]
+        },    
+        roleModel: {
+            url: 'powerList',
+                        name: '榜样力量',
+            index: 5,
+
+            data: {
+                organizationPowerMeunType: 2,
+                organizationPowerType: ''
+            },
+            tab: [
+                    {name: '老西藏', index: 1},
+                    {name: '优秀共产党员', index: 2},
+                    {name: '优秀党务工作者', index: 3},
+                    {name: '先进基层党组织', index: 4},
+                    {name: '优秀援藏干部人才', index: 5},
+                    {name: '优秀组工干部', index: 6},
+                    {name: '最美公务员', index: 7},
+            ]
+        },
+        preface: {
+            url: 'prefaceList',
+                        name: '序言',
+            index: 1,
+
+            data: {
+                prefaceType: 2
+            }
+        },
+        sevenGroup: {
+            url: 'voiceList',
+                        name: '七地之声',
+            index: 6,
+
+            data: {
+                areaVoiceMeunType: '',
+                areaVoiceType: 2
+            },
+            tab: [
+                {name: '拉萨', index: 1},
+                    {name: '日喀则', index: 2},
+                    {name: '山南', index: 3},
+                    {name: '林芝', index: 4},
+                    {name: '昌都', index: 5},
+                    {name: '那曲', index: 6},
+                    {name: '阿里', index: 7},
+            ]
+        }
+    }
+    format(shijianchuo){
+        //shijianchuo是整数，否则要parseInt转换
+        var time = new Date(shijianchuo);
+        var y = time.getFullYear();
+        var m = time.getMonth()+1;
+        var d = time.getDate();
+        return `${y}-${m}-${d}`
+    }
+    getList(){
+        this.queryValue = this.$route.query.value
+        const key = this.dataObj[this.queryValue].url
+        const myobj = this.dataObj[this.queryValue].data || {}
+        let mydata = {}
+        for (const key in myobj) {
+            if (Object.prototype.hasOwnProperty.call(myobj, key)) {
+                if (sessionStorage.getItem("myqidi")) {
+                    this.navIndex = sessionStorage.getItem("myqidi")
+                    sessionStorage.removeItem("myqidi")
+                }
+                mydata[key] = myobj[key] || this.navIndex
+                
+            }
+        }
+            $http[key]({
+                ...mydata
+            })
+            .then(res => {
+                res.data.data.map(el => {
+                    el.leaderVO && (el.time = this.format(el.leaderVO.updateDatetime))
+                    el.articleVO && (el.time = this.format(el.articleVO.createDatetime))
+                    return el
+                })
+                this.dataList = res.data.data
+            })
+    }
+    mounted(){
+        this.queryValue = this.$route.query.value
+        this.$nextTick(() => {
+            this.playerOptions = { ...this.playerOptionsDefault };
+        })
+        this.getList()
+        
+    }
+    updated(){
+        const list = Array.from(document.getElementsByClassName('myhtml'))
+        list.forEach(el => {
+            el.children[0].setAttribute('style', 'margin: 0px')
+        });
+    }
+    }
 </script>
 
 <style scoped lang="scss">
     .list{
         padding: 25px 0px;
+        min-height: 100vh;
         .content_box{
             background-image: url('/src/pc/static/imgs/detail-background.png');
             background-size: 100% 1154px;
+            min-height: 1154px;
             background-repeat: no-repeat;
             .content{
                 width: 1200px;
@@ -255,6 +273,10 @@ export default class List extends Vue {
                     overflow: hidden;
                     display: flex;
                     position: relative;
+                    .img{
+                        height: 540px;
+                        width: 100%
+                    }
                     .icon{
                         width: 46px;
                         height: 36px;
