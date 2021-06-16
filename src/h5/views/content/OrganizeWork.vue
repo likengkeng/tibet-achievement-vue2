@@ -8,24 +8,24 @@
         <div class='content'>
            <div class='content_top'>
             <div class='left' v-if='list[0]'>
-              <img :src="list[0].articleVO.articleCoverImagePath" alt="" class='img'>
+              <img :src="(list[0].articleVO || {}).articleCoverImagePath" alt="" class='img'>
               <div class='pd'>
-                <div class='title line_clamp1'>{{list[0].articleVO.articleTitle}}</div>
-                <div class='text line_clamp2' v-html='list[0].articleVO.articleContent'>{{list[1].articleVO.articleContent}}</div>
+                <div class='title line_clamp1'>{{ (list[0].articleVO || {}).articleTitle }}</div>
+                <div class='text line_clamp2' v-html='(list[0].articleVO || {}).articleContent'>{{(list[1].articleVO || {}).articleContent}}</div>
               </div>
             </div>
             <div class='right' v-if='list[1]'>
-              <img :src="list[1].articleVO.articleCoverImagePath" alt="" class='img'>
+              <img :src="(list[1].articleVO || {}).articleCoverImagePath" alt="" class='img'>
               <div class='pd'>
-                <div class='title line_clamp1'>{{list[1].articleVO.articleTitle}}</div>
-                <div class='text line_clamp2' v-html='list[1].articleVO.articleContent'>{{list[1].articleVO.articleContent}}</div>
+                <div class='title line_clamp1'>{{ (list[1].articleVO || {}).articleTitle }}</div>
+                <div class='text line_clamp2' v-html='(list[1].articleVO || {}).articleContent'>{{(list[1].articleVO || {}).articleContent}}</div>
               </div>
             </div>
           </div>
           <div class='content_bottom' v-if='list[2]'>
-            <img :src="list[2].articleVO.articleCoverImagePath" alt="" class='img'>
-            <div class='title line_clamp1'>{{list[2].articleVO.articleTitle}}</div>
-            <div class='text line_clamp2' v-html='list[2].articleVO.articleContent'>{{list[1].articleVO.articleContent}}</div>
+            <img :src="(list[2].articleVO || {}).articleCoverImagePath" alt="" class='img'>
+            <div class='title line_clamp1'>{{ (list[2].articleVO || {}).articleTitle }}</div>
+            <div class='text line_clamp2' v-html='(list[2].articleVO || {}).articleContent'>{{(list[2].articleVO || {}).articleContent}}</div>
           </div>
         </div>
       </van-tab>

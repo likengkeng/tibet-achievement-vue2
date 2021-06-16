@@ -42,7 +42,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     </template>
                     <template v-else>
                         <div class='content_center_title'>{{obj.articleVO.articleTitle}}</div>
@@ -58,11 +58,11 @@
                     <div class='comment_center'>
                         <div class='header_img'></div>
                         <div class='input_box'>
-                            <quill-editor 
+                            <quill-editor
                                  class='textarea'
-                                v-model="touristCommentContent" 
-                                ref="myQuillEditor" 
-                                :options="editorOption" 
+                                v-model="touristCommentContent"
+                                ref="myQuillEditor"
+                                :options="editorOption"
                                 @blur="onEditorBlur($event)" @focus="onEditorFocus($event)"
                                 @change="onEditorChange($event)">
                             </quill-editor>
@@ -90,7 +90,7 @@
                                         </div>
                                         <div v-html='el.repContent'></div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -104,7 +104,7 @@
 
     <input type="file" id='check' multiple @change='changefile'>
     </div>
-    
+
 </template>
 <script lang="ts">
     import Vue from 'vue';
@@ -135,7 +135,7 @@
         [{'align': []}],
         ['link', 'image', 'video'],
         // ['clean'],                                         // remove formatting button
-        ['voice'] 
+        ['voice']
     ]
     @Component({
         components: {
@@ -213,7 +213,7 @@
                     this.httpAdd()
                 })
             }
-            
+
         }
         httpAdd(){
             const idKey = this.idObj[this.$route.query.index]
@@ -266,7 +266,7 @@
                     }
                     return el
                 })
-                
+
                 this.list = [arr1, arr2]
             })
         }
@@ -277,7 +277,7 @@
             var m = time.getMonth()+1;
             var d = time.getDate();
             var h = time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
-            var mm = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes(); 
+            var mm = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
             var s = time.getSeconds() < 10 ? `0${time.getSeconds()}` : time.getSeconds();
             return `${y}-${m}-${d} ${h}:${mm}:${s}`
         }
@@ -288,7 +288,7 @@
             var m = time.getMonth()+1;
             var d = time.getDate();
             var h = time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
-            var mm = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes(); 
+            var mm = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
             var s = time.getSeconds() < 10 ? `0${time.getSeconds()}` : time.getSeconds();
             return [`${y}`, `${m}月${d}日`]
         }
@@ -317,13 +317,13 @@
                 if (!con.files[0].type.str.match(RegExp(/mp4/))) {
                     this.$message('视频格式只允许mp4')
                     return
-                }   
+                }
             }
             if (con.files[0].type.str.match(RegExp(/audio/))) {
                 if (!con.files[0].type.str.match(RegExp(/mpeg/)) || !con.files[0].type.str.match(RegExp(/mp3/)) ) {
                     this.$message('音频格式只允许mp3')
                     return
-                }   
+                }
             }
             if (con.files[0]) {
                 let file = con.files;
@@ -332,7 +332,7 @@
                 $http.fileUpload(param).then((res) => {
                     this.uploadSuccess(res.data)
                 });
-                
+
             }
         }
         uploadSuccess(res){
@@ -372,7 +372,7 @@
 </script>
 <style scoped lang="scss">
     .article_box{
-        
+
         background: #F1F1F1;
         .left-menu {
             position: fixed;
@@ -489,7 +489,7 @@
                 }
             }
         }
-        
+
     }
     .replyList{
         display: flex;
@@ -547,7 +547,7 @@
                 width: 335px;
                 height: 213px;
                 display: block
-            } 
+            }
             .title{
                 margin: 19px 11px;
                 font-size: 20px;
@@ -555,7 +555,7 @@
             }
             .text{
                 font-size: 14px
-            } 
+            }
         }
         .time{
             margin: 23px 18px 0px 12px
@@ -589,7 +589,7 @@
                 right: 82px
             }
         }
-        
+
         .time2{
             font-size: 18px;
         }

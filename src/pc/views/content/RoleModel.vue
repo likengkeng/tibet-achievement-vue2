@@ -15,34 +15,34 @@
       </div>
       <div class='article'>
         <div class='content1' v-if='list[0]' @click='jump(list[0])'>
-          <div class='article_content_header'>{{list[0].articleVO.articleTitle}}</div>
-          <div v-html='list[0].articleVO.articleContent'><span class='color'>【详情】</span></div>
+          <div class='article_content_header'>{{ (list[0].articleVO || {}).articleTitle }}</div>
+          <div v-html='(list[0].articleVO || {}).articleContent'><span class='color'>【详情】</span></div>
         </div>
         <div v-if='list[0]'  @click='jump(list[0])'>
-          <img :src="list[0].articleVO.articleCoverImagePath" alt="" class='content2'>
+          <img :src="(list[0].articleVO || {}).articleCoverImagePath" alt="" class='content2'>
         </div>
         <div>
           <div class='flex'>
             <div class='content3 relative' @mouseover.stop="mouseOver(1)" @mouseleave.stop="mouseLeave(1)" v-if='list[1]' @click='jump(list[1])'>
-              <img :src="list[1].articleVO.articleCoverImagePath" alt="" class='content3_img'>
+              <img :src="(list[1].articleVO || {}).articleCoverImagePath" alt="" class='content3_img'>
               <div class='modal' v-show='isShow1'>
-                <div class='modal_title'>{{list[1].articleVO.articleTitle}}</div>
-                <div v-html='list[1].articleVO.articleContent'><span class='color'>【详情】</span></div>
+                <div class='modal_title'>{{ (list[1].articleVO || {}).articleTitle }}</div>
+                <div v-html='(list[1].articleVO || {}).articleContent'><span class='color'>【详情】</span></div>
               </div>
             </div>
             <div class='content4 relative' @mouseover.stop="mouseOver(2)" @mouseleave.stop="mouseLeave(2)" v-if='list[2]' @click='jump(list[2])'>
-              <img :src="list[2].articleVO.articleCoverImagePath" alt="" class='content4_img'>
+              <img :src="(list[2].articleVO || {}).articleCoverImagePath" alt="" class='content4_img'>
               <div class='modal' v-show='isShow2'>
-                <div class='modal_title'>{{list[2].articleVO.articleTitle}}</div>
-                <div v-html='list[2].articleVO.articleContent'><span class='color'>【详情】</span></div>
+                <div class='modal_title'>{{ (list[2].articleVO || {}).articleTitle }}</div>
+                <div v-html='(list[2].articleVO || {}).articleContent'><span class='color'>【详情】</span></div>
               </div>
             </div>
           </div>
           <div class='relative' @mouseover.stop="mouseOver(3)" @mouseleave.stop="mouseLeave(3)" v-if='list[3]' @click='jump(list[3])'>
-            <img :src="list[3].articleVO.articleCoverImagePath" alt="" class='content5'>
+            <img :src="(list[3].articleVO || {}).articleCoverImagePath" alt="" class='content5'>
             <div class='modal' v-show='isShow3'>
-              <div class='modal_title'>{{list[3].articleVO.articleTitle}}</div>
-              <div v-html='list[3].articleVO.articleContent'><span class='color'>【详情】</span></div>
+              <div class='modal_title'>{{(list[3].articleVO || {}).articleTitle}}</div>
+              <div v-html='(list[3].articleVO || {}).articleContent'><span class='color'>【详情】</span></div>
             </div>
           </div>
         </div>
@@ -94,9 +94,9 @@ export default class RoleModel extends Vue {
   jump(item){
     // this.$router.push({name: 'Article', query: {value: 'leaderCare'}})
     this.$router.push({name: 'article', query: {
-      isHistory: this.navIndex == 3, 
-      item: JSON.stringify(item), 
-      name: '榜样力量', 
+      isHistory: this.navIndex == 3,
+      item: JSON.stringify(item),
+      name: '榜样力量',
       index: 5
     }})
 
@@ -109,7 +109,7 @@ export default class RoleModel extends Vue {
     this[`isShow${index}`] = false
   }
   navSelect(index){
-    
+
     this.navIndex = index
     this.getList()
   }

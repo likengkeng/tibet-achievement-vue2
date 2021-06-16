@@ -4,7 +4,6 @@ const apiUrl = 'http://182.61.5.103:9998/web/'
 import axios from 'axios';
 import { AxiosInstance } from 'axios';
 import { Loading, Message } from 'element-ui'
-console.log(apiUrl)
 let loadingInstance: any;
 
 function createAPI({ url, headers } : any) {
@@ -17,10 +16,10 @@ function createAPI({ url, headers } : any) {
   instance.interceptors.request.use(
     (request: any): any => {
       loadingInstance  = Loading.service({ //加载loading
-				fullscreen: true, 
+				fullscreen: true,
 				text: 'Loading',
 	            spinner: 'el-icon-loading',
-	            background: 'rgba(0, 0, 0, 0.7)' 
+	            background: 'rgba(0, 0, 0, 0.7)'
 	      });
       if (request.method === 'get') {
         request.headers.common['Pragma'] = 'no-cache';

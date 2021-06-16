@@ -31,7 +31,6 @@ import Component from 'vue-class-component';
 import TimeLine from '@/common/components/TimeLine.vue';
 import $http from '@/pc/api/event';
 import { BigEventItem } from 'CustomerTypes';
-import { eventList } from '../mock';
 import MyContentHeader from '@/pc/components/MyContentHeader.vue';
 import content from '@/pc/static/imgs/title_3.png'
 import icon from '@/pc/static/imgs/icon1.png'
@@ -55,7 +54,7 @@ export default class BigEvent extends Vue {
     var d = time.getDate() < 10 ? `0${time.getDate()}` : time.getDate();
 
     var h = time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
-    var mm = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes(); 
+    var mm = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
     var s = time.getSeconds() < 10 ? `0${time.getSeconds()}` : time.getSeconds();
     return [`${y}年`, `${m}月${d}日`]
     // return `${y}年${m}月${d}日 ${h}:${mm}:${s}`
@@ -95,10 +94,6 @@ export default class BigEvent extends Vue {
       .catch(() => {
 
       });
-    // this.bigEventList = eventList;
-    // if (this.bigEventList.length) {
-    //   this.selectEvent = this.bigEventList[0];
-    // }
   }
 }
 </script>
@@ -207,7 +202,7 @@ export default class BigEvent extends Vue {
     .select_list_footer{
       border: 8px solid rgba(255, 188, 102, 1);
     }
-    
+
   }
   .list_box .list:nth-child(5n) .list_footer{
       margin-right: 0px;

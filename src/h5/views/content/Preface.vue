@@ -2,7 +2,7 @@
   <div class="preface">
     <img :src="logo" alt="" class='preface-logo'>
     <van-swipe @change="onChange">
-      <van-swipe-item v-for='item in list'>
+      <van-swipe-item v-for='(item, index) in list' :key="index">
         <video :src="item.materialVO.pathAll" class='video' :ref='`video${index}`' v-if='item.isVideo'>
             您的浏览器不支持 video 标签。
         </video>
@@ -41,7 +41,6 @@
     getList(){
       $http.prefaceList({prefaceType: 1})
       .then(res => {
-        console.log(res)
         res.data.data.map(el => {
           el.isVideo = false
           if (el.materialVO.stffix == 'mp4') {

@@ -3,7 +3,7 @@
     <div class='solid'></div>
     <img :src="logo" alt="" class='bigEvent-logo'>
     <div class='list_box'>
-      
+
       <div v-for='item in list' :key='item.memorabiliaId' class='list'>
         <div class='time1'>{{item.time[0]}}</div>
         <div class='time2'>{{item.time[0]}}</div>
@@ -26,14 +26,10 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  import { eventList } from '../mock';
   import logo from '@/h5/static/imgs/title3.png'
   import rightIcon from '@/h5/static/imgs/right_icon.png'
   import $http from '@/pc/api/event';
-  @Component({
-    components: {
-    }
-  })
+  @Component({})
   export default class BigEvent extends Vue {
     list = [];
     logo = logo
@@ -41,7 +37,6 @@
     getList(){
       $http.memorabiliaList()
         .then((res) => {
-          console.log(res)
           res.data.data.map(el => {
             el.time = this.format(el.memorabiliaDatetime)
             return el
@@ -60,7 +55,7 @@
       var d = time.getDate() < 10 ? `0${time.getDate()}` : time.getDate();
 
       var h = time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
-      var mm = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes(); 
+      var mm = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
       var s = time.getSeconds() < 10 ? `0${time.getSeconds()}` : time.getSeconds();
       return [`${y}年`, `${m}月${d}日`]
       // return `${y}年${m}月${d}日 ${h}:${mm}:${s}`
@@ -156,7 +151,7 @@
             font-size: 14px;
           }
         }
-        
+
       }
     }
   }

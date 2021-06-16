@@ -29,9 +29,9 @@ export default class MenuHeader extends Vue {
   logo: String = logo
   detail: string = detail
 //   detailIcon: String = detailIcon
-    detailBtn(){
-        this.$emit("click")
-    }
+  detailBtn(){
+      this.$emit("click")
+  }
 }
 </script>
 <style scoped lang="scss">

@@ -8,8 +8,9 @@
     "check-types": "tsc --watch",
     "dev": "cross-env PROJECT=pc webpack-dev-server --progress --hot --inline --open --config build/webpack.dev.js",
     "dev:h5": "cross-env PROJECT=h5 webpack-dev-server --progress --hot --inline --open --config build/webpack.dev.js",
-    "build": "cross-env PROJECT=pc webpack --config build/webpack.prod.js",
+    "build": "npm run build:h5 && npm run build:pc",
     "build:h5": "cross-env PROJECT=h5 webpack --config build/webpack.prod.js",
+    "build:pc": "cross-env PROJECT=pc webpack --config build/webpack.prod.js",
     "lint": ""
   },
   "keywords": [],
