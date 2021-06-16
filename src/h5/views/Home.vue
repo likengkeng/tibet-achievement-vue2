@@ -13,6 +13,9 @@
       <leader-care></leader-care>
       <big-event></big-event>
       <organize-work></organize-work>
+      <role-model></role-model>
+      <div>sadas</div>
+
     </div>
   </div>
 </template>
@@ -25,6 +28,8 @@ import Preface from './content/Preface.vue';
 import LeaderCare from './content/LeaderCare.vue';
 import BigEvent from './content/BigEvent.vue';
 import OrganizeWork from './content/OrganizeWork.vue';
+import RoleModel from './content/RoleModel.vue';
+
 import { MenuItem } from 'CommonTypes';
 
 @Component({
@@ -34,6 +39,7 @@ import { MenuItem } from 'CommonTypes';
     LeaderCare,
     BigEvent,
     OrganizeWork,
+    RoleModel
   },
 })
 export default class Home extends Vue {

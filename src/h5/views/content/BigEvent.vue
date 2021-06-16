@@ -4,15 +4,15 @@
     <img :src="logo" alt="" class='bigEvent-logo'>
     <div class='list_box'>
       
-      <div v-for='item in list' :key='item.memorabiliaId' class='list'>
+      <div v-for='item in list' :key='item.memorabiliaId' class='list' :style='{transform: `translateX(-${pageSize*100}%)`}'>
         <div class='time1'>{{item.time[0]}}</div>
         <div class='time2'>{{item.time[0]}}</div>
         <div class='division'></div>
         <div class='padding_lf13'>
           <div class='img_box'>
             <img :src="item.memorabiliaImagePathAlls[0]" alt="" class='img'>
-            <img :src="rightIcon" alt="" class='right_icon'>
-            <img :src="rightIcon" alt="" class='right_icon left_icon'>
+            <img :src="rightIcon" alt="" class='right_icon' @click='rightBtn'>
+            <img :src="rightIcon" alt="" class='right_icon left_icon' @click='leftBtn'>
 
           </div>
           <div class='list_title'>{{item.memorabiliaTitle}}</div>
@@ -38,6 +38,7 @@
     list = [];
     logo = logo
     rightIcon = rightIcon
+    pageSize = 0
     getList(){
       $http.memorabiliaList()
         .then((res) => {
@@ -65,6 +66,18 @@
       return [`${y}年`, `${m}月${d}日`]
       // return `${y}年${m}月${d}日 ${h}:${mm}:${s}`
     }
+    rightBtn(){
+      if (this.pageSize >= this.list.length - 1) {
+        return
+      }
+      this.pageSize++
+    }
+    leftBtn(){
+      if (this.pageSize == 0) {
+        return
+      }
+      this.pageSize--
+    }
     mounted() {
       this.getList()
     }
@@ -73,6 +86,8 @@
 <style scoped lang="scss">
   .bigEvent {
     padding: 26px 0px 30px;
+    width: 100vw;
+    overflow: hidden;
     .solid{
       width: 100%;
       height: 2px;
@@ -92,6 +107,7 @@
       .list{
         width: 100vw;
         flex-shrink: 0;
+        transition: .5s;
         .time1{
           font-size: 22px;
           color: #662C00FF;
@@ -131,7 +147,6 @@
           .right_icon{
             width: 32px;
             height: 32px;
-            cursor: pointer;
             position: absolute;
             right: 5px;
             top: 50%;
