@@ -1,20 +1,23 @@
 <template>
   <div class="BigEventList">
     <my-header @headerNav='headerNav'></my-header>
-    <div class='list_box'>
-      <div class='list' v-for='(item, index) in list' :key='item.name' @click='jump(item)'>
-        <div class='time' :class='{color: index==0}'>
-          <p class='year'>{{item.time[0]}}</p>
-          <p>{{item.time[0]}}</p>
-          <img class='rocket' :src="rocket" alt="">
-        </div>
-        <div class='content'>
-          <img :src="(item.memorabiliaImagePathAlls||[])[0]" alt="" class='img'>
-          <div class='list_title'>{{item.memorabiliaTitle}}</div>
-          <div class='list_text'>{{item.memorabiliaContent}}</div>
+    <div class='padding8'>
+      <div class='list_box'>
+        <div class='list' v-for='(item, index) in list' :key='item.name' @click='jump(item)'>
+          <div class='time' :class='{color: index==0}'>
+            <p class='year'>{{item.time[0]}}</p>
+            <p>{{item.time[1]}}</p>
+            <img class='rocket' :src="rocket" alt="">
+          </div>
+          <div class='content'>
+            <img :src="(item.memorabiliaImagePathAlls||[])[0]" alt="" class='img'>
+            <div class='list_title'>{{item.memorabiliaTitle}}</div>
+            <div class='list_text'>{{item.memorabiliaContent}}</div>
+          </div>
         </div>
       </div>
     </div>
+    
   </div>
 </template>
 
@@ -32,7 +35,8 @@
     }
   })
   export default class Fuse extends Vue {
-    list = [1,1,1,1,1,1]
+    list = []
+    rocket = rocket
     getList(){
       $http.memorabiliaList()
         .then((res) => {
@@ -45,6 +49,9 @@
         .catch(() => {
 
         });  
+    }
+    jump(item){
+      this.$router.push({name: 'article', query: {isHistory: true, item: JSON.stringify(item), name: '大事记', index: 3}})
     }
     headerNav(){}
     format(shijianchuo){
@@ -69,23 +76,29 @@
 .BigEventList{
   background: #F5F5F5;
   min-height: 100vh;
+  .padding8{
+    padding: 8px;
+  }
   .time{
     color: rgba(148, 7, 8, 1);
     font-size: 14px;
     margin-bottom: 12px;
     position: relative;
+    display: flex;
+    align-items: center;
+    margin-right: 10px
   }
   .rocket{
     width: 40px;
     height: 51px;
     position: absolute;
     top: -7px;
-    left: -37px;
+    left: -45px;
   }
   
   .list_box{
     padding-bottom: 20px;
-    padding: 10px 8px 10px 34px;
+    padding: 10px 8px 10px 44px;
   }
   .list_box .list:first-child{
     padding-top: 30px
@@ -102,7 +115,7 @@
     height: 100%;
     position: absolute;
     top: 0px;
-    left: -19px
+    left: -26.5px
   }
   .color{
     color:#333
@@ -131,10 +144,22 @@
     margin-bottom: 6px;
     font-size: 16px;
     font-weight: 600;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
   }
   .list_text{
     color: #666666;
     font-size: 14px;
+    text-overflow: -o-ellipsis-lastline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    max-height: '40px'
   }
 }
 </style>

@@ -13,7 +13,7 @@
                 </div>
                 <div class='content_center'>
                     <template v-if='isHistory'>
-                        <div class='box'>
+                        <!--<div class='box'>
                             <div>
                                 <div v-for='(item, index) in list[0]' class='list left_list'>
                                     <img :src="rocket" alt="" v-if='index== 0' class='rocket'>
@@ -41,13 +41,15 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
+                        </div>-->
+                        <div class='content_center_title'>{{memorabilia.memorabiliaTitle}}</div>
+                        <div>{{memorabilia.memorabiliaContent}}</div>
                     </template>
                     <template v-else>
                         <div class='content_center_title'>{{obj.articleVO.articleTitle}}</div>
-                        <div v-html='obj.articleVO.articleContent'></div>
+                        <div class='myhtml' v-html='obj.articleVO.articleContent'></div>
                     </template>
+
                 </div>
                 <div class='comment' v-if='obj.articleVO.articleCanDiscuss'>
                     <div class='comment_top'>
@@ -56,7 +58,7 @@
                         <span class='tip'>文明上网理性发言，请遵守新闻评论服务协议</span>
                     </div>
                     <div class='comment_center'>
-                        <div class='header_img'></div>
+                        <!--<div class='header_img'></div>-->
                         <div class='input_box'>
                             <quill-editor
                                  class='textarea'
@@ -99,7 +101,6 @@
             </div>
         </div>
         <div class="left-menu">
-        <anchor-navigator  @headerNav='headerNav'></anchor-navigator>
     </div>
 
     <input type="file" id='check' multiple @change='changefile'>
@@ -109,14 +110,15 @@
 <script lang="ts">
     import Vue from 'vue';
     import Component from 'vue-class-component';
-    import MyHeader from '@/pc/components/MyHeader.vue';
+    import MyHeader from '@/h5/components/MyHeader.vue';
     import $http from '@/h5/api/event';
-    import rocket from '@/pc/static/imgs/rocket.png'
-    import AnchorNavigator from '@/pc/components/AnchorNavigator.vue';
+    import rocket from '@/h5/static/imgs/rocket.png'
     import { quillEditor, Quill } from "vue-quill-editor"; //调用编辑器
     import 'quill/dist/quill.core.css';
     import 'quill/dist/quill.snow.css';
     import 'quill/dist/quill.bubble.css';
+    import { Toast } from 'vant';
+
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
         ['blockquote', 'code-block'],
@@ -139,7 +141,7 @@
     ]
     @Component({
         components: {
-            MyHeader,AnchorNavigator,quillEditor, Quill
+            MyHeader,quillEditor, Quill
         },
     })
     export default class Article extends Vue {
@@ -225,50 +227,52 @@
                 touristCommentContent: this.touristCommentContent
             })
             .then(res => {
-                this.$message({
-                message: '评论成功',
-                type: 'success'
-                });
+                Toast('提交成功');
                 this.touristCommentContent = ''
-                this.getList()
+                // this.getList()
             })
         }
         headerNav(){}
         getList(){
             this.obj = JSON.parse(this.$route.query.item)
             this.name = this.$route.query.name
+            console.log(222)
             $http.commentList({
                 articleId: this.obj.articleId || this.obj.leaderCareId,
                 touristCommentType: this.$route.query.index
             })
             .then(res => {
-                res.data.data.map((el, index) => {
+                console.log(res.data.data)
+                res.data?.data?.map((el, index) => {
                     el.createDatetime = this.format(el.createDatetime)
-                    el.replyList.map(ele => {
+                    el.replyList?.map(ele => {
                         ele.createDatetime = this.format(ele.createDatetime)
                         return ele
                     })
                     return el
                 })
+                console.log(res.data)
                 this.list = res.data.data
             })
         }
+        memorabilia = {}
         getMemorabiliaList(){
-            $http.memorabiliaList()
-            .then(res => {
-                let arr1 = [], arr2 = []
-                res.data.data.map((el, index) => {
-                    el.memorabiliaDatetime = this.format1(el.memorabiliaDatetime)
-                    if (index%2==0) {
-                        arr1.push(el)
-                    } else {
-                        arr2.push(el)
-                    }
-                    return el
-                })
+            this.memorabilia = JSON.parse(this.$route.query.item)
+            // $http.memorabiliaList()
+            // .then(res => {
+            //     let arr1 = [], arr2 = []
+            //     res.data.data.map((el, index) => {
+            //         el.memorabiliaDatetime = this.format1(el.memorabiliaDatetime)
+            //         if (index%2==0) {
+            //             arr1.push(el)
+            //         } else {
+            //             arr2.push(el)
+            //         }
+            //         return el
+            //     })
 
-                this.list = [arr1, arr2]
-            })
+            //     this.list = [arr1, arr2]
+            // })
         }
         format(shijianchuo){
             //shijianchuo是整数，否则要parseInt转换
@@ -295,7 +299,10 @@
         mounted(){
             this.editorOption.initVoiceButton();
             this.isHistory = this.$route.query.isHistory
-            console.log(this.$route.query.isHistory, this.isHistory)
+            if (typeof this.isHistory == 'string') {
+                this.isHistory = this.$route.query.isHistory != 'false'
+            }
+            this.name = this.$route.query.name
             if (this.isHistory) {
                 this.getMemorabiliaList()
             } else {
@@ -373,7 +380,7 @@
 <style scoped lang="scss">
     .article_box{
 
-        background: #F1F1F1;
+        // background: #F1F1F1;
         .left-menu {
             position: fixed;
             top: 400px;
@@ -381,11 +388,12 @@
         }
     }
     .article{
-        background-image: url('/src/pc/static/imgs/organize-work_background.png');
-        background-size: 100% 1261px;
-        background-repeat: no-repeat;
+        // background-image: url('/src/h5/static/imgs/organize-work_background.png');
+        // background-size: 100% 1261px;
+        // background-repeat: no-repeat;
+        padding: 14px;
         .content{
-            width: 1200px;
+            width: 100%;
             margin: auto;
             padding: 30px 0px;
             .content_top{
@@ -399,7 +407,7 @@
             .content_center{
                 border-radius: 10px;
                 background: #FFFFFF;
-                padding: 44px 159px 64px 147px;
+                // padding: 14px;
                 margin-bottom: 23px;
                 .content_center_title{
                     text-align: center;
@@ -411,7 +419,7 @@
             .comment{
                 border-radius: 10px;
                 background: #FFFFFF;
-                padding: 27px 32px;
+                padding: 27px 0px;
                 .comment_top{
                     margin-bottom: 27px;
                     .comment_title{
@@ -469,10 +477,10 @@
                         margin-bottom: 14px;
                         display: flex;
                         .list_img{
-                            width: 50px;
-                            height: 50px;
+                            width: 40px;
+                            height: 40px;
                             display: block;
-                            margin-right: 22px;
+                            margin-right: 11px;
                         }
                         .name{
                             color: #941C1C;
@@ -491,6 +499,7 @@
         }
 
     }
+    
     .replyList{
         display: flex;
         .name{
@@ -592,6 +601,19 @@
 
         .time2{
             font-size: 18px;
+        }
+    }
+</style>
+<style lang='scss'>
+    .myhtml{   
+        img{
+            max-width: 100%
+        }
+        video{
+            max-width: 100%
+        }
+        audio{
+            max-width: 100%
         }
     }
 </style>

@@ -15,7 +15,7 @@
         </van-swipe>
         <div class='article_list' v-for='item in list' :key='item[key].articleId || item[key].leaderCareId' @click='jump(item)'>
           <div class='article_list_header line_clamp1'>
-            <span v-if='navIndex==3'>{{item[key].leaderName}}</span>
+            <span v-if='navIndex==2'>{{item[key].leaderName}}</span>
             <span v-else>{{item[key].articleTitle}}</span>
           </div>
           <div class='article_list_time'>{{item[key].createDatetime}}</div>

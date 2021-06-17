@@ -7,6 +7,7 @@ import '@/h5/static/styles/common.css';
 import { Swipe, SwipeItem } from 'vant';
 import { Tab, Tabs } from 'vant';
 import { Popup } from 'vant';
+
 Vue.use(Swipe);
 Vue.use(SwipeItem);
 Vue.use(Tab);

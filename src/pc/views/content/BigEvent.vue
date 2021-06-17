@@ -44,7 +44,7 @@ export default class BigEvent extends Vue {
   icon = icon
   pageSize = 0
   total = 0
-  detail(){this.$router.push({name: 'list', query: {value: 'bigEvent'}})}
+  detail(){this.$router.push({name: 'list', query: {value: 'bigEvent', isBigEvent: true}})}
   format(shijianchuo){
     //shijianchuo是整数，否则要parseInt转换
     var time = new Date(shijianchuo);
@@ -61,6 +61,7 @@ export default class BigEvent extends Vue {
   jump(item){
     // this.$router.push({name: 'Article', query: {value: 'leaderCare'}})
     this.$router.push({name: 'article', query: {
+      isHistory: true,
       item: JSON.stringify(item), 
       name: '大事记', 
       index: 3

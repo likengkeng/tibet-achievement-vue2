@@ -55,113 +55,113 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import Component from 'vue-class-component';
-import OrganizeHeader from '@/pc/components/OrganizeHeader.vue';
-import WorkSwiper from '@/common/components/MySwiper.vue';
-import { MenuItem } from 'CommonTypes';
-import MyContentHeader from '@/pc/components/MyContentHeader.vue';
-import content from '@/pc/static/imgs/title_4.png'
-import right_icon from '@/pc/static/imgs/right_icon.png'
-import left_icon from '@/pc/static/imgs/left_icon.png'
-import $http from '@/pc/api/event';
+  import Vue from 'vue';
+  import Component from 'vue-class-component';
+  import OrganizeHeader from '@/pc/components/OrganizeHeader.vue';
+  import WorkSwiper from '@/common/components/MySwiper.vue';
+  import { MenuItem } from 'CommonTypes';
+  import MyContentHeader from '@/pc/components/MyContentHeader.vue';
+  import content from '@/pc/static/imgs/title_4.png'
+  import right_icon from '@/pc/static/imgs/right_icon.png'
+  import left_icon from '@/pc/static/imgs/left_icon.png'
+  import $http from '@/pc/api/event';
 
-@Component({
-  components: {
-    OrganizeHeader,
-    WorkSwiper,
-    MyContentHeader
-  }
-})
-export default class OrganizeWork extends Vue {
-  content: string = content
-  left_icon = left_icon
-  right_icon = right_icon
-  menuList: MenuItem[] = [
-    {
-      text: '党的政治建设',
-      value: 'politicalBuilding',
-      index: 1
-    },
-    {
-      text: '干部工作',
-      value: 'cadreWork',
-      index: 2
-    },
-    {
-      text: '党的组织建设',
-      value: 'organizationBuilding',
-      index: 3
-    },
-    {
-      text: '人才工作',
-      value: 'talentWork',
-      index: 4
-    },
-    {
-      text: '干部人才援藏工作',
-      value: 'helpTibetWork',
-      index: 5
-    },
-    {
-      text: '自身建设',
-      value: 'selfConstruction',
-      index: 6
-    },
-  ];
-  currentMenu: MenuItem = {} as MenuItem;
-  list = []
-  pageSize = 0
-  detail(){this.$router.push({name: 'list', query: {value: 'organizeWork'}})}
-  leftBtn(){
-    if (this.pageSize == 0) {
-      return
+  @Component({
+    components: {
+      OrganizeHeader,
+      WorkSwiper,
+      MyContentHeader
     }
-    this.pageSize -= 1
-  }
-  jump(item){
-    // this.$router.push({name: 'Article', query: {value: 'leaderCare'}})
-    this.$router.push({name: 'article', query: {
-      item: JSON.stringify(item),
-      name: '组织工作',
-      index: 4
-    }})
-
-  }
-  rightBtn(){
-    if (this.pageSize == this.list.length-1) {
-      return
+  })
+  export default class OrganizeWork extends Vue {
+    content: string = content
+    left_icon = left_icon
+    right_icon = right_icon
+    menuList: MenuItem[] = [
+      {
+        text: '党的政治建设',
+        value: 'politicalBuilding',
+        index: 1
+      },
+      {
+        text: '干部工作',
+        value: 'cadreWork',
+        index: 2
+      },
+      {
+        text: '党的组织建设',
+        value: 'organizationBuilding',
+        index: 3
+      },
+      {
+        text: '人才工作',
+        value: 'talentWork',
+        index: 4
+      },
+      {
+        text: '干部人才援藏工作',
+        value: 'helpTibetWork',
+        index: 5
+      },
+      {
+        text: '自身建设',
+        value: 'selfConstruction',
+        index: 6
+      },
+    ];
+    currentMenu: MenuItem = {} as MenuItem;
+    list = []
+    pageSize = 0
+    detail(){this.$router.push({name: 'list', query: {value: 'organizeWork'}})}
+    leftBtn(){
+      if (this.pageSize == 0) {
+        return
+      }
+      this.pageSize -= 1
     }
-    this.pageSize += 1
-  }
-  getList(){
-    $http.powerList({
-      organizationPowerMeunType: 1,
-      organizationPowerType: this.currentMenu.index
-    })
-    .then(res => {
-      let arr = []
-      res.data.data.forEach((el,index) => {
-        if (arr[Math.ceil((index+1)/3)-1]) {
-          arr[Math.ceil((index+1)/3)-1].push(el)
-        } else {
-          arr[Math.ceil((index+1)/3)-1] = [el]
-        }
-      });
-      console.log(res)
-      this.list = arr
-    })
-  }
-  mounted() {
-    this.currentMenu = this.menuList[0];
-    this.getList()
-  }
+    jump(item){
+      // this.$router.push({name: 'Article', query: {value: 'leaderCare'}})
+      this.$router.push({name: 'article', query: {
+        item: JSON.stringify(item),
+        name: '组织工作',
+        index: 4
+      }})
 
-  updateCurrentMenu(menu) {
-    this.currentMenu = menu;
-    this.getList()
+    }
+    rightBtn(){
+      if (this.pageSize == this.list.length-1) {
+        return
+      }
+      this.pageSize += 1
+    }
+    getList(){
+      $http.powerList({
+        organizationPowerMeunType: 1,
+        organizationPowerType: this.currentMenu.index
+      })
+      .then(res => {
+        let arr = []
+        res.data.data.forEach((el,index) => {
+          if (arr[Math.ceil((index+1)/3)-1]) {
+            arr[Math.ceil((index+1)/3)-1].push(el)
+          } else {
+            arr[Math.ceil((index+1)/3)-1] = [el]
+          }
+        });
+        console.log(res)
+        this.list = arr
+      })
+    }
+    mounted() {
+      this.currentMenu = this.menuList[0];
+      this.getList()
+    }
+
+    updateCurrentMenu(menu) {
+      this.currentMenu = menu;
+      this.getList()
+    }
   }
-}
 </script>
 <style scoped lang="scss">
 .organize-work {

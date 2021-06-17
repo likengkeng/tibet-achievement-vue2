@@ -21,10 +21,10 @@
             <div v-for='item in list' :key='item.articleId' class='list' @click='jump(item)'>
               <div class='my_flex list_left'>
                 <img :src="leaderCare_icon" alt="" class='icon'>
-                <div v-if='navIndex==3'>第{{(item.leaderVO || {}).leaderSort}}任-{{(item.leaderVO || {}).leaderName}} </div>
-                <div v-else>{{(item.articleVO || {}).articleTitle}}</div>
+                <div class='line_clamp1' v-if='navIndex==3'>第{{(item.leaderVO || {}).leaderSort}}任-{{(item.leaderVO || {}).leaderName}} </div>
+                <div v-else class='line_clamp1'>{{(item.articleVO || {}).articleTitle}}</div>
               </div>
-              <div>{{item.createDatetime}}</div>
+              <div class='createDatetime'>{{item.createDatetime}}</div>
             </div>
           </div>
         </div>
@@ -34,77 +34,77 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import Component from 'vue-class-component';
-// import ImageSwiper from '@/common/components/MySwiper.vue';
-import MyContentHeader from '@/pc/components/MyContentHeader.vue';
-import leaderCare_icon from '@/pc/static/imgs/leaderCare_icon.png'
-import content from '@/pc/static/imgs/title_2.png'
-import $http from '@/pc/api/event';
+  import Vue from 'vue';
+  import Component from 'vue-class-component';
+  // import ImageSwiper from '@/common/components/MySwiper.vue';
+  import MyContentHeader from '@/pc/components/MyContentHeader.vue';
+  import leaderCare_icon from '@/pc/static/imgs/leaderCare_icon.png'
+  import content from '@/pc/static/imgs/title_2.png'
+  import $http from '@/pc/api/event';
 
-@Component({
-  components: {
-    MyContentHeader
-  }
-})
-export default class LeaderCare extends Vue {
-  currentImage: string = '/static/imgs/test01.jpg';
-  leaderCare_icon: String = leaderCare_icon
-  content: string = content
-  imgList = [];
-  imgListIndex = 0
-  navIndex: Number = 1
-  list = []
-  jump(item){
-    // this.$router.push({name: 'Article', query: {value: 'leaderCare'}})
-    this.$router.push({name: 'article', query: {
-      isHistory: this.navIndex == 3,
-      item: JSON.stringify(item),
-      name: '领导关怀',
-      index: 2
-    }})
+  @Component({
+    components: {
+      MyContentHeader
+    }
+  })
+  export default class LeaderCare extends Vue {
+    currentImage: string = '/static/imgs/test01.jpg';
+    leaderCare_icon: String = leaderCare_icon
+    content: string = content
+    imgList = [];
+    imgListIndex = 0
+    navIndex: Number = 1
+    list = []
+    jump(item){
+      // this.$router.push({name: 'Article', query: {value: 'leaderCare'}})
+      this.$router.push({name: 'article', query: {
+        isHistory: this.navIndex == 3,
+        item: JSON.stringify(item),
+        name: '领导关怀',
+        index: 2
+      }})
 
-  }
-  detail(){this.$router.push({name: 'list', query: {value: 'leaderCare'}})}
-  navSelect(index){
-    this.navIndex = index
-    this.imgListIndex = 0
-    this.getList()
-  }
-  getList(){
-    $http.leaderList({leaderCareType: this.navIndex})
-    .then(res => {
-      console.log(res)
-      this.imgList = []
-      res?.data?.data?.map(el => {
-        el.articleVO?.createDatetime && (el.createDatetime = this.format(el.articleVO.createDatetime))
-        el.leaderVO?.createDatetime && (el.createDatetime = this.format(el.leaderVO.createDatetime))
-        if (this.navIndex == 3) {
-          this.imgList = [...el.leaderVO.leaderImagePathAlls, ...this.imgList]
-        } else {
-          this.imgList.push(el.articleVO.articleCoverImagePath)
-        }
-        return el
+    }
+    detail(){this.$router.push({name: 'list', query: {value: 'leaderCare'}})}
+    navSelect(index){
+      this.navIndex = index
+      this.imgListIndex = 0
+      this.getList()
+    }
+    getList(){
+      $http.leaderList({leaderCareType: this.navIndex})
+      .then(res => {
+        console.log(res)
+        this.imgList = []
+        res?.data?.data?.map(el => {
+          el.articleVO?.createDatetime && (el.createDatetime = this.format(el.articleVO.createDatetime))
+          el.leaderVO?.createDatetime && (el.createDatetime = this.format(el.leaderVO.createDatetime))
+          if (this.navIndex == 3) {
+            this.imgList = [...el.leaderVO.leaderImagePathAlls, ...this.imgList]
+          } else {
+            this.imgList.push(el.articleVO.articleCoverImagePath)
+          }
+          return el
+        })
+        this.list = res.data.data
       })
-      this.list = res.data.data
-    })
-  }
-  format(shijianchuo){
-    //shijianchuo是整数，否则要parseInt转换
-    var time = new Date(shijianchuo);
-    var y = time.getFullYear();
-    var m = time.getMonth()+1;
-    var d = time.getDate() < 10 ? `0${time.getDate()}` : time.getDate();
+    }
+    format(shijianchuo){
+      //shijianchuo是整数，否则要parseInt转换
+      var time = new Date(shijianchuo);
+      var y = time.getFullYear();
+      var m = time.getMonth()+1;
+      var d = time.getDate() < 10 ? `0${time.getDate()}` : time.getDate();
 
-    var h = time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
-    var mm = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
-    var s = time.getSeconds() < 10 ? `0${time.getSeconds()}` : time.getSeconds();
-    return `${y}-${m}-${d} ${h}:${mm}:${s}`
+      var h = time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
+      var mm = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
+      var s = time.getSeconds() < 10 ? `0${time.getSeconds()}` : time.getSeconds();
+      return `${y}-${m}-${d} ${h}:${mm}:${s}`
+    }
+    mounted(){
+      this.getList()
+    }
   }
-  mounted(){
-    this.getList()
-  }
-}
 </script>
 <style scoped lang="scss">
 .leader-care {
@@ -203,11 +203,16 @@ export default class LeaderCare extends Vue {
         font-size: 16px;
             cursor: pointer;
         display: flex;
-        align-content: center;
+        align-items: center;
         justify-content: space-between;
         margin-bottom: 18px;
         .list_left{
           align-items: center;
+          overflow: hidden
+        }
+        .createDatetime{
+          flex-shrink: 0;
+          margin-left: 10px
         }
         .icon{
           width: 50px;
@@ -218,5 +223,12 @@ export default class LeaderCare extends Vue {
       }
     }
   }
+  .line_clamp1{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
+  }
+  
 }
 </style>

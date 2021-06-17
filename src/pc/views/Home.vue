@@ -127,7 +127,7 @@ export default class Home extends Vue {
 .tibet-achievement {
   overflow: hidden;
   .content {
-    min-height: 3500px;
+    // min-height: 3500px;
     width: 100vw;
     // padding-left: 360px;
     // width: calc(100% - 720px);

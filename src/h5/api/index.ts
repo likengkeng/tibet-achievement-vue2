@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { AxiosInstance } from 'axios';
 const apiUrl = 'http://182.61.5.103:9998/web/'
-
+import { Toast } from 'vant';
+let toast;
 function createAPI({ url, headers } : any) {
   const instance = axios.create({
     headers,
@@ -11,6 +12,11 @@ function createAPI({ url, headers } : any) {
 
   instance.interceptors.request.use(
     (request: any): any => {
+      toast = Toast.loading({
+        duration: 0, // 持续展示 toast
+        forbidClick: true,
+        message: '加载中...',
+      });
       if (request.method === 'get') {
         request.headers.common['Pragma'] = 'no-cache';
         request.headers.common['Cache-control'] = 'no-cache';
@@ -24,9 +30,11 @@ function createAPI({ url, headers } : any) {
 
   instance.interceptors.response.use(
     (response: any): any => {
+      Toast.clear()
       return response;
     },
     (errorData: any): any => {
+      Toast.clear()
       return Promise.reject(errorData?.response || {});
     },
   );

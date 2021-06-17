@@ -1,18 +1,18 @@
 <template>
   <div class="bigEvent">
     <div class='solid'></div>
-    <img :src="logo" alt="" class='bigEvent-logo'>
+    <img :src="logo" alt="" class='bigEvent-logo' @click='detail'>
     <div class='list_box'>
       
       <div v-for='item in list' :key='item.memorabiliaId' class='list' :style='{transform: `translateX(-${pageSize*100}%)`}'>
         <div class='time1'>{{item.time[0]}}</div>
         <div class='time2'>{{item.time[0]}}</div>
         <div class='division'></div>
-        <div class='padding_lf13' @click='jump(item)'>
+        <div class='padding_lf13' @click.stop='jump(item)'>
           <div class='img_box'>
             <img :src="item.memorabiliaImagePathAlls[0]" alt="" class='img'>
-            <img :src="rightIcon" alt="" class='right_icon' @click='rightBtn'>
-            <img :src="rightIcon" alt="" class='right_icon left_icon' @click='leftBtn'>
+            <img :src="rightIcon" alt="" class='right_icon' @click.stop='rightBtn'>
+            <img :src="rightIcon" alt="" class='right_icon left_icon' @click.stop='leftBtn'>
           </div>
           <div class='list_title'>{{item.memorabiliaTitle}}</div>
           <div class='list_text'>{{item.memorabiliaContent}}</div>
@@ -77,11 +77,12 @@
       this.$router.push({name: 'article', query: {
         item: JSON.stringify(item), 
         name: '大事记', 
-        index: 3
+        index: 3,
+        isHistory: true,
       }})
 
     }
-    detail(){this.$router.push({name: 'BigEventList', query: {value: 'bigEvent'}})}
+    detail(){this.$router.push({name: 'bigEventList', query: {value: 'bigEvent'}})}
     mounted() {
       this.getList()
     }
@@ -169,10 +170,22 @@
           .list_title{
             font-size: 16px;
             font-weight: bold;
-            margin-bottom: 10px
+            margin-bottom: 10px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            word-break: break-all;
           }
           .list_text{
             font-size: 14px;
+            text-overflow: -o-ellipsis-lastline;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            max-height: '40px'
           }
         }
 

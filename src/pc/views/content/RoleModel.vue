@@ -73,16 +73,16 @@ export default class RoleModel extends Vue {
 
   roleModel_icon: string = roleModel_icon
   navTitle = [
-    {name: '老西藏'},
-    {name: '优秀共产党员'},
-    {name: '优秀党务工作者'},
-    {name: '先进基层党组织'},
-    {name: '优秀援藏干部人才'},
-    {name: '优秀组工干部'},
-    {name: '最美公务员'},
+    {name: '老西藏', index: 1},
+    {name: '优秀共产党员', index: 2},
+    {name: '优秀党务工作者', index: 3},
+    {name: '先进基层党组织', index: 4},
+    {name: '优秀援藏干部人才', index: 5},
+    {name: '优秀组工干部', index: 6},
+    {name: '最美公务员', index: 7},
   ]
   navIndex = 0
-  list = [{},{},{},{},{},{},{}]
+  list = []
   isShow1 = false
   isShow2 = false
   isShow3 = false
@@ -108,7 +108,7 @@ export default class RoleModel extends Vue {
   mouseLeave(index){
     this[`isShow${index}`] = false
   }
-  navSelect(index){
+  navSelect(item, index){
 
     this.navIndex = index
     this.getList()
@@ -223,6 +223,7 @@ export default class RoleModel extends Vue {
         width: 185px;
         height: 124px;
         margin-right: 9px;
+        overflow: hidden;
         .content3_img,.content4_img{
           width: 100%;
           height: 100%;
@@ -264,6 +265,7 @@ export default class RoleModel extends Vue {
     box-sizing: border-box;
     .modal_title{
       font-weight: bold;
+      text-align: center
     }
   }
 }

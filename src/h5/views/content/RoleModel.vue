@@ -10,7 +10,7 @@
             <img class='icon' :src="leaderCareIcon" alt="">
             <div class='flex before_img'>
               <img :src="list[0].articleVO.articleCoverImagePath" alt="" class='article_img'>
-              <div>
+              <div class='myhtml'>
                 <div class='title'>{{list[0].articleVO.articleTitle}}</div>
                 <div class='text' v-html='list[0].articleVO.articleContent'>{{}}</div>
               </div>
@@ -134,7 +134,8 @@
   }
   .flex_g1{
     flex-grow: 1;
-    text-align: right
+    text-align: right;
+    overflow: hidden
   }
   .before_img{
       position: relative;
@@ -173,12 +174,27 @@
   .title{
     font-size: 16px;
     font-weight: 600;
+     white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
   }
   .text{
     font-size: 14px;
+    text-overflow: -o-ellipsis-lastline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    -webkit-box-orient: vertical;
+    max-height: 80px;
   }
   .mb_50{
     margin-bottom: 50px;
+  }
+  .myhtml{
+    overflow: hidden;
   }
 
 }

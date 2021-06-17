@@ -1,8 +1,11 @@
 <template>
   <div class="Photograph1">
     <my-header class='flex_s0'></my-header>
-    <video id="video" ref='video' class='flex_g1 video' autoplay="autoplay" v-if='!img'></video>
-    <img :src="img" alt="" class='flex_g1 video' v-else>
+    <div class='video_box'>
+      <video id="video" ref='video' class='flex_g1 video' autoplay="autoplay"></video>
+      <canvas class='canvas' ref='canvas'></canvas>
+
+    </div>
     <div class='camera flex_s0'>
       <div class='camera3_box' @click='upload'>
         <img :src="camera3" alt="" class='camera3'>
@@ -11,8 +14,7 @@
       <img :src="camera1" alt="" class='camera1' @click='photograph'>
       <img :src="camera2" alt="" class='camera2' @click='select'>
     </div>
-    <canvas class='canvas' ref='canvas'></canvas>
-    <input class='canvas' type="file" ref='file' accept="image/*" name="image" @change="getFile($event)" >
+    <input class='fileinput' type="file" ref='file' accept="image/*" name="image" @change="getFile($event)" >
   </div>
 </template>
 
@@ -24,17 +26,22 @@
     import camera1 from '@/h5/static/imgs/camera1.png'
     import camera2 from '@/h5/static/imgs/camera2.png'
     import camera3 from '@/h5/static/imgs/camera3.png'
-
+    import '@/h5/static/facepp_sdk/jquery.min.js'
+    import '@/h5/static/facepp_sdk/exif.js'
+    import FACEPP from '@/h5/static/facepp_sdk/facepp_sdk.js'
+    import str from '@/h5/static/imgs/module1.js'
+    import { Notify } from 'vant';
     @Component({
       components: {
           MyHeader
       },
     })
     export default class Photograph1 extends Vue {
+            facepp = new FACEPP('ZZB6CifNdU01PxaPobUM1-DxmqoykgVv','Gx4MwKDPHzjYXulPcfG5LFGxShF1ptr6',1);
+
       camera3 = camera3
       camera2 = camera2
       camera1 = camera1
-      img = ''
       isdirection = false
       detail(){this.$router.push({name: 'Photograph1', query: {value: 'bigEvent'}})}
       mounted(){
@@ -64,24 +71,17 @@
         });
       }
       photograph() {
+        console.log(1111)
+        const vm = this
         // 把当前视频帧内容渲染到canvas上
         let ctx = this.$refs["canvas"].getContext("2d");
         ctx.drawImage(this.$refs["video"], 0, 0, 640, 480);
         /**------------后面是下载功能----------*/
         // 转base64格式、图片格式转换、图片质量压缩---支持两种格式image/jpeg+image/png
         let imgBase64 = this.$refs["canvas"].toDataURL("image/jpeg", 0.7);
-        // 由字节转换为KB 判断大小
-        let str = imgBase64.replace("data:image/jpeg;base64,", "");
-        this.img = imgBase64
-        // let strLength = str.length;
-        // let fileLength = parseInt(strLength - (strLength / 8) * 2); // 图片尺寸 用于判断
-        // let size = (fileLength / 1024).toFixed(2);
-        console.log(size); // 上传拍照信息 调用接口上传图片 .........
-        // 保存到本地
-        // let ADOM = document.createElement("a");
-        // ADOM.href = this.headImgSrc;
-        // ADOM.download = new Date().getTime() + ".jpeg";
-        // ADOM.click();
+        const mergePara = {"template_base64": imgBase64, "merge_base64" : str,  };
+        vm.facepp.mergeFace(mergePara,vm.handleSuccess,vm.handleError);
+        
       }
       upload(){
         this.$refs.file.click()
@@ -92,12 +92,20 @@
         let reader = new FileReader();   //html5读文件
         reader.readAsDataURL(file.target.files[0]); //转BASE64    
         reader.onload=function(e) {    //读取完毕后调用接口
-          const base64Image = e.target.result
-          // window.open('../static/mergeFace.html')Photograph2
-
-          window.location.href="./static/mergeFace.html"
+          const base64Image = e.target.result;
+          console.log(base64Image)
+          const mergePara = {"template_base64": base64Image, "merge_base64" : str,  };
+          vm.facepp.mergeFace(mergePara,vm.handleSuccess,vm.handleError);
         }
       }
+      handleSuccess(e) {
+        const base64Image  = 'data:image/jpg;base64,' + e.result;
+        this.$router.push({name: 'photograph2', query: {src: base64Image}})
+      }
+      handleError(){
+        Notify('失败');
+      }
+      
     }
 </script>
 
@@ -115,15 +123,30 @@
     .flex_s0{
       flex-shrink: 0
     }
-    .video{
-      width: 100vw
+    .video_box{
+      width: 100vw;
+      position: relative;
+      .video{
+        width:100%;
+        height: 100%;
+        position: relative;
+        z-index: 100
+      }
+      .canvas{
+        width:100%;
+        height: 100%;
+        position: relative;
+        z-index: -100
+      }
     }
     .camera{
       display: flex;
       justify-content: space-around;
       align-items: center;
       height: 115px;
-      background: #fff
+      background: #fff;
+      position: relative;
+    z-index: 9999999;
     }
     .camera3_box{
       font-size: 18px;
@@ -148,9 +171,10 @@
       height: 22px;
       display: block
     }
-    .canvas{
-      width: 100vw;
-      height: 100vh;
+    .fileinput{
+      width: 0px;
+      height: 0px;
+      overflow: hidden;
       position: absolute;
       z-index: -99999999;
     }

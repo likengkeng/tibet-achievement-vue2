@@ -13,7 +13,7 @@
                 </div>
                 <div class='content_center'>
                     <template v-if='isHistory'>
-                        <div class='box'>
+                        <!--<div class='box'>
                             <div>
                                 <div v-for='(item, index) in list[0]' class='list left_list'>
                                     <img :src="rocket" alt="" v-if='index== 0' class='rocket'>
@@ -41,12 +41,13 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
+                        </div>-->
+                        <div class='content_center_title'>{{memorabilia.memorabiliaTitle || memorabilia.leaderVO.leaderName}}</div>
+                        <div>{{memorabilia.memorabiliaContent || memorabilia.leaderVO.leaderComment}}</div>
                     </template>
                     <template v-else>
                         <div class='content_center_title'>{{(obj.articleVO || {}).articleTitle}}</div>
-                        <div v-html='(obj.articleVO || {}).articleContent'></div>
+                        <div class='myhtml' v-html='(obj.articleVO || {}).articleContent'></div>
                     </template>
                 </div>
                 <div class='comment' v-if='(obj.articleVO || {}).articleCanDiscuss'>
@@ -81,14 +82,14 @@
                                     <div class='mb_14'>
                                         <span class='name'>游客{{item.touristId}}</span>&nbsp;&nbsp;<span class='time'>{{item.createDatetime}}</span>
                                     </div>
-                                    <div v-html='item.touristCommentContent'></div>
+                                    <div class='myhtml' v-html='item.touristCommentContent'></div>
                                 </div>
                                 <div v-if='item.replyList'>
                                     <div v-for='el in item.replyList' class='replyList'>
                                         <div class='mb_14'>
                                             <span class='name'>小编回复</span>
                                         </div>
-                                        <div v-html='el.repContent'></div>
+                                        <div class='myhtml' v-html='el.repContent'></div>
                                     </div>
 
                                 </div>
@@ -117,6 +118,7 @@
     import 'quill/dist/quill.core.css';
     import 'quill/dist/quill.snow.css';
     import 'quill/dist/quill.bubble.css';
+    import { Message } from 'element-ui';
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
         ['blockquote', 'code-block'],
@@ -228,12 +230,12 @@
                 touristCommentContent: this.touristCommentContent
             })
             .then(res => {
-                this.$message({
-                message: '评论成功',
-                type: 'success'
+                Message({
+                    message: '评论成功',
+                    type: 'success'
                 });
                 this.touristCommentContent = ''
-                this.getList()
+                // this.getList()
             })
         }
         headerNav(){}
@@ -256,22 +258,24 @@
                 this.list = res.data.data
             })
         }
+        memorabilia = {}
         getMemorabiliaList(){
-            $http.memorabiliaList()
-            .then(res => {
-                let arr1 = [], arr2 = []
-                res?.data?.data?.map((el, index) => {
-                    el.memorabiliaDatetime = this.format1(el.memorabiliaDatetime)
-                    if (index%2==0) {
-                        arr1.push(el)
-                    } else {
-                        arr2.push(el)
-                    }
-                    return el
-                })
+            this.memorabilia = JSON.parse(this.$route.query.item)
+            // $http.memorabiliaList()
+            // .then(res => {
+            //     let arr1 = [], arr2 = []
+            //     res?.data?.data?.map((el, index) => {
+            //         el.memorabiliaDatetime = this.format1(el.memorabiliaDatetime)
+            //         if (index%2==0) {
+            //             arr1.push(el)
+            //         } else {
+            //             arr2.push(el)
+            //         }
+            //         return el
+            //     })
 
-                this.list = [arr1, arr2]
-            })
+            //     this.list = [arr1, arr2]
+            // })
         }
         format(shijianchuo){
             //shijianchuo是整数，否则要parseInt转换
@@ -298,7 +302,9 @@
         mounted(){
             this.editorOption.initVoiceButton();
             this.isHistory = this.$route.query.isHistory
-            console.log(this.$route.query.isHistory, this.isHistory)
+            if (typeof this.isHistory == 'string') {
+                this.isHistory = this.$route.query.isHistory != 'false'
+            }
             if (this.isHistory) {
                 this.getMemorabiliaList()
             } else {
@@ -309,22 +315,22 @@
             const con = document.getElementById('check')
             console.log(con.files,con.files.length )
             if (con.files.length > 1) {
-                this.$message('最多1张')
+                Message('最多1张')
                 return
             }
             if (con.files[0].size  > 5 * 1024 * 1024) {
-                 this.$message('文件最大5M')
+                 Message('文件最大5M')
                 return
             }
             if (con.files[0].type.str.match(RegExp(/video/))) {
                 if (!con.files[0].type.str.match(RegExp(/mp4/))) {
-                    this.$message('视频格式只允许mp4')
+                    Message('视频格式只允许mp4')
                     return
                 }
             }
             if (con.files[0].type.str.match(RegExp(/audio/))) {
                 if (!con.files[0].type.str.match(RegExp(/mpeg/)) || !con.files[0].type.str.match(RegExp(/mp3/)) ) {
-                    this.$message('音频格式只允许mp3')
+                    Message('音频格式只允许mp3')
                     return
                 }
             }
@@ -506,95 +512,17 @@
     ::v-deep .ql-toolbar.ql-snow + .ql-container.ql-snow{
         height:100px
     }
-    .box .right_list:first-child{
-        margin-top: 180px;
-    }
-    .box{
-        display: flex;
-        justify-content: center;
-        .istime1.time1::before{
-            display: none
+</style>
+<style lang='scss'>
+    .myhtml{   
+        img{
+            max-width: 100%
         }
-        .rocket{
-            width: 40px;
-            height: 51px;
-            position: absolute;
-            right: -35px;
-            top: 23px
+        video{
+            max-width: 100%
         }
-        .list{
-            display: flex;
-            padding-bottom: 60px;
-            position: relative;
-        }
-        .left_list::before{
-            content: '';
-            display: block;
-            width: 6px;
-            height: 100%;
-            background: rgba(228, 228, 228, 1);
-            position: absolute;
-            right: -18px;
-            top: 0px
-        }
-        .right_list{
-            // margin-top: 180px;
-        }
-        .left_box{
-            box-shadow: 0px 2px 18px 0px rgba(213, 152, 152, 0.5);
-            background: #FFFFFF;
-            border-radius: 6px;
-            border: 1px solid #F3D9D9;
-            padding: 15px 14px;
-            .img{
-                width: 335px;
-                height: 213px;
-                display: block
-            }
-            .title{
-                margin: 19px 11px;
-                font-size: 20px;
-                font-weight: 600;
-            }
-            .text{
-                font-size: 14px
-            }
-        }
-        .time{
-            margin: 23px 18px 0px 12px
-        }
-        .right_time{
-            margin: 23px 25px 0px 43px
-        }
-        .time1{
-            font-weight: 600;
-            font-size: 28px;
-            position: relative;
-        }
-        .time1::before{
-            content: '';
-            display: block;
-            position: absolute;
-            top: 50%;
-            right: -48px;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            box-sizing: border-box;
-            background: rgba(163, 163, 163, 0.75);
-            box-shadow: 0px 2px 18px 0px rgba(163, 163, 163, 0.75);
-            border: 5px solid #fff;
-            transform: translateY(-50%)
-        }
-
-        .right_list{
-            .time1::before{
-                right: 82px
-            }
-        }
-
-        .time2{
-            font-size: 18px;
+        audio{
+            max-width: 100%
         }
     }
 </style>
