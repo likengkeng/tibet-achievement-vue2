@@ -3,7 +3,7 @@
     <img :src="logo" alt="" class='preface-logo' @click='detail'>
     <van-swipe @change="onChange">
       <van-swipe-item v-for='(item, index) in list' :key="index">
-        <video :src="item.materialVO.pathAll" class='video' :ref='`video${index}`' v-if='item.isVideo'>
+        <video :src="item.materialVO.pathAll" class='video' controls :ref='`video${index}`' v-if='item.isVideo'>
             您的浏览器不支持 video 标签。
         </video>
         <img v-else :src="item.materialVO.pathAll" class='img' alt="图片">

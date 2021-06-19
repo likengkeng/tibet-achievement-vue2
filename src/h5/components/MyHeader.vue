@@ -38,7 +38,7 @@
                 myroute: {name: 'list', query: {value: 'leaderCare'}}
             },
             {
-                text: '大事件',
+                text: '大事记',
                 value: 'bigEvent',
                 myroute: {name: 'list', query: {value: 'bigEvent'}}
             },

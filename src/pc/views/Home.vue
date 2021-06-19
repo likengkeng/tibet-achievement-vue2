@@ -75,10 +75,10 @@ export default class Home extends Vue {
       myroute: {name: 'list', query: {value: 'leaderCare'}}
     },
     {
-      text: '大事件',
+      text: '大事记',
       value: 'bigEvent',
       content: BigEvent,
-      myroute: {name: 'list', query: {value: 'bigEvent'}}
+      myroute: {name: 'list', query: {value: 'bigEvent', isBigEvent: true}}
     },
     {
       text: '组织工作',
@@ -117,6 +117,7 @@ export default class Home extends Vue {
 
   updateCurrentMenu(menu) {
     this.currentMenu = menu;
+    console.log(menu)
     this.$router.push(menu.myroute)
     // jumpToContent(`${this.currentMenu.value}_jump_page`);
   }

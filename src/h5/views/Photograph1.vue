@@ -2,17 +2,16 @@
   <div class="Photograph1">
     <my-header class='flex_s0'></my-header>
     <div class='video_box'>
-      <video id="video" ref='video' class='flex_g1 video' autoplay="autoplay"></video>
-      <canvas class='canvas' ref='canvas'></canvas>
-
+      <input type="file" class='filecamera' ref='filecamera' @change='change' accept="image/*" capture="camera">
+      <canvas ref='canvas' class='canvas'></canvas>
     </div>
     <div class='camera flex_s0'>
-      <div class='camera3_box' @click='upload'>
+      <div class='camera3_box flex_g1' @click='upload'>
         <img :src="camera3" alt="" class='camera3'>
         <p>相册</p>
       </div>
-      <img :src="camera1" alt="" class='camera1' @click='photograph'>
-      <img :src="camera2" alt="" class='camera2' @click='select'>
+      <div class='flex_g1'> <img :src="camera1" alt="" class='camera1' @click='photograph'></div>
+      <div class='flex_g1'></div>
     </div>
     <input class='fileinput' type="file" ref='file' accept="image/*" name="image" @change="getFile($event)" >
   </div>
@@ -26,85 +25,52 @@
     import camera1 from '@/h5/static/imgs/camera1.png'
     import camera2 from '@/h5/static/imgs/camera2.png'
     import camera3 from '@/h5/static/imgs/camera3.png'
-    import '@/h5/static/facepp_sdk/jquery.min.js'
-    import '@/h5/static/facepp_sdk/exif.js'
-    import FACEPP from '@/h5/static/facepp_sdk/facepp_sdk.js'
-    import str from '@/h5/static/imgs/module1.js'
-    import { Notify } from 'vant';
     @Component({
       components: {
           MyHeader
       },
     })
     export default class Photograph1 extends Vue {
-            facepp = new FACEPP('ZZB6CifNdU01PxaPobUM1-DxmqoykgVv','Gx4MwKDPHzjYXulPcfG5LFGxShF1ptr6',1);
 
       camera3 = camera3
       camera2 = camera2
       camera1 = camera1
-      isdirection = false
-      detail(){this.$router.push({name: 'Photograph1', query: {value: 'bigEvent'}})}
+      index = -1
       mounted(){
-          this.callcamera()
+        this.index = this.$route.query.img
+        this.$nextTick(() => {
+          this.$refs.filecamera.click()
+        })
       }
       select(){
-        this.isdirection = !this.isdirection
-        this.callcamera()
-      }
-      callcamera(){
-          let constraints = {video: true }
-        if (this.isdirection) {
-          constraints = {video: { facingMode: { exact: "environment" } }}
-        }
-        navigator.mediaDevices.getUserMedia(constraints)
-        .then((success) => {
-          var videoTracks = success.getVideoTracks();
-          // 摄像头开启成功
-          this.$refs["video"].srcObject = success;
-          this.isCameraFlag = false;
-          // 实时拍照效果
-          this.$refs["video"].play()
-        })
-        .catch((error) => {
-          console.error("摄像头开启失败，请检查摄像头是否可用！");
-          this.isCameraFlag = true;
-        });
-      }
-      photograph() {
-        console.log(1111)
-        const vm = this
-        // 把当前视频帧内容渲染到canvas上
-        let ctx = this.$refs["canvas"].getContext("2d");
-        ctx.drawImage(this.$refs["video"], 0, 0, 640, 480);
-        /**------------后面是下载功能----------*/
-        // 转base64格式、图片格式转换、图片质量压缩---支持两种格式image/jpeg+image/png
-        let imgBase64 = this.$refs["canvas"].toDataURL("image/jpeg", 0.7);
-        const mergePara = {"template_base64": imgBase64, "merge_base64" : str,  };
-        vm.facepp.mergeFace(mergePara,vm.handleSuccess,vm.handleError);
         
+      }
+      photograph(){
+                  this.$refs.filecamera.click()
+      }
+      change(e){
+        const vm = this
+        let img=e.srcElement.files[0]; //获取到上传文件的对象
+        var reader = new FileReader();
+        reader.readAsDataURL(img);//参数为上传的文件对象 传值进去就会触发以下onload方法
+        reader.onload = function (e) {
+          vm.$router.push({name: 'photograph2', query: {src: e.target.result, index: vm.index}})
+        }
       }
       upload(){
         this.$refs.file.click()
       }
       getFile(file){
         const vm = this
-        console.log(file)
         let reader = new FileReader();   //html5读文件
         reader.readAsDataURL(file.target.files[0]); //转BASE64    
         reader.onload=function(e) {    //读取完毕后调用接口
           const base64Image = e.target.result;
-          console.log(base64Image)
-          const mergePara = {"template_base64": base64Image, "merge_base64" : str,  };
-          vm.facepp.mergeFace(mergePara,vm.handleSuccess,vm.handleError);
+
+          vm.$router.push({name: 'photograph2', query: {src: base64Image, index: vm.index}})
         }
       }
-      handleSuccess(e) {
-        const base64Image  = 'data:image/jpg;base64,' + e.result;
-        this.$router.push({name: 'photograph2', query: {src: base64Image}})
-      }
-      handleError(){
-        Notify('失败');
-      }
+      
       
     }
 </script>
@@ -123,9 +89,19 @@
     .flex_s0{
       flex-shrink: 0
     }
+    .filecamera{
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      opacity: 0;
+    }
     .video_box{
       width: 100vw;
       position: relative;
+      flex-grow: 1;
+      overflow: hidden;
       .video{
         width:100%;
         height: 100%;
@@ -153,7 +129,15 @@
       color: rgba(0, 0, 0, 0.85);
       display: flex;
       align-items: center;
-
+      width: 33.33%
+    }
+    .flex_g1{
+      // flex-grow: 1;
+      width: 33%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: -0.5%
     }
     .camera3{
       margin-right: 10px;
@@ -177,5 +161,9 @@
       overflow: hidden;
       position: absolute;
       z-index: -99999999;
+    }
+    .selectImg{
+      width: 375px;
+      height: 515px;
     }
 </style>

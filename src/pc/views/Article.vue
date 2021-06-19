@@ -302,6 +302,7 @@
         mounted(){
             this.editorOption.initVoiceButton();
             this.isHistory = this.$route.query.isHistory
+            this.name = this.$route.query.name
             if (typeof this.isHistory == 'string') {
                 this.isHistory = this.$route.query.isHistory != 'false'
             }
@@ -322,14 +323,14 @@
                  Message('文件最大5M')
                 return
             }
-            if (con.files[0].type.str.match(RegExp(/video/))) {
-                if (!con.files[0].type.str.match(RegExp(/mp4/))) {
+            if (con.files[0].type.match(RegExp(/video/))) {
+                if (!con.files[0].type.match(RegExp(/mp4/))) {
                     Message('视频格式只允许mp4')
                     return
                 }
             }
-            if (con.files[0].type.str.match(RegExp(/audio/))) {
-                if (!con.files[0].type.str.match(RegExp(/mpeg/)) || !con.files[0].type.str.match(RegExp(/mp3/)) ) {
+            if (con.files[0].type.match(RegExp(/audio/))) {
+                if (!con.files[0].type.match(RegExp(/mpeg/)) || !con.files[0].type.match(RegExp(/mp3/)) ) {
                     Message('音频格式只允许mp3')
                     return
                 }

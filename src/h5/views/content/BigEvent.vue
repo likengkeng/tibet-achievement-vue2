@@ -10,7 +10,13 @@
         <div class='division'></div>
         <div class='padding_lf13' @click.stop='jump(item)'>
           <div class='img_box'>
-            <img :src="item.memorabiliaImagePathAlls[0]" alt="" class='img'>
+            <video v-if='item.fileType=="mp4"' :src="(item.memorabiliaImagePathAlls||[])[0]" class='img'>
+                  您的浏览器不支持 video 标签。
+              </video>
+              <audio :src="(item.memorabiliaImagePathAlls||[])[0]" controls class='img' v-else-if='item.fileType=="mp3"'>
+              您的浏览器不支持 audio 标签。
+            </audio>
+            <img :src="(item.memorabiliaImagePathAlls||[])[0]" alt="" class='img' v-else>
             <img :src="rightIcon" alt="" class='right_icon' @click.stop='rightBtn'>
             <img :src="rightIcon" alt="" class='right_icon left_icon' @click.stop='leftBtn'>
           </div>
@@ -34,14 +40,18 @@
     logo = logo
     rightIcon = rightIcon
     pageSize = 0
+    fileType = ''
     getList(){
       $http.memorabiliaList()
         .then((res) => {
           res?.data?.data?.map(el => {
             el.time = this.format(el.memorabiliaDatetime)
+            const index = el.memorabiliaImagePathAlls[0].lastIndexOf(".")
+            const fileType = el.memorabiliaImagePathAlls[0].substr(index + 1)
+            el.fileType = fileType
             return el
           })
-          this.list = res.data.data;
+        this.list = res.data.data;
         })
         .catch(() => {
 
@@ -73,6 +83,10 @@
       this.pageSize--
     }
     jump(item){
+      if (item.articleVO?.articleType == 2 && item.articleVO?.articleSuperUrl) {
+          window.open(item.articleVO.articleSuperUrl)
+          return
+      }
       // this.$router.push({name: 'Article', query: {value: 'leaderCare'}})
       this.$router.push({name: 'article', query: {
         item: JSON.stringify(item), 

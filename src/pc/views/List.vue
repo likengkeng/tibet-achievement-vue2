@@ -18,7 +18,13 @@
                         <div v-for='(item, index) in bigEventList[0]' class='big_list big_left_list' @click='bigjump(item)'>
                             <img :src="rocket" alt="" v-if='index== 0' class='big_rocket'>
                             <div class='big_left_box'>
-                                <img :src="item.memorabiliaImagePathAlls[0]" alt="" class='big_img'>
+                                <video v-if='item.fileType=="mp4"' :src="(item.memorabiliaImagePathAlls||[])[0]" class='big_img'>
+                                    您的浏览器不支持 video 标签。
+                                </video>
+                                <audio :src="(item.memorabiliaImagePathAlls||[])[0]" controls class='big_img' v-else-if='item.fileType=="mp3"'>
+                                您的浏览器不支持 audio 标签。
+                                </audio>
+                                <img :src="(item.memorabiliaImagePathAlls||[])[0]" alt="" class='big_img' v-else>
                                 <div class='big_title'>{{item.memorabiliaTitle}}</div>
                                 <div class='big_text'>{{item.memorabiliaContent}}</div>
                             </div>
@@ -35,7 +41,13 @@
                                 <div class='big_time2'>{{item.memorabiliaDatetime[1]}}</div>
                             </div>
                             <div class='big_left_box'>
-                                <img :src="item.memorabiliaImagePathAlls[0]" alt="" class='big_img'>
+                                <video v-if='item.fileType=="mp4"' :src="(item.memorabiliaImagePathAlls||[])[0]" class='big_img'>
+                                    您的浏览器不支持 video 标签。
+                                </video>
+                                <audio :src="(item.memorabiliaImagePathAlls||[])[0]" controls class='big_img' v-else-if='item.fileType=="mp3"'>
+                                您的浏览器不支持 audio 标签。
+                                </audio>
+                                <img :src="(item.memorabiliaImagePathAlls||[])[0]" alt="" class='big_img' v-else>
                                 <div class='big_title'>{{item.memorabiliaTitle}}</div>
                                 <div class='big_text'>{{item.memorabiliaContent}}</div>
                             </div>
@@ -132,9 +144,17 @@
             this.getList()
         }
         jump(item, boo=false){
+            if (item.articleVO?.articleType == 2 && item.articleVO?.articleSuperUrl) {
+                window.open(item.articleVO.articleSuperUrl)
+                return
+            }
             this.$router.push({name: 'article', query: {isHistory: boo, item: JSON.stringify(item), name: this.dataObj[this.queryValue].name, index: this.dataObj[this.queryValue].index}})
         }
         bigjump(item){
+            if (item.articleVO?.articleType == 2 && item.articleVO?.articleSuperUrl) {
+                window.open(item.articleVO.articleSuperUrl)
+                return
+            }
             this.$router.push({name: 'article', query: {
                 isHistory: true,
                 item: JSON.stringify(item), 
@@ -282,6 +302,11 @@
                 let arr1 = [], arr2 = []
                 res?.data?.data?.map((el, index) => {
                     el.memorabiliaDatetime = this.format1(el.memorabiliaDatetime)
+                    const i = el.memorabiliaImagePathAlls[0].lastIndexOf(".")
+                    console.log(i)
+                    const fileType = el.memorabiliaImagePathAlls[0].substr(i + 1)
+                    console.log(fileType)
+                    el.fileType = fileType
                     if (index%2==0) {
                         arr1.push(el)
                     } else {
@@ -295,6 +320,7 @@
         }
         mounted(){
             this.queryValue = this.$route.query.value
+            console.log(this.$route.query)
             this.isBigEvent = this.$route.query.isBigEvent
             this.name = this.dataObj[this.queryValue].name
             if (this.isBigEvent) {
@@ -313,10 +339,10 @@
 </script>
 
 <style scoped lang="scss">
-.bigEvent_box{
-    width: 1200px;
-    margin: auto;
-}
+    .bigEvent_box{
+        width: 1200px;
+        margin: auto;
+    }
     .list{
         padding: 25px 0px;
         min-height: 100vh;
@@ -400,7 +426,7 @@
                         background: rgba(239, 208, 208, 1);
                         margin-top: 30px;
                         .nav_btn{
-                            padding: 12px 38px 14px;
+                            padding: 12px 30px 14px;
                             color: rgba(176, 21, 22, 1);
                             font-size: 16px;
                             font-weight: bold;
@@ -428,7 +454,7 @@
                             box-sizing: border-box;
                             cursor: pointer;
                             .data_list_img{
-                                width: 255px;
+                                width: 100%;
                                 height: 176px;
                                 display: block;
                             }
@@ -478,7 +504,9 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin: 20px 0px;
+        padding: 20px 0px;
+        width: 1200px;
+        margin: auto;
     }
     .content_center{
         border-radius: 10px;
@@ -573,7 +601,7 @@
         }
 
         .big_right_list{
-            .time1::before{
+            .big_time1::before{
                 right: 82px
             }
         }

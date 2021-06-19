@@ -19,14 +19,13 @@
           <div class='content_ovh' v-if='list[1]' @click='jump(list[1])'>
             <div class='flex before_img_right'>
               <div class='flex_g1'>
-                <div class='title'>{{list[0].articleVO.articleTitle}}</div>
-                <div class='text' v-html='list[0].articleVO.articleContent'>{{}}</div>
+                <div class='title'>{{list[1].articleVO.articleTitle}}</div>
+                <div class='text' v-html='list[1].articleVO.articleContent'>{{}}</div>
               </div>
-              <img :src="list[0].articleVO.articleCoverImagePath" alt="" class='article_img'>
+              <img :src="list[1].articleVO.articleCoverImagePath" alt="" class='article_img'>
             </div>
             <div class='icon_right_box'> <img class='icon_right' :src="leaderCareIcon" alt=""></div>
-          </div>
-          
+          </div>          
         </div>
       </van-tab>
     </van-tabs>
@@ -74,6 +73,10 @@
       this.$router.push({name: 'list', query: {value: 'roleModel'}})
     }
     jump(item){
+      if (item.articleVO?.articleType == 2 && item.articleVO?.articleSuperUrl) {
+          window.open(item.articleVO.articleSuperUrl)
+          return
+      }
       // this.$router.push({name: 'Article', query: {value: 'leaderCare'}})
       this.$router.push({name: 'article', query: {
         isHistory: this.navIndex == 3,

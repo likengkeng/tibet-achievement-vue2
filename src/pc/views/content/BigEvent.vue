@@ -14,7 +14,13 @@
           <div class='list_center' :class='{select_list_center: item.check}'>
           </div>
           <div class='list_footer' :class='{select_list_footer: item.check}' @click='jump(item)'>
-            <img :src="item.memorabiliaImagePathAlls[0]" alt="" class='img'>
+            <video v-if='item.fileType=="mp4"' :src="(item.memorabiliaImagePathAlls||[])[0]" class='img'>
+                  您的浏览器不支持 video 标签。
+              </video>
+              <audio :src="(item.memorabiliaImagePathAlls||[])[0]" controls class='img' v-else-if='item.fileType=="mp3"'>
+              您的浏览器不支持 audio 标签。
+            </audio>
+            <img :src="(item.memorabiliaImagePathAlls||[])[0]" alt="" class='img' v-else>
             <div class='title line_clamp1'>{{item.memorabiliaTitle}}</div>
             <div class='footer_content line_clamp2'>{{item.memorabiliaContent}}</div>
           </div>
@@ -59,6 +65,10 @@ export default class BigEvent extends Vue {
     // return `${y}年${m}月${d}日 ${h}:${mm}:${s}`
   }
   jump(item){
+    if (item.articleVO?.articleType == 2 && item.articleVO?.articleSuperUrl) {
+          window.open(item.articleVO.articleSuperUrl)
+          return
+      }
     // this.$router.push({name: 'Article', query: {value: 'leaderCare'}})
     this.$router.push({name: 'article', query: {
       isHistory: true,
@@ -87,6 +97,7 @@ export default class BigEvent extends Vue {
       this.pageSize++
     }
   }
+  fileType = ''
   mounted() {
     $http.memorabiliaList()
       .then((res) => {
@@ -94,6 +105,9 @@ export default class BigEvent extends Vue {
         res?.data?.data?.map(el => {
           el.time = this.format(el.memorabiliaDatetime)
           el.check = false
+          const index = el.memorabiliaImagePathAlls[0].lastIndexOf(".")
+            const fileType = el.memorabiliaImagePathAlls[0].substr(index + 1)
+            el.fileType = fileType
           return el
         })
         res.data.data[0].check = true

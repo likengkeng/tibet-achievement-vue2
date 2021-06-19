@@ -92,6 +92,10 @@ export default class RoleModel extends Vue {
       this.$router.push({name: 'list', query: {value: 'roleModel'}})
   }
   jump(item){
+    if (item.articleVO?.articleType == 2 && item.articleVO?.articleSuperUrl) {
+        window.open(item.articleVO.articleSuperUrl)
+        return
+    }
     // this.$router.push({name: 'Article', query: {value: 'leaderCare'}})
     this.$router.push({name: 'article', query: {
       isHistory: this.navIndex == 3,
@@ -263,6 +267,7 @@ export default class RoleModel extends Vue {
     font-size: 16px;
     z-index: 10;
     box-sizing: border-box;
+    overflow: hidden;
     .modal_title{
       font-weight: bold;
       text-align: center

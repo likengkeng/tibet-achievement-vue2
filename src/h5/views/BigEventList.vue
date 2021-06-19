@@ -10,7 +10,13 @@
             <img class='rocket' :src="rocket" alt="">
           </div>
           <div class='content'>
-            <img :src="(item.memorabiliaImagePathAlls||[])[0]" alt="" class='img'>
+            <video v-if='item.showPath.type=="mp4"' :src="(item.memorabiliaImagePathAlls||[])[0]" class='img'>
+                  您的浏览器不支持 video 标签。
+              </video>
+              <audio :src="(item.memorabiliaImagePathAlls||[])[0]" controls class='img' v-else-if='item.showPath.type=="mp3"'>
+              您的浏览器不支持 audio 标签。
+            </audio>
+            <img :src="(item.memorabiliaImagePathAlls||[])[0]" alt="" class='img' v-else>
             <div class='list_title'>{{item.memorabiliaTitle}}</div>
             <div class='list_text'>{{item.memorabiliaContent}}</div>
           </div>
@@ -37,11 +43,18 @@
   export default class Fuse extends Vue {
     list = []
     rocket = rocket
+    fileType = ''
     getList(){
       $http.memorabiliaList()
         .then((res) => {
           res.data.data.map(el => {
             el.time = this.format(el.memorabiliaDatetime)
+            const index = el.memorabiliaImagePathAlls[0].lastIndexOf(".")
+              const fileType = el.memorabiliaImagePathAlls[0].substr(index + 1)
+              el.showPath={
+                path: el.memorabiliaImagePathAlls[0],
+                type: fileType
+              }
             return el
           })
           this.list = res.data.data;
@@ -51,6 +64,10 @@
         });  
     }
     jump(item){
+      if (item.articleVO?.articleType == 2 && item.articleVO?.articleSuperUrl) {
+          window.open(item.articleVO.articleSuperUrl)
+          return
+      }
       this.$router.push({name: 'article', query: {isHistory: true, item: JSON.stringify(item), name: '大事记', index: 3}})
     }
     headerNav(){}

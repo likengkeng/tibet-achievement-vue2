@@ -2,7 +2,7 @@
   <div class="Clothing">
     <my-header @headerNav='headerNav'></my-header>
     <div class='list_box'>
-      <div class='list' v-for='item in list' :key='item.name' @click='jump(item)'>
+      <div class='list' v-for='(item, index) in list' :key='item.name' @click='jump(index)'>
         <div class='img'></div>
         <div class='name'>{{item.name}}</div>
       </div>
@@ -15,7 +15,13 @@
   import Component from 'vue-class-component';
   import logo from '@/h5/static/imgs/title7.png'
   import MyHeader from '@/h5/components/MyHeader.vue';
-
+  import template1 from '@/h5/static/imgs/template1.png'
+  import template2 from '@/h5/static/imgs/template2.png'
+  import template3 from '@/h5/static/imgs/template3.png'
+  import template4 from '@/h5/static/imgs/template4.png'
+  import template5 from '@/h5/static/imgs/template5.png'
+  import template6 from '@/h5/static/imgs/template6.png'
+  import template7 from '@/h5/static/imgs/template7.png'
 
   @Component({
     components: {
@@ -24,18 +30,16 @@
   })
   export default class Fuse extends Vue {
     list = [
-      {img: logo, name: '名字1'},
-      {img: logo, name: '名字2'},
-      {img: logo, name: '名字3'},
-      {img: logo, name: '名字4'},
-      {img: logo, name: '名字5'},
-      {img: logo, name: '名字6'},
-      {img: logo, name: '名字7'},
-      {img: logo, name: '名字8'}
+      {img: template1, name: '名字1'},
+      {img: template2, name: '名字2'},
+      {img: template3, name: '名字3'},
+      {img: template4, name: '名字4'},
+      {img: template5, name: '名字5'},
+      {img: template6, name: '名字6'},
+      {img: template7, name: '名字7'},
     ]
-    jump(){
+    jump(index){this.$router.push({name: 'photograph1', query: {img: index}})}
 
-    }
     mounted() {
     }
   }

@@ -9,7 +9,7 @@ const port = isPC ? '8000' : '9000';
 module.exports = merge(common, {
   devtool: 'inline-source-map',
   devServer: {
-    // host: '192.168.1.101',
+    host: '192.168.1.101',
     port,
     contentBase: '../dist',
     overlay: true,

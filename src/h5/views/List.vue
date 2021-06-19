@@ -66,6 +66,10 @@
             this.getList()
         }
         jump(item, boo=false){
+            if (item.articleVO?.articleType == 2 && item.articleVO?.articleSuperUrl) {
+                window.open(item.articleVO.articleSuperUrl)
+                return
+            }
             this.$router.push({name: 'article', query: {isHistory: boo, item: JSON.stringify(item), name: this.dataObj[this.queryValue].name, index: this.dataObj[this.queryValue].index}})
         }
         queryValue = ''
@@ -214,12 +218,17 @@
         .data_list_title{
             font-size: 16px;
             font-weight: 500;
+            
         }
-
+        .data_list_img{
+            max-width: 100%;
+            margin: auto
+        }
         .myhtml{
             height: 80px;
             overflow: hidden;
         }
+        
         .line_clamp1 {
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -227,4 +236,20 @@
             word-break: break-all;
         }
     }
+</style>
+<style>
+    .myhtml{
+            img{
+                max-width: 100%;
+                margin: auto
+            }
+            video{
+                max-width: 100%;
+                margin: auto
+            }
+            audio{
+                max-width: 100%;
+                margin: auto
+            }
+        }
 </style>

@@ -93,6 +93,10 @@ export default class OrganizeWork extends Vue {
   detail(){this.$router.push({name: 'list', query: {value: 'organizeWork'}})}
 
   jump(item){
+    if (item.articleVO?.articleType == 2 && item.articleVO?.articleSuperUrl) {
+          window.open(item.articleVO.articleSuperUrl)
+          return
+      }
     // this.$router.push({name: 'Article', query: {value: 'leaderCare'}})
     this.$router.push({name: 'article', query: {
       item: JSON.stringify(item), 
@@ -153,6 +157,7 @@ export default class OrganizeWork extends Vue {
   }
   .text{
     font-size: 14px;
+    max-height: 80px;
   }
   .content_bottom{
     padding: 9px;

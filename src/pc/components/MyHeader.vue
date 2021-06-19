@@ -21,7 +21,10 @@ import Component from 'vue-class-component';
 import ghIcon from '@/pc/static/imgs/gh_icon.png'
 import titleIcon from '@/pc/static/imgs/title_icon.png'
 import icon2 from '@/pc/static/imgs/100_icon.png'
-
+@Component({
+    components: {
+    },
+    })
 export default class MenuHeader extends Vue {
     ghIcon = ghIcon
     titleIcon = titleIcon
@@ -43,9 +46,9 @@ export default class MenuHeader extends Vue {
             myroute: {name: 'list', query: {value: 'leaderCare'}}
         },
         {
-            text: '大事件',
+            text: '大事记',
             value: 'bigEvent',
-            myroute: {name: 'list', query: {value: 'bigEvent'}}
+            myroute: {name: 'list', query: {value: 'bigEvent', isBigEvent: true}}
         },
         {
             text: '组织工作',

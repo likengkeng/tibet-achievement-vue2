@@ -80,6 +80,10 @@
     detail(){this.$router.push({name: 'list', query: {value: 'leaderCare'}})}
 
     jump(item){
+      if (item.articleVO?.articleType == 2 && item.articleVO?.articleSuperUrl) {
+          window.open(item.articleVO.articleSuperUrl)
+          return
+      }
       if (this.navIndex == 3) {
         this.$router.push({name: 'minister'})
       } else {

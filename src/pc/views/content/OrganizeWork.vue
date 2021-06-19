@@ -120,6 +120,10 @@
       this.pageSize -= 1
     }
     jump(item){
+      if (item.articleVO?.articleType == 2 && item.articleVO?.articleSuperUrl) {
+          window.open(item.articleVO.articleSuperUrl)
+          return
+      }
       // this.$router.push({name: 'Article', query: {value: 'leaderCare'}})
       this.$router.push({name: 'article', query: {
         item: JSON.stringify(item),

@@ -40,9 +40,9 @@ export default class AnchorNavigator extends Vue {
       myroute: {name: 'list', query: {value: 'leaderCare'}}
     },
     {
-      text: '大事件',
+      text: '大事记',
       value: 'bigEvent',
-      myroute: {name: 'list', query: {value: 'bigEvent'}}
+      myroute: {name: 'list', query: {value: 'bigEvent', isBigEvent: true}}
     },
     {
       text: '组织工作',
