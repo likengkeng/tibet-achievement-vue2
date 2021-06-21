@@ -123,7 +123,15 @@
             this.pageSize = index
         }
         headerNav(){
-            this.getList()
+            this.queryValue = this.$route.query.value
+            console.log(this.$route.query)
+            this.isBigEvent = this.$route.query.isBigEvent
+            this.name = this.dataObj[this.queryValue].name
+            if (this.isBigEvent) {
+                this.getBigEvent()
+            } else {
+                this.getList()
+            }
         }
         leftBtn(){
             console.log(this.pageSize)

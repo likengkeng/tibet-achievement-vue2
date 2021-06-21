@@ -10,7 +10,9 @@
     <div class='list_box'>
       <div class='list'>
         <div v-for='item in list' :key='item.name'>
-          <img class='list_img' :src="item.img" alt="" @click='chang(item)'>
+          <div class='img_box'>
+            <img class='list_img' :src="item.img" alt="" @click='chang(item)'>
+          </div>
           <div class='name'>{{item.name}}</div>
         </div>
       </div>
@@ -42,7 +44,6 @@
     import FACEPP from '@/h5/static/facepp_sdk/facepp_sdk.js'
     import { Notify } from 'vant';
     import { Toast } from 'vant';
-
     @Component({
     components: {
         MyHeader
@@ -57,13 +58,13 @@
         dowload = dowload
         code = code
         list = [
-          {img: template1, name: '名字1'},
-          {img: template2, name: '名字2'},
-          {img: template3, name: '名字3'},
-          {img: template4, name: '名字4'},
-          {img: template5, name: '名字5'},
-          {img: template6, name: '名字6'},
-          {img: template7, name: '名字7'},
+          {img: template1, name: '雅砻藏族'},
+          {img: template2, name: '康区藏装'},
+          {img: template3, name: '汉服女'},
+          {img: template4, name: '安多藏装'},
+          {img: template5, name: '中山装'},
+          {img: template6, name: '后藏藏装'},
+          {img: template7, name: '拉萨藏装'},
         ]
         chang(item){
           this.templateImg = item.img
@@ -104,29 +105,6 @@
             event.initEvent("click", true, false);
             save_link.dispatchEvent(event);
         }
-
-        // upload(){
-        //   let aLink = document.createElement('a');
-        //   let blob = this.base64ToBlob(this.src); //new Blob([content]);
-        //   let evt = document.createEvent("HTMLEvents");
-        //   evt.initEvent("click", true, true);//initEvent 不加后两个参数在FF下会报错  事件类型，是否冒泡，是否阻止浏览器的默认行为
-        //   aLink.download = '融合.png';
-        //   aLink.href = URL.createObjectURL(blob);
-        //   aLink.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}));//兼容火狐
-        // }
-        // base64ToBlob(code) {
-        //   let parts = code.split(';base64,');
-        //   let contentType = parts[0].split(':')[1];
-        //   let raw = window.atob(parts[1]);
-        //   let rawLength = raw.length;
-
-        //   let uInt8Array = new Uint8Array(rawLength);
-
-        //   for (let i = 0; i < rawLength; ++i) {
-        //     uInt8Array[i] = raw.charCodeAt(i);
-        //   }
-        //   return new Blob([uInt8Array], {type: contentType});
-        // }
         image2Base64(img) {
             var canvas = document.createElement("canvas");
             canvas.width = img.width;
@@ -173,11 +151,41 @@
           }
           this.$nextTick(() => {
             this.$refs.myCanvas.width = window.innerWidth * 2;
-			    this.$refs.myCanvas.height = window.innerHeight * 2;
+			      this.$refs.myCanvas.height = window.innerHeight * 2;
           })
           
           
           
+        }
+
+        afuse(){
+          const params = {
+            Action: 'FaceFusion',
+            Version: '2018-12-01',
+            ProjectId: '306673',
+            ModelId: 'qc_306673_360696_4',
+            Image: '',
+            RspImgType: 'url'
+          };
+          Toast.loading({
+            duration: 0, // 持续展示 toast
+            forbidClick: true,
+            message: '加载中...',
+          });
+          const vm = this
+          var img = new Image();
+          img.src= this.templateImg;
+          img.onload=function(){
+              params.Image = vm.image2Base64(img);
+              client.FaceFusion(params).then(
+                (data) => {
+                  console.log(data);
+                },
+                (err) => {
+                  console.error("error", err);
+                }
+              );
+          }
         }
     }
 </script>
@@ -216,12 +224,19 @@
       background: #fff;
       display: flex;
     }
-    .list_img{
+    .img_box{
       width: 60px;
       height: 60px;
       border-radius: 50%;
-      margin: 0px 18px 9px; 
-      flex-shrink: 0;
+      overflow: hidden;
+            margin: 0px 18px 9px; 
+                  flex-shrink: 0;
+
+
+    }
+    .list_img{
+      width: 60px;
+      height: auto;
       display: block
     }
     .name{

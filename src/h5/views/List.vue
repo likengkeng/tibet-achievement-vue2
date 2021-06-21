@@ -3,22 +3,33 @@
     <my-header @headerNav='headerNav'></my-header>
     <div v-if='tab'>
         <van-tabs title-active-color="#BA0C00FF" v-model='navIndex' color='#BA0C00FF' @click="navTab">
-        <van-tab v-for="item in tab" :title="item.text" :key='item.text'>
-        </van-tab>
+            <van-tab v-for="item in tab" :title="item.name" :key='item.name'>
+            </van-tab>
         </van-tabs>
     </div>
     
     <div class='data_list'>
-        <div v-for='(item, index) in dataList' :key='index' class='data_list_content'>
-            <div v-if='navIndex==3 && queryValue=="leaderCare"' @click='jump(item, "history")'>
-                <img :src="item.leaderVO.leaderImagePathAlls[0]" alt="" class='data_list_img'>
-                <div clas='data_list_title line_clamp1'>{{item.leaderVO.leaderName}}</div>
-                <div class='data_list_text line_clamp1 myhtml' v-html='item.leaderVO.leaderComment'></div>
+        <div  v-if='navIndex==2 && queryValue=="leaderCare"' class='leaderCare'>
+            <div class='leaderCare_list mr_10'>
+                <div class='leaderCare_list_content' v-for='item in dataList[0]' :key='(item||{}).leaderCareId'  @click='jump(item, "history")'>
+                    <img :src="(((item||{}).leaderVO||{}).leaderImagePathAlls||[])[0]" alt="" class='data_list_img'>
+                    <div clas='data_list_title line_clamp1'>{{((item||{}).leaderVO||{}).leaderName}}</div>
+                    <div class='data_list_text line_clamp4 myhtml'>{{((item||{}).leaderVO||{}).leaderComment}}</div>
+                </div>
             </div>
-            <div v-else @click='jump(item)'>
-                <img :src="item.articleVO.articleCoverImagePath" alt="" class='data_list_img'>
-                <div clas='data_list_title line_clamp1'>{{item.articleVO.articleTitle}}</div>
-                <div class='data_list_text myhtml' v-html='item.articleVO.articleContent'></div>
+            <div class='leaderCare_list'>
+                <div v-for='item in dataList[1]' class='leaderCare_list_content' :key='(item||{}).leaderCareId'  @click='jump(item, "history")'>
+                    <img :src="(((item||{}).leaderVO||{}).leaderImagePathAlls||[])[0]" alt="" class='data_list_img'>
+                    <div clas='data_list_title line_clamp1'>{{((item||{}).leaderVO||{}).leaderName}}</div>
+                    <div class='data_list_text line_clamp1 myhtml'>{{((item||{}).leaderVO||{}).leaderComment}}</div>
+                </div>
+            </div>
+        </div>
+        <div v-else v-for='(item, index) in dataList' :key='index' class='data_list_content'>
+            <div @click='jump(item)'>
+                <img :src="(item.articleVO||{}).articleCoverImagePath" alt="" class='data_list_img'>
+                <div clas='data_list_title line_clamp1'>{{(item.articleVO||{}).articleTitle}}</div>
+                <div class='data_list_text myhtml' v-html='(item.articleVO||{}).articleContent'></div>
             </div>
         </div>
     </div>
@@ -46,7 +57,10 @@
             this.pageSize = index
         }
         headerNav(){
+            this.navIndex = 0
+            this.queryValue = this.$route.query.value
             this.getList()
+            this.tab = this.dataObj[this.queryValue].tab
         }
         leftBtn(){
             console.log(this.pageSize)
@@ -168,30 +182,42 @@
         }
         getList(){
             this.queryValue = this.$route.query.value
-            const key = this.dataObj[this.queryValue].url
-            const myobj = this.dataObj[this.queryValue].data || {}
-            let mydata = {}
-            for (const key in myobj) {
-                if (Object.prototype.hasOwnProperty.call(myobj, key)) {
-                    if (sessionStorage.getItem("myqidi")) {
-                        this.navIndex = sessionStorage.getItem("myqidi")
-                        sessionStorage.removeItem("myqidi")
-                    }
-                    mydata[key] = myobj[key] || this.navIndex+1
+            if (this.queryValue) {
+                const httpkey = this.dataObj[this.queryValue].url
+                const myobj = this.dataObj[this.queryValue].data || {}
+                let mydata = {}
+                for (const key in myobj) {
+                    if (Object.prototype.hasOwnProperty.call(myobj, key)) {
+                        if (sessionStorage.getItem("myqidi")) {
+                            this.navIndex = sessionStorage.getItem("myqidi")
+                            sessionStorage.removeItem("myqidi")
+                        }
+                        mydata[key] = myobj[key] || this.navIndex+1
 
+                    }
                 }
-            }
-                $http[key]({
+                $http[httpkey]({
                     ...mydata
                 })
                 .then(res => {
-                    res.data.data.map(el => {
+                    let arr1 = [], arr2 = []
+                    res.data.data.map((el, index) => {
                         el.leaderVO && (el.time = this.format(el.leaderVO.updateDatetime))
                         el.articleVO && (el.time = this.format(el.articleVO.createDatetime))
+                        if (index%2==0) {
+                            arr1.push(el)
+                        } else {
+                            arr2.push(el)
+                        }
                         return el
                     })
-                    this.dataList = res.data.data
+                    if (this.navIndex==2 && this.queryValue=="leaderCare") {
+                        this.dataList = [arr1, arr2] 
+                    } else {
+                        this.dataList = res.data.data
+                    }
                 })
+            }
         }
         tab = null
         mounted(){
@@ -200,42 +226,86 @@
             this.tab = this.dataObj[this.queryValue].tab
         }
         updated(){
-            const list = Array.from(document.getElementsByClassName('myhtml'))
-            list.forEach(el => {
-                el.children[0].setAttribute('style', 'margin: 0px')
-            });
+            // const list = Array.from(document.getElementsByClassName('myhtml'))
+            // list.forEach(el => {
+            //     el.children[0].setAttribute('style', 'margin: 0px')
+            // });
         }
     }
 </script>
 
 <style scoped lang="scss">
+.list{
+    
+background: #F5F5F5;
+}
     .data_list{
         padding: 12px 12px 22px;
         min-height: 100vh;
         .data_list_content{
             background: #fff;
+            margin-bottom: 13px;
+                box-shadow: 0px 2px 18px 0px rgba(202, 202, 202, 0.5);
+                border-radius: 6px;
+                background: #FFFFFF;
+                padding: 14px;
+            .data_list_img{
+                max-width: 100%;
+                margin: 0px auto 7px;
+                display: block
+            }
+            .myhtml{
+                max-height: 80px;
+                overflow: hidden;
+            }
+            
+            .line_clamp1 {
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                word-break: break-all;
+            }
         }
         .data_list_title{
-            font-size: 16px;
-            font-weight: 500;
-            
-        }
-        .data_list_img{
-            max-width: 100%;
-            margin: auto
-        }
-        .myhtml{
-            height: 80px;
-            overflow: hidden;
-        }
+                font-size: 16px;
+                font-weight: 500;
+                
+            }
         
-        .line_clamp1 {
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            word-break: break-all;
-        }
     }
+     .leaderCare{
+            display: flex;
+            .mr_10{
+                margin-right: 10px
+            }
+            .leaderCare_list{
+                width: 50%;
+                flex-grow: 1;
+
+            }
+            .leaderCare_list_content{
+                margin-bottom: 13px;
+                box-shadow: 0px 2px 18px 0px rgba(202, 202, 202, 0.5);
+                border-radius: 6px;
+                background: #FFFFFF;
+                padding: 14px;
+            .data_list_img{
+                width: 100%;
+                display: block;
+                margin-bottom: 7px;
+                height: 154px;
+}
+            }
+            .line_clamp4{
+                text-overflow: -o-ellipsis-lastline;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 4;
+                line-clamp: 4;
+                -webkit-box-orient: vertical;
+            }
+        }
 </style>
 <style>
     .myhtml{
@@ -252,4 +322,5 @@
                 margin: auto
             }
         }
+       
 </style>

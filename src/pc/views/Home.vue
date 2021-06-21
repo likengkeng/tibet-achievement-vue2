@@ -117,7 +117,6 @@ export default class Home extends Vue {
 
   updateCurrentMenu(menu) {
     this.currentMenu = menu;
-    console.log(menu)
     this.$router.push(menu.myroute)
     // jumpToContent(`${this.currentMenu.value}_jump_page`);
   }

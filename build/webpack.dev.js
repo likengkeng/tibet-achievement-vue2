@@ -9,7 +9,7 @@ const port = isPC ? '8000' : '9000';
 module.exports = merge(common, {
   devtool: 'inline-source-map',
   devServer: {
-    host: '192.168.1.101',
+    host: '192.168.1.102',
     port,
     contentBase: '../dist',
     overlay: true,
@@ -22,7 +22,7 @@ module.exports = merge(common, {
     },
     proxy: {
       '/rng': {     //这里最好有一个 /
-          target: 'http://182.61.5.103:9999/cms/',  // 后台接口域名
+          target: 'http://182.61.5.103/cms/',  // 后台接口域名
           ws: true,        //如果要代理 websockets，配置这个参数
           secure: false,  // 如果是https接口，需要配置这个参数
           changeOrigin: true,  //是否跨域

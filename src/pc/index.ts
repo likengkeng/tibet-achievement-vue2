@@ -10,6 +10,7 @@ Object.keys(directive).forEach(key => {
   // @ts-ignore
   Vue.directive(key, directive[key]);
 });
+
 new Vue({
   el: "#app",
   router,

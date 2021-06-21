@@ -86,8 +86,13 @@ export default class Home extends Vue {
       value: 'indexPage',
     } as MenuItem;
   updateCurrentMenu(menu) {
+    let name = 'list'
+    if (menu.value == 'bigEvent') {
+      name = 'bigEventList'
+    }
+    console.log(name)
     // this.currentMenu = menu;
-    this.$router.push({name: 'list', query: {value: menu.value}})
+    this.$router.push({name, query: {value: menu.value}})
   }
 }
 </script>

@@ -1,10 +1,10 @@
 <template>
   <div class="Clothing">
     <div class='solid'></div>
-    <img :src="logo" alt="" class='Clothing-logo'>
+    <img :src="logo" alt="" class='Clothing-logo' @click='jumps'>
     <div class='list_box'>
       <div class='list' v-for='(item, index) in list' :key='item.name' @click='jump(index)'>
-        <img :src="item.img" class='img' alt="">
+        <div class='img_box'><img :src="item.img" class='img' alt=""></div>
         <div class='name'>{{item.name}}</div>
       </div>
     </div>
@@ -31,16 +31,18 @@
   export default class SevenGroup extends Vue {
     logo = logo
     list = [
-      {img: template1, name: '名字1'},
-      {img: template2, name: '名字2'},
-      {img: template3, name: '名字3'},
-      {img: template4, name: '名字4'},
-      {img: template5, name: '名字5'},
-      {img: template6, name: '名字6'},
-      {img: template7, name: '名字7'},
+      {img: template1, name: '雅砻藏族'},
+      {img: template2, name: '康区藏装'},
+      {img: template3, name: '汉服女'},
+      {img: template4, name: '安多藏装'},
+      {img: template5, name: '中山装'},
+      {img: template6, name: '后藏藏装'},
+      {img: template7, name: '拉萨藏装'},
     ]
     jump(index){this.$router.push({name: 'photograph1', query: {img: index}})}
-
+    jumps(){
+      this.$router.push({name: 'fuse'})
+    }
     mounted() {
     }
   }
@@ -71,12 +73,17 @@
     width: 47.5%;
     margin: 0px 5% 32px 0px;
   }
+  .img_box{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden
+  }
   .img{
     background: #ccc;
     width: 150px;
-    height: 150px;
+    height: auto;
     display: block;
-    border-radius: 50%;
     margin: 0px auto 10px
   }
   .name{

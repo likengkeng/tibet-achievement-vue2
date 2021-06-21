@@ -84,7 +84,7 @@
           el.articleVO?.createDatetime && (el.createDatetime = this.format(el.articleVO.createDatetime))
           el.leaderVO?.createDatetime && (el.createDatetime = this.format(el.leaderVO.createDatetime))
           if (this.navIndex == 3) {
-            this.imgList = [...el.leaderVO.leaderImagePathAlls, ...this.imgList]
+            this.imgList = [ ...this.imgList, ...el.leaderVO.leaderImagePathAlls]
           } else {
             this.imgList.push(el.articleVO.articleCoverImagePath)
           }

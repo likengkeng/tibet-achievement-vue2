@@ -21,10 +21,12 @@ import Component from 'vue-class-component';
 import ghIcon from '@/pc/static/imgs/gh_icon.png'
 import titleIcon from '@/pc/static/imgs/title_icon.png'
 import icon2 from '@/pc/static/imgs/100_icon.png'
+
+// import {Watch} from "vue-property-decorator";
 @Component({
     components: {
-    },
-    })
+    }
+})
 export default class MenuHeader extends Vue {
     ghIcon = ghIcon
     titleIcon = titleIcon
@@ -84,6 +86,11 @@ export default class MenuHeader extends Vue {
         this.selectValue = this.$route.query.value
         this.getList()
     }
+    // @Watch('$route')
+    // onPersonChanged2(to, from) {
+    //     console.log(to, from)
+    // }
+
 }
 </script>
 <style scoped lang="scss">

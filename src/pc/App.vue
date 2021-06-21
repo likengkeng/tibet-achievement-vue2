@@ -12,7 +12,7 @@ import Component from 'vue-class-component';
 @Component({})
 export default class App extends Vue {
   mounted(){
-    if (!localStorage.getItem('touristId')) {
+    if (!localStorage.getItem('touristId') || localStorage.getItem('touristId') == 'undefined') {
       $http.touristCreate()
         .then(res => {
           console.log(res)

@@ -16,7 +16,7 @@
 <script lang="ts">
     import Vue from 'vue';
     import Component from 'vue-class-component';
-    import ghIcon from '@/pc/static/imgs/gh_icon.png'
+    import ghIcon from '@/h5/static/imgs/gh_icon.png'
     @Component({
     })
     export default class MenuHeader extends Vue {
@@ -40,7 +40,7 @@
             {
                 text: '大事记',
                 value: 'bigEvent',
-                myroute: {name: 'list', query: {value: 'bigEvent'}}
+                myroute: {name: 'bigEventList', query: {value: 'bigEvent'}}
             },
             {
                 text: '组织工作',
@@ -60,6 +60,7 @@
         ]
         isShow = false
         nav(item, index){
+            this.isShow = false
             if (this.$route.name == 'list') {
                 this.selectValue = item.value
                 this.$router.push(item.myroute)

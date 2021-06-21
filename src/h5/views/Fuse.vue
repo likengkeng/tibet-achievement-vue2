@@ -3,7 +3,9 @@
     <my-header @headerNav='headerNav'></my-header>
     <div class='list_box'>
       <div class='list' v-for='(item, index) in list' :key='item.name' @click='jump(index)'>
-        <div class='img'></div>
+        <div class='img_box'>
+          <img class='img' :src="item.img" alt="">
+        </div>
         <div class='name'>{{item.name}}</div>
       </div>
     </div>
@@ -30,13 +32,13 @@
   })
   export default class Fuse extends Vue {
     list = [
-      {img: template1, name: '名字1'},
-      {img: template2, name: '名字2'},
-      {img: template3, name: '名字3'},
-      {img: template4, name: '名字4'},
-      {img: template5, name: '名字5'},
-      {img: template6, name: '名字6'},
-      {img: template7, name: '名字7'},
+      {img: template1, name: '雅砻藏族'},
+      {img: template2, name: '康区藏装'},
+      {img: template3, name: '汉服女'},
+      {img: template4, name: '安多藏装'},
+      {img: template5, name: '中山装'},
+      {img: template6, name: '后藏藏装'},
+      {img: template7, name: '拉萨藏装'},
     ]
     jump(index){this.$router.push({name: 'photograph1', query: {img: index}})}
 
@@ -70,12 +72,17 @@
     width: 47.5%;
     margin: 0px 5% 32px 0px;
   }
+  .img_box{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden
+  }
   .img{
     background: #ccc;
     width: 150px;
-    height: 150px;
+    height: auto;
     display: block;
-    border-radius: 50%;
     margin: 0px auto 10px
   }
   .name{

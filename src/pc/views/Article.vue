@@ -209,7 +209,10 @@
         // 类型 1==序言 2==领导关怀 3==大事记 4==组织工作 5==榜样力量 6==七地组声
         idObj = ['', 'prefaceId', 'leaderCareId', 'memorabiliaId', 'organizationPowerId', 'organizationPowerId', 'areaVoiceId']
         add(){
-            if (localStorage.getItem('touristId')) {
+            if (!this.touristCommentContent) {
+                return
+            }
+            if (localStorage.getItem('touristId') || localStorage.getItem('touristId') == 'undefined') {
                 this.httpAdd()
             } else {
                  $http.touristCreate()
@@ -222,21 +225,26 @@
         }
         httpAdd(){
             const idKey = this.idObj[this.$route.query.index]
-            $http.commentAdd({
-                touristId: localStorage.getItem('touristId'),
-                touristCommentType: this.$route.query.index,
-                articleId: this.obj.articleVO.articleId,
-                [idKey]: this.obj[idKey],
-                touristCommentContent: this.touristCommentContent
-            })
-            .then(res => {
-                Message({
-                    message: '评论成功',
-                    type: 'success'
-                });
-                this.touristCommentContent = ''
-                // this.getList()
-            })
+            $http.touristCreate()
+                .then(res => {
+                    localStorage.setItem('touristId', res.data.data.id)
+                    $http.commentAdd({
+                        touristId: localStorage.getItem('touristId'),
+                        touristCommentType: this.$route.query.index,
+                        articleId: this.obj.articleVO.articleId,
+                        [idKey]: this.obj[idKey],
+                        touristCommentContent: this.touristCommentContent
+                    })
+                    .then(res => {
+                        Message({
+                            message: '评论成功',
+                            type: 'success'
+                        });
+                        this.touristCommentContent = ''
+                        // this.getList()
+                    })
+                })
+            
         }
         headerNav(){}
         getList(){

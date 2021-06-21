@@ -4,9 +4,9 @@ import Router from 'vue-router';
 Vue.use(Router);
 const Home = () => import(/* webpackChunkName: "Home" */ '@/pc/views/Home.vue');
 const List = () => import(/* webpackChunkName: "List" */ '@/pc/views/List.vue');
-const Article = () => import(/* webpackChunkName: "Article" */ '@/pc/views/Article.vue');
+const Article = () => import(/* webpackChunkName: "Article" */ '@/pc/views/Article.vue'); 
 
-export default new Router({
+const router = new Router({
   mode: 'hash',
   routes: [
     { path: '/', redirect: { name: 'home' } },
@@ -27,3 +27,8 @@ export default new Router({
     }
   ],
 });
+// router.beforeEach((to, from, next) => {
+//   console.log(to, from)
+//   next()
+// })
+export default router

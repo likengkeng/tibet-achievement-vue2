@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { AxiosInstance } from 'axios';
-const apiUrl = 'http://182.61.5.103:9998/web/'
+const apiUrl = 'http://182.61.5.103/web/'
 import { Toast } from 'vant';
 let toast;
 function createAPI({ url, headers } : any) {
