@@ -1,5 +1,5 @@
 
-const apiUrl = 'http://182.61.5.103/web/'
+const apiUrl = 'http://172.18.10.91/web/'
 
 import axios from 'axios';
 import { AxiosInstance } from 'axios';

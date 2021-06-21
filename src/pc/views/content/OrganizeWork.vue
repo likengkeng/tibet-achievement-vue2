@@ -163,6 +163,7 @@
 
     updateCurrentMenu(menu) {
       this.currentMenu = menu;
+      this.pageSize = 0
       this.getList()
     }
   }
